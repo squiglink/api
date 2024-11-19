@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      SQUIGLINK_DEV_DATABASE_URL: postgresql://postgres:postgres@postgres:5432/squiglink_dev
+      SQUIGLINK_TEST_DATABASE_URL: postgresql://postgres:postgres@postgres:5432/squiglink_test
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/backend
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: postgres
+    image: postgres:17.1-alpine3.20
+    ports:
+      - 5432:5432
+    volumes:
+      - ./squiglink_database/docker_entrypoint:/docker-entrypoint-initdb.d

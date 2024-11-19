@@ -1,0 +1,23 @@
+[workspace]
+members = ["squiglink", "squiglink_database"]
+resolver = "2"
+
+[workspace.dependencies.anyhow]
+version = "1.0.93"
+
+[workspace.dependencies.axum]
+version = "0.8.0-alpha.1"
+default-features = false
+features = ["http1", "tokio"]
+
+[workspace.dependencies.refinery]
+version = "0.8.14"
+default-features = false
+features = ["tokio-postgres"]
+
+[workspace.dependencies.tokio-postgres]
+version = "0.7.12"
+
+[workspace.dependencies.tokio]
+version = "1.4.11"
+features = ["rt-multi-thread"]

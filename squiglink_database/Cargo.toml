@@ -1,0 +1,10 @@
+[package]
+name = "squiglink_database"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+refinery = { workspace = true }
+tokio = { workspace = true }
+tokio-postgres = { workspace = true }
