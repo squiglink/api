@@ -69,7 +69,7 @@ create table
         data text not null,
         database_id bigint references databases (id) not null,
         device_id bigint references measurement_devices (id) not null,
-        name text not null,
+        name text,
         product_id bigint references products (id) not null,
         unique (name, product_id)
     );
@@ -78,7 +78,7 @@ create table
     reviews (
         id bigint primary key,
         product_id bigint references products (id) not null,
-        score real not null,
+        score real,
         url text not null,
         user_id bigint references users (id) not null,
         unique (product_id, user_id)
