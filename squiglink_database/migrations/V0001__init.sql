@@ -69,9 +69,9 @@ create table
         data text not null,
         database_id bigint references databases (id) not null,
         device_id bigint references measurement_devices (id) not null,
-        name text,
+        prefix text,
         product_id bigint references products (id) not null,
-        unique (name, product_id)
+        unique (prefix, product_id)
     );
 
 create table
