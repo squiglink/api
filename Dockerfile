@@ -11,4 +11,4 @@ COPY . .
 RUN npm install
 RUN cargo build
 
-CMD ["cargo", "run", "--bin", "squiglink"]
+CMD ["cargo", "run", "--bin", "squiglink_studio"]

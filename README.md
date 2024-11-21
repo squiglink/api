@@ -1,4 +1,4 @@
-# Squiglink
+# Squiglink Studio
 
 ## Setup
 
