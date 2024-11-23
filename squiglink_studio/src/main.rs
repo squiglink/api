@@ -4,8 +4,8 @@ use axum::routing::get;
 async fn main() -> Result<(), anyhow::Error> {
     let router = axum::Router::new().route("/", get(root));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
-    axum::serve(listener, router).await?;
+    let tcp_listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+    axum::serve(tcp_listener, router).await?;
 
     Ok(())
 }
