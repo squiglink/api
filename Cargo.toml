@@ -8,12 +8,21 @@ version = "1.0.93"
 [workspace.dependencies.axum]
 version = "0.8.0-alpha.1"
 default-features = false
-features = ["http1", "tokio"]
+features = ["http1", "json", "macros", "tokio"]
+
+[workspace.dependencies.postgres-types]
+version = "0.2.8"
+features = ["derive"]
 
 [workspace.dependencies.refinery]
 version = "0.8.14"
 default-features = false
 features = ["tokio-postgres"]
+
+[workspace.dependencies.serde]
+version = "1.0.215"
+default-features = false
+features = ["derive"]
 
 [workspace.dependencies.tokio-postgres]
 version = "0.7.12"
