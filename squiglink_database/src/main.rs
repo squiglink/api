@@ -1,4 +1,5 @@
 use anyhow::Error;
+use std::env;
 
 mod embedded {
     use refinery::embed_migrations;
@@ -8,8 +9,8 @@ mod embedded {
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     for database_url in [
-        std::env::var("SQUIGLINK_DEV_DATABASE_URL")?,
-        std::env::var("SQUIGLINK_TEST_DATABASE_URL")?,
+        env::var("SQUIGLINK_DEV_DATABASE_URL")?,
+        env::var("SQUIGLINK_TEST_DATABASE_URL")?,
     ] {
         println!("Connecting to `{}`...", database_url);
         let (mut client, connection) =

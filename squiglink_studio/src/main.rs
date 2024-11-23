@@ -2,13 +2,15 @@ mod application_error;
 mod application_state;
 mod requests;
 use application_state::ApplicationState;
-use axum::routing::get;
+use axum::{routing::get, Router};
+use std::env;
 use std::sync::Arc;
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     let (client, connection) = tokio_postgres::connect(
-        &std::env::var("SQUIGLINK_DEV_DATABASE_URL")?,
+        &env::var("SQUIGLINK_DEV_DATABASE_URL")?,
         tokio_postgres::NoTls,
     )
     .await?;
@@ -22,14 +24,13 @@ async fn main() -> Result<(), anyhow::Error> {
         postgres_client: client,
     });
 
-    let router = axum::Router::new()
+    let tcp_listener = TcpListener::bind("0.0.0.0:3000").await?;
+    let router = Router::new()
         .route(
             "/measurements/{id}",
             get(requests::measurements_show::handler),
         )
         .with_state(application_state);
-
-    let tcp_listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
     axum::serve(tcp_listener, router).await?;
 
     Ok(())
