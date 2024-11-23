@@ -1,7 +1,5 @@
 create type database_kind as enum('earbuds', 'headphones', 'iems');
 
-create type measurement_channel as enum('left', 'right');
-
 create type user_scoring_system as enum(
     'five_star',
     'hundred_point',
@@ -65,14 +63,20 @@ create table
 create table
     measurements (
         id bigint primary key,
-        channel measurement_channel not null,
-        data text not null,
+        channel_left text,
+        channel_right text,
         database_id bigint references databases (id) not null,
         device_id bigint references measurement_devices (id) not null,
         prefix text,
         product_id bigint references products (id) not null,
         unique (prefix, product_id)
     );
+
+alter table measurements
+add constraint measurements_either_channel_is_not_null check (
+    channel_left is not null
+    or channel_right is not null
+);
 
 create table
     reviews (
