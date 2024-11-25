@@ -15,16 +15,22 @@
 2. Migrate the databases:
 
    ```sh
-   docker compose run backend cargo run --bin squiglink_database
+   docker compose run backend cargo run --bin squiglink_database migrate
    ```
 
-3. Start the application:
+3. Seed the database:
+
+   ```sh
+   docker compose run backend cargo run --bin squiglink_database migrate
+   ```
+
+4. Start the application:
 
    ```sh
    docker compose up
    ```
 
-4. Open <http://localhost:3000> in a browser.
+5. Open <http://localhost:3000> in a browser.
 
 ## Tips
 

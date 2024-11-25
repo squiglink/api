@@ -1,32 +1,37 @@
+mod commands;
 use anyhow::Error;
-use std::env;
+use clap::Subcommand;
 
-mod embedded {
-    use refinery::embed_migrations;
-    embed_migrations!("migrations");
+#[derive(clap::Parser, Debug)]
+#[command(
+    disable_help_subcommand = true,
+    disable_version_flag = true,
+    version = env!("CARGO_PKG_VERSION")
+)]
+struct CommandParser {
+    /// Show version
+    #[arg(action = clap::builder::ArgAction::Version, short, long)]
+    version: (),
+
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Debug, Subcommand)]
+enum Command {
+    /// Migrate the database
+    Migrate(commands::migrate::Command),
+
+    /// Seed the database
+    Seed(commands::seed::Command),
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    for database_url in [
-        env::var("SQUIGLINK_DEV_DATABASE_URL")?,
-        env::var("SQUIGLINK_TEST_DATABASE_URL")?,
-    ] {
-        println!("Connecting to `{}`...", database_url);
-        let (mut client, connection) =
-            tokio_postgres::connect(&database_url, tokio_postgres::NoTls).await?;
-        tokio::spawn(async move {
-            if let Err(err) = connection.await {
-                eprintln!("{}", err);
-            }
-        });
-
-        let report = embedded::migrations::runner()
-            .run_async(&mut client)
-            .await?;
-        for migration in report.applied_migrations() {
-            println!("Executed a migration: `{}`.", migration);
-        }
+    let command_parser: CommandParser = clap::Parser::parse();
+    match command_parser.command {
+        Command::Migrate(command) => command.execute().await?,
+        Command::Seed(command) => command.execute().await?,
     }
     Ok(())
 }

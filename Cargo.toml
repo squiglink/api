@@ -10,6 +10,11 @@ version = "0.8.0-alpha.1"
 default-features = false
 features = ["http1", "json", "macros", "tokio"]
 
+[workspace.dependencies.clap]
+version = "4.5.21"
+default-features = false
+features = ["color", "derive", "help", "std", "usage", "wrap_help"]
+
 [workspace.dependencies.postgres-types]
 version = "0.2.8"
 features = ["derive"]
