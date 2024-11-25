@@ -16,7 +16,7 @@ pub struct Measurement {
     channel_right: Option<String>,
     database_id: i64,
     measurement_device_id: i64,
-    prefix: Option<String>,
+    label: Option<String>,
     product_id: i64,
 }
 
@@ -27,7 +27,7 @@ impl From<Row> for Measurement {
             channel_right: row.get("channel_right"),
             database_id: row.get("database_id"),
             measurement_device_id: row.get("measurement_device_id"),
-            prefix: row.get("prefix"),
+            label: row.get("label"),
             product_id: row.get("product_id"),
         }
     }

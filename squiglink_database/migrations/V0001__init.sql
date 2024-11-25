@@ -66,10 +66,10 @@ create table
         channel_left text,
         channel_right text,
         database_id bigint references databases (id) not null,
+        label text,
         measurement_device_id bigint references measurement_devices (id) not null,
-        prefix text,
         product_id bigint references products (id) not null,
-        unique (prefix, product_id)
+        unique (label, product_id)
     );
 
 alter table measurements
