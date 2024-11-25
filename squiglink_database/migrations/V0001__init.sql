@@ -9,14 +9,14 @@ create type user_scoring_system as enum(
 
 create table
     brands (
-        id bigint primary key,
+        id bigserial primary key,
         name text not null unique,
         url text unique
     );
 
 create table
     users (
-        id bigint primary key,
+        id bigserial primary key,
         name text not null unique,
         scoring_system user_scoring_system not null,
         username text not null unique
@@ -24,7 +24,7 @@ create table
 
 create table
     databases (
-        id bigint primary key,
+        id bigserial primary key,
         compensation_measurement text,
         kind database_kind not null,
         path text not null,
@@ -34,7 +34,7 @@ create table
 
 create table
     products (
-        id bigint primary key,
+        id bigserial primary key,
         brand_id bigint references brands (id) not null,
         name text not null unique,
         unique (brand_id, name)
@@ -42,14 +42,14 @@ create table
 
 create table
     stores (
-        id bigint primary key,
+        id bigserial primary key,
         name text not null unique,
         url text not null unique
     );
 
 create table
     product_listings (
-        id bigint primary key,
+        id bigserial primary key,
         price_usd real,
         product_id bigint references products (id) not null,
         store_id bigint references stores (id) not null,
@@ -58,11 +58,14 @@ create table
     );
 
 create table
-    measurement_devices (id bigint primary key, name text not null unique);
+    measurement_devices (
+        id bigserial primary key,
+        name text not null unique
+    );
 
 create table
     measurements (
-        id bigint primary key,
+        id bigserial primary key,
         channel_left text,
         channel_right text,
         database_id bigint references databases (id) not null,
@@ -80,7 +83,7 @@ add constraint measurements_either_channel_is_not_null check (
 
 create table
     reviews (
-        id bigint primary key,
+        id bigserial primary key,
         product_id bigint references products (id) not null,
         score real,
         url text not null,
