@@ -1,7 +1,7 @@
 mod application_error;
 mod application_state;
+mod entities;
 mod requests;
-use application_state::ApplicationState;
 use axum::{routing::get, Router};
 use std::env;
 use std::sync::Arc;
@@ -20,7 +20,7 @@ async fn main() -> Result<(), anyhow::Error> {
         }
     });
 
-    let application_state = Arc::new(ApplicationState {
+    let application_state = Arc::new(application_state::ApplicationState {
         postgres_client: client,
     });
 
