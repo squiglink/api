@@ -26,6 +26,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let tcp_listener = TcpListener::bind("0.0.0.0:3000").await?;
     let router = Router::new()
+        .route("/measurements", get(requests::measurements_index::handler))
         .route(
             "/measurements/{id}",
             get(requests::measurements_show::handler),
