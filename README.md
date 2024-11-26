@@ -21,7 +21,7 @@
 3. Seed the database:
 
    ```sh
-   docker compose run backend cargo run --bin squiglink_database migrate
+   docker compose run backend cargo run --bin squiglink_database seed
    ```
 
 4. Start the application:
