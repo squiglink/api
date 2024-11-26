@@ -33,18 +33,18 @@ create table
     );
 
 create table
-    products (
+    measurement_devices (
+        id bigserial primary key,
+        name text not null unique
+    );
+
+create table
+    models (
         id bigserial primary key,
         brand_id bigint references brands (id) not null,
         name text not null unique,
         preferred_shop_url text,
         unique (brand_id, name)
-    );
-
-create table
-    measurement_devices (
-        id bigserial primary key,
-        name text not null unique
     );
 
 create table
@@ -55,8 +55,8 @@ create table
         database_id bigint references databases (id) not null,
         label text,
         measurement_device_id bigint references measurement_devices (id) not null,
-        product_id bigint references products (id) not null,
-        unique (label, product_id)
+        model_id bigint references models (id) not null,
+        unique (label, model_id)
     );
 
 alter table measurements
@@ -68,9 +68,9 @@ add constraint measurements_either_channel_is_not_null check (
 create table
     reviews (
         id bigserial primary key,
-        product_id bigint references products (id) not null,
+        model_id bigint references models (id) not null,
         score real,
         url text not null,
         user_id bigint references users (id) not null,
-        unique (product_id, user_id)
+        unique (model_id, user_id)
     );
