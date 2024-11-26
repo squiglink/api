@@ -17,7 +17,7 @@ create table
 create table
     users (
         id bigserial primary key,
-        name text not null unique,
+        display_name text not null unique,
         scoring_system user_scoring_system not null,
         username text not null unique
     );

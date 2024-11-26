@@ -4,7 +4,7 @@ values
     ('Squiglink', 'https://squig.link/');
 
 insert into
-    users (name, scoring_system, username)
+    users (display_name, scoring_system, username)
 values
     ('Super* Review', 'five_star', 'superreview');
 
