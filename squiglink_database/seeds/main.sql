@@ -14,22 +14,11 @@ values
     ('$1', 'iems', '/', 1);
 
 insert into
-    products (brand_id, name)
-values
-    (1, 'Sunrise');
-
-insert into
-    stores (name, url)
-values
-    ('Squiglink Merch', 'https://squig.link/merch/');
-
-insert into
-    product_listings (price_usd, product_id, store_id, url)
+    products (brand_id, name, preferred_shop_url)
 values
     (
-        1337,
         1,
-        1,
+        'Sunrise',
         'https://squig.link/merch/sunrise-quartz'
     );
 

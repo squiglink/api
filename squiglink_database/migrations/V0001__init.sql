@@ -37,24 +37,8 @@ create table
         id bigserial primary key,
         brand_id bigint references brands (id) not null,
         name text not null unique,
+        preferred_shop_url text,
         unique (brand_id, name)
-    );
-
-create table
-    stores (
-        id bigserial primary key,
-        name text not null unique,
-        url text not null unique
-    );
-
-create table
-    product_listings (
-        id bigserial primary key,
-        price_usd real,
-        product_id bigint references products (id) not null,
-        store_id bigint references stores (id) not null,
-        url text not null unique,
-        unique (product_id, store_id)
     );
 
 create table
