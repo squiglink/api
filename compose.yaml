@@ -1,5 +1,5 @@
 services:
-  backend:
+  api:
     build: .
     depends_on:
       - postgres
@@ -9,7 +9,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .:/backend
+      - .:/api
 
   postgres:
     environment:

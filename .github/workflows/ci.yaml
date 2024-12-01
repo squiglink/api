@@ -9,10 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: docker compose run backend cargo build
-      - run: docker compose run backend npm install
+      - run: docker compose run api cargo build
+      - run: docker compose run api npm install
 
-      - run: docker compose run backend cargo clippy -- --deny warnings
-      - run: docker compose run backend cargo fmt
-      - run: docker compose run backend cargo test
-      - run: docker compose run backend npx prettier --write .
+      - run: docker compose run api cargo clippy -- --deny warnings
+      - run: docker compose run api cargo fmt
+      - run: docker compose run api cargo test
+      - run: docker compose run api npx prettier --write .

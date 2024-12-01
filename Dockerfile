@@ -6,9 +6,9 @@ RUN apk add --no-cache \
 RUN rustup component add clippy
 RUN rustup component add rustfmt
 
-WORKDIR /backend
+WORKDIR /api
 COPY . .
 RUN npm install
 RUN cargo build
 
-CMD ["cargo", "run", "--bin", "squiglink_studio"]
+CMD ["cargo", "run", "--bin", "squiglink_api"]

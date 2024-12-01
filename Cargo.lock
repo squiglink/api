@@ -1182,24 +1182,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "squiglink_database"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "refinery",
- "tokio",
- "tokio-postgres",
-]
-
-[[package]]
-name = "squiglink_studio"
+name = "squiglink_api"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
  "postgres-types",
  "serde",
+ "tokio",
+ "tokio-postgres",
+]
+
+[[package]]
+name = "squiglink_database"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "refinery",
  "tokio",
  "tokio-postgres",
 ]

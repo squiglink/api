@@ -1,5 +1,5 @@
 [workspace]
-members = ["squiglink_database", "squiglink_studio"]
+members = ["squiglink_api", "squiglink_database"]
 resolver = "2"
 
 [workspace.dependencies.anyhow]
