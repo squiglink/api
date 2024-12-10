@@ -8,10 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - run: docker compose run api cargo build
-      - run: docker compose run api npm install
-
       - run: docker compose run api cargo clippy -- --deny warnings
       - run: docker compose run api cargo fmt
       - run: docker compose run api cargo test

@@ -8,7 +8,7 @@ RUN rustup component add rustfmt
 
 WORKDIR /api
 COPY . .
-RUN npm install
+RUN npm install --global prettier@3.3.3
 RUN cargo build
 
 CMD ["cargo", "run", "--bin", "squiglink_api"]

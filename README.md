@@ -5,11 +5,7 @@
 1. Install dependencies:
 
    ```sh
-   # Cargo
    docker compose run api cargo build
-
-   # npm
-   docker compose run api npm install
    ```
 
 2. Migrate the databases:
