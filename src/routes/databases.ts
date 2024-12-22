@@ -8,7 +8,7 @@ application.get("/", databaseMiddleware, async (context) => {
     .selectFrom("databases")
     .selectAll()
     .limit(10)
-    .offset((Number(context.req.query("page")) || 1) - 1)
+    .offset(((Number(context.req.query("page")) || 1) - 1) * 10)
     .execute();
 
   return context.json(databases);
