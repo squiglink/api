@@ -1,14 +1,9 @@
-FROM rust:1.82-alpine3.20
+FROM node:23.5-alpine3.21
 
-RUN apk add --no-cache \
-  musl-dev \
-  npm
-RUN rustup component add clippy
-RUN rustup component add rustfmt
+RUN npm install --global pnpm@^9.15.1
 
 WORKDIR /api
-COPY . .
-RUN npm install --global prettier@3.3.3
-RUN cargo build
+COPY package.json pnpm-lock.yaml .
+RUN pnpm install
 
-CMD ["cargo", "run", "--bin", "squiglink_api"]
+CMD ["pnpm", "dev"]

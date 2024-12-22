@@ -1,55 +1,23 @@
 # Squiglink API
 
-## Setup
+## Install
 
-1. Install dependencies:
-
-   ```sh
-   docker compose run api cargo build
-   ```
-
-2. Migrate the databases:
+1. Execute:
 
    ```sh
-   docker compose run api cargo run --bin squiglink_database migrate
-   ```
-
-3. Seed the database:
-
-   ```sh
-   docker compose run api cargo run --bin squiglink_database seed
-   ```
-
-4. Start the application:
-
-   ```sh
+   docker compose run api pnpm install
+   docker compose run api pnpm kysely migrate:latest
+   docker compose run api pnpm kysely seed run
+   docker compose run api pnpm kysely-test migrate:latest
    docker compose up
    ```
 
-5. Open <http://localhost:3000> in a browser.
+2. Open <http://localhost:3000>.
 
 ## Tips
 
-- Run Clippy:
-
-  ```sh
-  docker compose run api cargo clippy -- --deny warnings
-  ```
-
-- Run Prettier:
-
-  ```
-  docker compose run api npx prettier --write .
-  ```
-
-- Run rustfmt:
-
-  ```sh
-  docker compose run api cargo fmt
-  ```
-
-- Run tests:
-
-  ```sh
-  docker compose run api cargo test
-  ```
+```sh
+docker compose run api pnpm prettier --check .
+docker compose run api pnpm prettier --write .
+docker compose run api pnpm vitest
+```
