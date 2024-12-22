@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, vi } from "vitest";
+import { beforeAll, beforeEach, vi } from "vitest";
 import { env } from "process";
 import { newDatabase } from "./database.js";
 import { sql } from "kysely";
@@ -10,7 +10,7 @@ beforeAll(() => {
   );
 });
 
-afterEach(async () => {
+beforeEach(async () => {
   const database = newDatabase();
 
   await sql`truncate table ${sql.table("databases")} cascade`.execute(database);
