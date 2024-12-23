@@ -3,6 +3,9 @@ import { Kysely, PostgresDialect } from "kysely";
 import pg from "pg";
 import type { Database } from "./types.js";
 
+const int8TypeId = 20;
+pg.types.setTypeParser(int8TypeId, (value) => parseInt(value, 10));
+
 const { Pool } = pg;
 
 export function newDatabase(): Kysely<Database> {
