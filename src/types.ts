@@ -19,11 +19,23 @@ export type UserScoringSystem =
   | "ten_point"
   | "ten_point_decimal";
 
+export interface Brands {
+  id: Generated<Int8>;
+  name: string;
+}
+
 export interface Databases {
   id: Generated<Int8>;
   kind: DatabaseKind;
   path: string;
   user_id: Int8;
+}
+
+export interface Models {
+  brand_id: Int8;
+  id: Generated<Int8>;
+  name: string;
+  shop_url: string | null;
 }
 
 export interface Users {
@@ -34,6 +46,8 @@ export interface Users {
 }
 
 export interface Database {
+  brands: Brands;
   databases: Databases;
+  models: Models;
   users: Users;
 }
