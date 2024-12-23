@@ -4,11 +4,12 @@ import { newDatabase } from "../database.js";
 
 describe("GET /databases", () => {
   test("it works", async () => {
+    const database = newDatabase();
+
     let userIds = [];
     let databaseIds = [];
 
     for (let index = 1; index <= 11; index++) {
-      const database = newDatabase();
       const { id: userId } = await database
         .insertInto("users")
         .values({
