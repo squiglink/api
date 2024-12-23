@@ -56,15 +56,15 @@ describe("GET /databases", () => {
     };
 
     const pagelessResponse = await application.request("/databases");
-    expect(pagelessResponse.ok).toBe(true);
     expect(await pagelessResponse.json()).toEqual(firstPage);
+    expect(pagelessResponse.ok).toBe(true);
 
     const firstPageResponse = await application.request("/databases?page=1");
-    expect(firstPageResponse.ok).toBe(true);
     expect(await firstPageResponse.json()).toEqual(firstPage);
+    expect(firstPageResponse.ok).toBe(true);
 
     const secondPageResponse = await application.request("/databases?page=2");
-    expect(secondPageResponse.ok).toBe(true);
     expect(await secondPageResponse.json()).toEqual(secondPage);
+    expect(secondPageResponse.ok).toBe(true);
   });
 });
