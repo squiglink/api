@@ -290,15 +290,11 @@ describe("GET /models", () => {
     expect(await pagelessResponse.json()).toEqual(firstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request(
-      "/models?query=foo&page=1",
-    );
+    const firstPageResponse = await application.request("/models?query=foo&page=1");
     expect(await firstPageResponse.json()).toEqual(firstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request(
-      "/models?query=foo&page=2",
-    );
+    const secondPageResponse = await application.request("/models?query=foo&page=2");
     expect(await secondPageResponse.json()).toEqual(secondPage);
     expect(secondPageResponse.ok).toBe(true);
   });
@@ -442,15 +438,11 @@ describe("GET /models", () => {
     expect(await pagelessResponse.json()).toEqual(firstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request(
-      "/models?query=foo&page=1",
-    );
+    const firstPageResponse = await application.request("/models?query=foo&page=1");
     expect(await firstPageResponse.json()).toEqual(firstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request(
-      "/models?query=foo&page=2",
-    );
+    const secondPageResponse = await application.request("/models?query=foo&page=2");
     expect(await secondPageResponse.json()).toEqual(secondPage);
     expect(secondPageResponse.ok).toBe(true);
   });

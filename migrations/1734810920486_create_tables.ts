@@ -11,9 +11,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .createTable("users")
     .addColumn("id", "bigserial", (column) => column.primaryKey())
     .addColumn("display_name", "text", (column) => column.notNull())
-    .addColumn("scoring_system", sql`user_scoring_system`, (column) =>
-      column.notNull(),
-    )
+    .addColumn("scoring_system", sql`user_scoring_system`, (column) => column.notNull())
     .addColumn("username", "text", (column) => column.notNull().unique())
     .execute();
 
@@ -25,10 +23,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("user_id", "bigint", (column) =>
       column.references("users.id").notNull().onDelete("cascade"),
     )
-    .addUniqueConstraint("databases_path_and_user_id_unique", [
-      "path",
-      "user_id",
-    ])
+    .addUniqueConstraint("databases_path_and_user_id_unique", ["path", "user_id"])
     .execute();
 
   await database.schema
@@ -39,9 +34,6 @@ export async function up(database: Kysely<any>): Promise<void> {
     )
     .addColumn("name", "text", (column) => column.notNull())
     .addColumn("shop_url", "text")
-    .addUniqueConstraint("models_brand_id_and_name_unique", [
-      "brand_id",
-      "name",
-    ])
+    .addUniqueConstraint("models_brand_id_and_name_unique", ["brand_id", "name"])
     .execute();
 }

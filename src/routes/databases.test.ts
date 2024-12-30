@@ -160,21 +160,15 @@ describe("GET /databases", () => {
       page_count: 2,
     };
 
-    const pagelessResponse = await application.request(
-      "/databases?query=earbuds",
-    );
+    const pagelessResponse = await application.request("/databases?query=earbuds");
     expect(await pagelessResponse.json()).toEqual(firstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request(
-      "/databases?query=earbuds?page=1",
-    );
+    const firstPageResponse = await application.request("/databases?query=earbuds?page=1");
     expect(await firstPageResponse.json()).toEqual(firstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request(
-      "/databases?query=earbuds?page=2",
-    );
+    const secondPageResponse = await application.request("/databases?query=earbuds?page=2");
     expect(await secondPageResponse.json()).toEqual(secondPage);
     expect(secondPageResponse.ok).toBe(true);
   });
@@ -287,15 +281,11 @@ describe("GET /databases", () => {
     expect(await pagelessResponse.json()).toEqual(firstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request(
-      "/databases?query=foo&page=1",
-    );
+    const firstPageResponse = await application.request("/databases?query=foo&page=1");
     expect(await firstPageResponse.json()).toEqual(firstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request(
-      "/databases?query=foo&page=2",
-    );
+    const secondPageResponse = await application.request("/databases?query=foo&page=2");
     expect(await secondPageResponse.json()).toEqual(secondPage);
     expect(secondPageResponse.ok).toBe(true);
   });

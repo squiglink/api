@@ -7,17 +7,9 @@ export type Generated<T> =
     ? ColumnType<S, I | undefined, U>
     : ColumnType<T, T | undefined, T>;
 
-export type Int8 = ColumnType<
-  string,
-  bigint | number | string,
-  bigint | number | string
->;
+export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
 
-export type UserScoringSystem =
-  | "five_star"
-  | "hundred_point"
-  | "ten_point"
-  | "ten_point_decimal";
+export type UserScoringSystem = "five_star" | "hundred_point" | "ten_point" | "ten_point_decimal";
 
 export interface Brands {
   id: Generated<Int8>;

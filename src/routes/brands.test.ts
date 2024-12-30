@@ -68,10 +68,7 @@ describe("GET /brands", () => {
       const { id: brandId } = await database
         .insertInto("brands")
         .values({
-          name:
-            brandIndex > 8
-              ? `Foo Brand ${brandIndex}`
-              : `Bar Brand ${brandIndex}`,
+          name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
         })
         .returning("id")
         .executeTakeFirstOrThrow();
@@ -113,15 +110,11 @@ describe("GET /brands", () => {
     expect(await pagelessResponse.json()).toEqual(queryBrandFirstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request(
-      "/brands?query=foo&page=1",
-    );
+    const firstPageResponse = await application.request("/brands?query=foo&page=1");
     expect(await firstPageResponse.json()).toEqual(queryBrandFirstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request(
-      "/brands?query=foo&page=2",
-    );
+    const secondPageResponse = await application.request("/brands?query=foo&page=2");
     expect(await secondPageResponse.json()).toEqual(queryBrandSecondPage);
     expect(secondPageResponse.ok).toBe(true);
   });
