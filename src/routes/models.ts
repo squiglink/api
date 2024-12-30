@@ -1,6 +1,7 @@
 import { databaseMiddleware } from "../middlewares/database_middleware.js";
 import { Hono } from "hono";
 import { jsonObjectFrom } from "kysely/helpers/postgres";
+import { sql } from "kysely";
 
 const application = new Hono();
 
@@ -8,6 +9,7 @@ application.get("/", databaseMiddleware, async (context) => {
   const pageNumber = Number(context.req.query("page")) || 1;
   const pageSize = 10;
 
+  const searchQueryParameter = context.req.query("query");
   const page = await context.var.database
     .selectFrom("models")
     .select(["models.id", "models.name", "models.shop_url"])
@@ -18,6 +20,14 @@ application.get("/", databaseMiddleware, async (context) => {
           .selectAll()
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
+    )
+    .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
+      selectQueryBuilder
+        .leftJoin("brands", "brands.id", "models.brand_id")
+        .orderBy([
+          sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
+          "models.id",
+        ]),
     )
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)
