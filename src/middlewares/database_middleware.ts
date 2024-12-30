@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
+import { database } from "../database.js";
 import { Kysely } from "kysely";
-import { newDatabase } from "../database.js";
 import type { Database } from "../types.js";
 
 export const databaseMiddleware = createMiddleware<{
@@ -8,7 +8,6 @@ export const databaseMiddleware = createMiddleware<{
     database: Kysely<Database>;
   };
 }>(async (context, next) => {
-  const database = newDatabase();
   context.set("database", database);
   await next();
 });

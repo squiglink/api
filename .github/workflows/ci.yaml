@@ -13,4 +13,4 @@ jobs:
       - run: docker compose run api pnpm kysely-test migrate:latest
 
       - run: docker compose run api pnpm prettier --check .
-      - run: docker compose run api pnpm vitest run
+      - run: docker compose run api pnpm test run

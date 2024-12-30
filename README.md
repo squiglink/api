@@ -20,5 +20,5 @@
 docker compose run api pnpm kysely-codegen
 docker compose run api pnpm prettier --check .
 docker compose run api pnpm prettier --write .
-docker compose run api pnpm vitest
+docker compose run api pnpm test
 ```

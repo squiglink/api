@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "kysely-codegen": "kysely-codegen --env-file kysely-codegen.config.env --out-file kysely-codegen.ts",
-    "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely"
+    "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely",
+    "test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" vitest"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",

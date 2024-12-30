@@ -1,11 +1,9 @@
 import { application } from "../application.js";
+import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
-import { newDatabase } from "../database.js";
 
 describe("GET /models", () => {
   test("it works", async () => {
-    const database = newDatabase();
-
     let brandIds = [];
     let modelIds = [];
 

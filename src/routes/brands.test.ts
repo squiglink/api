@@ -1,11 +1,9 @@
 import { application } from "../application.js";
+import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
-import { newDatabase } from "../database.js";
 
 describe("GET /brands", () => {
   test("it works", async () => {
-    const database = newDatabase();
-
     let brandIds = [];
 
     for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
