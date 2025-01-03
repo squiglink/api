@@ -1,3 +1,4 @@
+import { cors } from "hono/cors";
 import { Hono } from "hono";
 import brands from "./routes/brands.js";
 import databases from "./routes/databases.js";
@@ -5,6 +6,7 @@ import models from "./routes/models.js";
 
 export const application = new Hono();
 
+application.use("*", cors());
 application.route("/brands", brands);
 application.route("/databases", databases);
 application.route("/models", models);
