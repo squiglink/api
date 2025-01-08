@@ -1,9 +1,9 @@
 import { application } from "../application.js";
-import { database } from "../database.js";
+import { count } from "../test_helper.js";
 import { describe, expect, test } from "vitest";
 
 describe("POST /brands/new", () => {
-  test("it works", async () => {
+  test("creates a new brand", async () => {
     let body = { name: "Brand" };
 
     const response = await application.request("/brands/new", {
@@ -13,13 +13,6 @@ describe("POST /brands/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(response.ok).toBe(true);
-    expect(
-      (
-        await database
-          .selectFrom("brands")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
+    expect(await count("brands")).toEqual(1);
   });
 });

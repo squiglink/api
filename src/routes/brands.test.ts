@@ -4,28 +4,30 @@ import { describe, expect, test } from "vitest";
 
 describe("GET /brands", () => {
   test("it works", async () => {
-    let brandIds = [];
+    let brandIds: number[] = [];
 
-    for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
-      const { id: brandId } = await database
-        .insertInto("brands")
-        .values({
-          name: `Brand ${brandIndex}`,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      brandIds.push(brandId);
-      for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
-        await database
-          .insertInto("models")
+    await database.transaction().execute(async (transaction) => {
+      for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
+        const { id: brandId } = await transaction
+          .insertInto("brands")
           .values({
-            brand_id: brandId,
-            name: `Model ${modelIndex}`,
+            name: `Brand ${brandIndex}`,
           })
           .returning("id")
           .executeTakeFirstOrThrow();
+        brandIds.push(Number(brandId));
+        for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
+          await transaction
+            .insertInto("models")
+            .values({
+              brand_id: brandId,
+              name: `Model ${modelIndex}`,
+            })
+            .returning("id")
+            .executeTakeFirstOrThrow();
+        }
       }
-    }
+    });
 
     let firstPage = {
       page: [
@@ -61,28 +63,30 @@ describe("GET /brands", () => {
   });
 
   test("queries name", async () => {
-    let brandIds = [];
+    let brandIds: number[] = [];
 
-    for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
-      const { id: brandId } = await database
-        .insertInto("brands")
-        .values({
-          name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      brandIds.push(brandId);
-      for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
-        await database
-          .insertInto("models")
+    await database.transaction().execute(async (transaction) => {
+      for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
+        const { id: brandId } = await transaction
+          .insertInto("brands")
           .values({
-            brand_id: brandId,
-            name: `Model ${modelIndex}`,
+            name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
           })
           .returning("id")
           .executeTakeFirstOrThrow();
+        brandIds.push(Number(brandId));
+        for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
+          await transaction
+            .insertInto("models")
+            .values({
+              brand_id: brandId,
+              name: `Model ${modelIndex}`,
+            })
+            .returning("id")
+            .executeTakeFirstOrThrow();
+        }
       }
-    }
+    });
 
     let queryBrandFirstPage = {
       page: [

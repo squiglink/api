@@ -1,10 +1,10 @@
-import { databaseMiddleware } from "../middlewares/database_middleware.js";
+import { database } from "../database.js";
 import { Hono } from "hono";
 import type { MeasurementKind } from "../types.js";
 
 const application = new Hono();
 
-application.post("/new", databaseMiddleware, async (context) => {
+application.post("/new", async (context) => {
   const body: {
     brand_id: number;
     name: string;
@@ -24,7 +24,7 @@ application.post("/new", databaseMiddleware, async (context) => {
     };
   } = await context.req.json();
 
-  const result = await context.var.database.transaction().execute(async (transaction) => {
+  const result = await database.transaction().execute(async (transaction) => {
     const model = await transaction
       .insertInto("models")
       .values({

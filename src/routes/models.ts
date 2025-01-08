@@ -1,16 +1,16 @@
-import { databaseMiddleware } from "../middlewares/database_middleware.js";
+import { database } from "../database.js";
 import { Hono } from "hono";
 import { jsonObjectFrom } from "kysely/helpers/postgres";
 import { sql } from "kysely";
 
 const application = new Hono();
 
-application.get("/", databaseMiddleware, async (context) => {
+application.get("/", async (context) => {
   const pageNumber = Number(context.req.query("page")) || 1;
   const pageSize = 10;
 
   const searchQueryParameter = context.req.query("query");
-  const page = await context.var.database
+  const page = await database
     .selectFrom("models")
     .select(["models.id", "models.name"])
     .select((expressionBuilder) =>
@@ -33,9 +33,9 @@ application.get("/", databaseMiddleware, async (context) => {
     .offset((pageNumber - 1) * pageSize)
     .execute();
 
-  const { count } = await context.var.database
+  const { count } = await database
     .selectFrom("models")
-    .select(context.var.database.fn.countAll().as("count"))
+    .select(database.fn.countAll().as("count"))
     .executeTakeFirstOrThrow();
   const pageCount = Math.ceil(Number(count) / 10);
 

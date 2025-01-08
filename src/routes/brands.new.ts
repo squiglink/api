@@ -1,12 +1,12 @@
-import { databaseMiddleware } from "../middlewares/database_middleware.js";
+import { database } from "../database.js";
 import { Hono } from "hono";
 
 const application = new Hono();
 
-application.post("/new", databaseMiddleware, async (context) => {
+application.post("/new", async (context) => {
   const body = await context.req.json();
 
-  const result = await context.var.database
+  const result = await database
     .insertInto("brands")
     .values({
       name: body.name,

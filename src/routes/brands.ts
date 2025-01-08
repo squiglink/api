@@ -1,19 +1,19 @@
-import { databaseMiddleware } from "../middlewares/database_middleware.js";
+import { database } from "../database.js";
 import { Hono } from "hono";
 import { sql } from "kysely";
 
 const application = new Hono();
 
-application.get("/", databaseMiddleware, async (context) => {
+application.get("/", async (context) => {
   const pageNumber = Number(context.req.query("page")) || 1;
   const pageSize = 10;
 
   const searchQueryParameter = context.req.query("query");
-  const page = await context.var.database
+  const page = await database
     .selectFrom("brands")
     .leftJoin("models", "brands.id", "models.brand_id")
     .selectAll("brands")
-    .select(context.var.database.fn.count("models.id").as("model_count"))
+    .select(database.fn.count("models.id").as("model_count"))
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(sql`brands.name <-> ${searchQueryParameter}`),
     )
@@ -23,9 +23,9 @@ application.get("/", databaseMiddleware, async (context) => {
     .offset((pageNumber - 1) * pageSize)
     .execute();
 
-  const { count } = await context.var.database
+  const { count } = await database
     .selectFrom("brands")
-    .select(context.var.database.fn.countAll().as("count"))
+    .select(database.fn.countAll().as("count"))
     .executeTakeFirstOrThrow();
   const pageCount = Math.ceil(Number(count) / 10);
 

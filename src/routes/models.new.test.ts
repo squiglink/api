@@ -1,30 +1,49 @@
 import { application } from "../application.js";
+import { count } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
 
 describe("POST /models/new", () => {
-  test("it works", async () => {
-    const { id: brandId } = await database
-      .insertInto("brands")
-      .values({
-        name: `Brand`,
-      })
-      .returning("id")
-      .executeTakeFirstOrThrow();
-    const { id: userId } = await database
-      .insertInto("users")
-      .values({
-        display_name: `User`,
-        scoring_system: "five_star",
-        username: `user`,
-      })
-      .returning("id")
-      .executeTakeFirstOrThrow();
-    const { id: databaseId } = await database
-      .insertInto("databases")
-      .values({ kind: "earbuds", path: "/", user_id: userId })
-      .returning("id")
-      .executeTakeFirstOrThrow();
+  test("creates a new model", async () => {
+    let brandId: number = -1;
+    let userId: number = -1;
+    let databaseId: number = -1;
+
+    await database.transaction().execute(async (transaction) => {
+      brandId = Number(
+        (
+          await transaction
+            .insertInto("brands")
+            .values({
+              name: `Brand`,
+            })
+            .returning("id")
+            .executeTakeFirstOrThrow()
+        ).id,
+      );
+      userId = Number(
+        (
+          await transaction
+            .insertInto("users")
+            .values({
+              display_name: `User`,
+              scoring_system: "five_star",
+              username: `user`,
+            })
+            .returning("id")
+            .executeTakeFirstOrThrow()
+        ).id,
+      );
+      databaseId = Number(
+        (
+          await transaction
+            .insertInto("databases")
+            .values({ kind: "earbuds", path: "/", user_id: userId })
+            .returning("id")
+            .executeTakeFirstOrThrow()
+        ).id,
+      );
+    });
 
     let body = {
       brand_id: brandId,
@@ -52,33 +71,12 @@ describe("POST /models/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(response.ok).toBe(true);
-    expect(
-      (
-        await database
-          .selectFrom("models")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await database
-          .selectFrom("evaluations")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await database
-          .selectFrom("measurements")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
+    expect(await count("models")).toEqual(1);
+    expect(await count("evaluations")).toEqual(1);
+    expect(await count("measurements")).toEqual(1);
   });
 
-  test("it works without measurements", async () => {
+  test("creates a new model without measurements", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -119,25 +117,11 @@ describe("POST /models/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(response.ok).toBe(true);
-    expect(
-      (
-        await database
-          .selectFrom("models")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
-    expect(
-      (
-        await database
-          .selectFrom("evaluations")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
+    expect(await count("models")).toEqual(1);
+    expect(await count("evaluations")).toEqual(1);
   });
 
-  test("it works without an evaluation", async () => {
+  test("creates a new model without an evaluation", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -172,13 +156,6 @@ describe("POST /models/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(response.ok).toBe(true);
-    expect(
-      (
-        await database
-          .selectFrom("models")
-          .select(database.fn.countAll().as("count"))
-          .executeTakeFirstOrThrow()
-      ).count,
-    ).toEqual(1);
+    expect(await count("models")).toEqual(1);
   });
 });

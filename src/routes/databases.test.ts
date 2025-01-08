@@ -4,27 +4,29 @@ import { describe, expect, test } from "vitest";
 
 describe("GET /databases", () => {
   test("it works", async () => {
-    let userIds = [];
-    let databaseIds = [];
+    let userIds: number[] = [];
+    let databaseIds: number[] = [];
 
-    for (let index = 1; index <= 11; index++) {
-      const { id: userId } = await database
-        .insertInto("users")
-        .values({
-          display_name: `User ${index}`,
-          scoring_system: "five_star",
-          username: `foo_${index}`,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      userIds.push(userId);
-      const { id: databaseId } = await database
-        .insertInto("databases")
-        .values({ kind: "earbuds", path: "/", user_id: userId })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      databaseIds.push(databaseId);
-    }
+    await database.transaction().execute(async (transaction) => {
+      for (let index = 1; index <= 11; index++) {
+        const { id: userId } = await transaction
+          .insertInto("users")
+          .values({
+            display_name: `User ${index}`,
+            scoring_system: "five_star",
+            username: `user_${index}`,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        userIds.push(Number(userId));
+        const { id: databaseId } = await transaction
+          .insertInto("databases")
+          .values({ kind: "earbuds", path: "/", user_id: userId })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        databaseIds.push(Number(databaseId));
+      }
+    });
 
     let firstPage = {
       page: [
@@ -67,31 +69,33 @@ describe("GET /databases", () => {
   });
 
   test("it queries kind", async () => {
-    let userIds = [];
-    let databaseIds = [];
+    let userIds: number[] = [];
+    let databaseIds: number[] = [];
 
-    for (let index = 1; index <= 11; index++) {
-      const { id: userId } = await database
-        .insertInto("users")
-        .values({
-          display_name: `User ${index}`,
-          scoring_system: "five_star",
-          username: `foo_${index}`,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      userIds.push(userId);
-      const { id: databaseId } = await database
-        .insertInto("databases")
-        .values({
-          kind: index > 8 ? "earbuds" : "headphones",
-          path: "/",
-          user_id: userId,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      databaseIds.push(databaseId);
-    }
+    await database.transaction().execute(async (transaction) => {
+      for (let index = 1; index <= 11; index++) {
+        const { id: userId } = await transaction
+          .insertInto("users")
+          .values({
+            display_name: `User ${index}`,
+            scoring_system: "five_star",
+            username: `user_${index}`,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        userIds.push(Number(userId));
+        const { id: databaseId } = await transaction
+          .insertInto("databases")
+          .values({
+            kind: index > 8 ? "earbuds" : "headphones",
+            path: "/",
+            user_id: userId,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        databaseIds.push(Number(databaseId));
+      }
+    });
 
     let firstPage = {
       page: [
@@ -174,31 +178,33 @@ describe("GET /databases", () => {
   });
 
   test("it queries path", async () => {
-    let userIds = [];
-    let databaseIds = [];
+    let userIds: number[] = [];
+    let databaseIds: number[] = [];
 
-    for (let index = 1; index <= 11; index++) {
-      const { id: userId } = await database
-        .insertInto("users")
-        .values({
-          display_name: `User ${index}`,
-          scoring_system: "five_star",
-          username: `foo_${index}`,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      userIds.push(userId);
-      const { id: databaseId } = await database
-        .insertInto("databases")
-        .values({
-          kind: "earbuds",
-          path: index > 8 ? "/foo" : "/bar",
-          user_id: userId,
-        })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-      databaseIds.push(databaseId);
-    }
+    await database.transaction().execute(async (transaction) => {
+      for (let index = 1; index <= 11; index++) {
+        const { id: userId } = await transaction
+          .insertInto("users")
+          .values({
+            display_name: `User ${index}`,
+            scoring_system: "five_star",
+            username: `user_${index}`,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        userIds.push(Number(userId));
+        const { id: databaseId } = await transaction
+          .insertInto("databases")
+          .values({
+            kind: "earbuds",
+            path: index > 8 ? "/foo" : "/bar",
+            user_id: userId,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow();
+        databaseIds.push(Number(databaseId));
+      }
+    });
 
     let firstPage = {
       page: [
