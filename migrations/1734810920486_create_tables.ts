@@ -33,7 +33,32 @@ export async function up(database: Kysely<any>): Promise<void> {
       column.references("brands.id").notNull().onDelete("cascade"),
     )
     .addColumn("name", "text", (column) => column.notNull())
-    .addColumn("shop_url", "text")
     .addUniqueConstraint("models_brand_id_and_name_unique", ["brand_id", "name"])
+    .execute();
+
+  await database.schema
+    .createTable("evaluations")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("database_id", "bigint", (column) =>
+      column.references("databases.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("model_id", "bigint", (column) =>
+      column.references("models.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("review_score", "real")
+    .addColumn("review_url", "text")
+    .addColumn("shop_url", "text")
+    .execute();
+
+  await database.schema
+    .createTable("measurements")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("evaluation_id", "bigint", (column) =>
+      column.references("evaluations.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())
+    .addColumn("label", "text", (column) => column.notNull())
+    .addColumn("left_channel", "text", (column) => column.notNull())
+    .addColumn("right_channel", "text", (column) => column.notNull())
     .execute();
 }

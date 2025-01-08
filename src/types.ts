@@ -9,6 +9,12 @@ export type Generated<T> =
 
 export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
 
+export type MeasurementKind =
+  | "frequency_response"
+  | "harmonic_distortion"
+  | "impedance"
+  | "sound_isolation";
+
 export type UserScoringSystem = "five_star" | "hundred_point" | "ten_point" | "ten_point_decimal";
 
 export interface Brands {
@@ -23,11 +29,28 @@ export interface Databases {
   user_id: Int8;
 }
 
+export interface Evaluations {
+  database_id: Int8;
+  id: Generated<Int8>;
+  model_id: Int8;
+  review_score: number | null;
+  review_url: string | null;
+  shop_url: string | null;
+}
+
+export interface Measurements {
+  evaluation_id: Int8;
+  id: Generated<Int8>;
+  kind: MeasurementKind;
+  label: string;
+  left_channel: string;
+  right_channel: string;
+}
+
 export interface Models {
   brand_id: Int8;
   id: Generated<Int8>;
   name: string;
-  shop_url: string | null;
 }
 
 export interface Users {
@@ -40,6 +63,8 @@ export interface Users {
 export interface Database {
   brands: Brands;
   databases: Databases;
+  evaluations: Evaluations;
+  measurements: Measurements;
   models: Models;
   users: Users;
 }

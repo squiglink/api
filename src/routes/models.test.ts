@@ -21,7 +21,6 @@ describe("GET /models", () => {
         .values({
           brand_id: brandId,
           name: `Model ${index}`,
-          shop_url: "https://squig.link",
         })
         .returning("id")
         .executeTakeFirstOrThrow();
@@ -37,7 +36,6 @@ describe("GET /models", () => {
             name: "Brand 1",
           },
           name: "Model 1",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[1],
@@ -46,7 +44,6 @@ describe("GET /models", () => {
             name: "Brand 2",
           },
           name: "Model 2",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[2],
@@ -55,7 +52,6 @@ describe("GET /models", () => {
             name: "Brand 3",
           },
           name: "Model 3",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[3],
@@ -64,7 +60,6 @@ describe("GET /models", () => {
             name: "Brand 4",
           },
           name: "Model 4",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[4],
@@ -73,7 +68,6 @@ describe("GET /models", () => {
             name: "Brand 5",
           },
           name: "Model 5",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[5],
@@ -82,7 +76,6 @@ describe("GET /models", () => {
             name: "Brand 6",
           },
           name: "Model 6",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[6],
@@ -91,7 +84,6 @@ describe("GET /models", () => {
             name: "Brand 7",
           },
           name: "Model 7",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[7],
@@ -100,7 +92,6 @@ describe("GET /models", () => {
             name: "Brand 8",
           },
           name: "Model 8",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[8],
@@ -109,7 +100,6 @@ describe("GET /models", () => {
             name: "Brand 9",
           },
           name: "Model 9",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[9],
@@ -118,7 +108,6 @@ describe("GET /models", () => {
             name: "Brand 10",
           },
           name: "Model 10",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,
@@ -132,7 +121,6 @@ describe("GET /models", () => {
             name: "Brand 11",
           },
           name: "Model 11",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,
@@ -169,7 +157,6 @@ describe("GET /models", () => {
         .values({
           brand_id: brandId,
           name: `Model ${index}`,
-          shop_url: "https://squig.link",
         })
         .returning("id")
         .executeTakeFirstOrThrow();
@@ -185,7 +172,6 @@ describe("GET /models", () => {
             name: "Foo Brand 9",
           },
           name: "Model 9",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[9],
@@ -194,7 +180,6 @@ describe("GET /models", () => {
             name: "Foo Brand 10",
           },
           name: "Model 10",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[10],
@@ -203,7 +188,6 @@ describe("GET /models", () => {
             name: "Foo Brand 11",
           },
           name: "Model 11",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[0],
@@ -212,7 +196,6 @@ describe("GET /models", () => {
             name: "Bar Brand 1",
           },
           name: "Model 1",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[1],
@@ -221,7 +204,6 @@ describe("GET /models", () => {
             name: "Bar Brand 2",
           },
           name: "Model 2",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[2],
@@ -230,7 +212,6 @@ describe("GET /models", () => {
             name: "Bar Brand 3",
           },
           name: "Model 3",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[3],
@@ -239,7 +220,6 @@ describe("GET /models", () => {
             name: "Bar Brand 4",
           },
           name: "Model 4",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[4],
@@ -248,7 +228,6 @@ describe("GET /models", () => {
             name: "Bar Brand 5",
           },
           name: "Model 5",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[5],
@@ -257,7 +236,6 @@ describe("GET /models", () => {
             name: "Bar Brand 6",
           },
           name: "Model 6",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[6],
@@ -266,7 +244,6 @@ describe("GET /models", () => {
             name: "Bar Brand 7",
           },
           name: "Model 7",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,
@@ -280,7 +257,6 @@ describe("GET /models", () => {
             name: "Bar Brand 8",
           },
           name: "Model 8",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,
@@ -317,7 +293,6 @@ describe("GET /models", () => {
         .values({
           brand_id: brandId,
           name: index > 8 ? `Foo Model ${index}` : `Bar Model ${index}`,
-          shop_url: "https://squig.link",
         })
         .returning("id")
         .executeTakeFirstOrThrow();
@@ -333,7 +308,6 @@ describe("GET /models", () => {
             name: "Brand 9",
           },
           name: "Foo Model 9",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[9],
@@ -342,7 +316,6 @@ describe("GET /models", () => {
             name: "Brand 10",
           },
           name: "Foo Model 10",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[10],
@@ -351,7 +324,6 @@ describe("GET /models", () => {
             name: "Brand 11",
           },
           name: "Foo Model 11",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[0],
@@ -360,7 +332,6 @@ describe("GET /models", () => {
             name: "Brand 1",
           },
           name: "Bar Model 1",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[1],
@@ -369,7 +340,6 @@ describe("GET /models", () => {
             name: "Brand 2",
           },
           name: "Bar Model 2",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[2],
@@ -378,7 +348,6 @@ describe("GET /models", () => {
             name: "Brand 3",
           },
           name: "Bar Model 3",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[3],
@@ -387,7 +356,6 @@ describe("GET /models", () => {
             name: "Brand 4",
           },
           name: "Bar Model 4",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[4],
@@ -396,7 +364,6 @@ describe("GET /models", () => {
             name: "Brand 5",
           },
           name: "Bar Model 5",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[5],
@@ -405,7 +372,6 @@ describe("GET /models", () => {
             name: "Brand 6",
           },
           name: "Bar Model 6",
-          shop_url: "https://squig.link",
         },
         {
           id: modelIds[6],
@@ -414,7 +380,6 @@ describe("GET /models", () => {
             name: "Brand 7",
           },
           name: "Bar Model 7",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,
@@ -428,7 +393,6 @@ describe("GET /models", () => {
             name: "Brand 8",
           },
           name: "Bar Model 8",
-          shop_url: "https://squig.link",
         },
       ],
       page_count: 2,

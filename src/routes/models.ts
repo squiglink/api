@@ -12,7 +12,7 @@ application.get("/", databaseMiddleware, async (context) => {
   const searchQueryParameter = context.req.query("query");
   const page = await context.var.database
     .selectFrom("models")
-    .select(["models.id", "models.name", "models.shop_url"])
+    .select(["models.id", "models.name"])
     .select((expressionBuilder) =>
       jsonObjectFrom(
         expressionBuilder

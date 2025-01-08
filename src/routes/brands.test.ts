@@ -21,7 +21,6 @@ describe("GET /brands", () => {
           .values({
             brand_id: brandId,
             name: `Model ${modelIndex}`,
-            shop_url: "https://squig.link",
           })
           .returning("id")
           .executeTakeFirstOrThrow();
@@ -79,7 +78,6 @@ describe("GET /brands", () => {
           .values({
             brand_id: brandId,
             name: `Model ${modelIndex}`,
-            shop_url: "https://squig.link",
           })
           .returning("id")
           .executeTakeFirstOrThrow();
