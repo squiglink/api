@@ -3,7 +3,7 @@ import { sql, type Kysely } from "kysely";
 export async function up(database: Kysely<any>): Promise<void> {
   await database.schema
     .createTable("brands")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("name", "text", (column) => column.notNull().unique())
     .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
@@ -11,7 +11,7 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("users")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("display_name", "text", (column) => column.notNull())
     .addColumn("scoring_system", sql`user_scoring_system`, (column) => column.notNull())
@@ -21,7 +21,7 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("databases")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("kind", sql`database_kind`, (column) => column.notNull())
     .addColumn("path", "text", (column) => column.notNull())
@@ -34,8 +34,8 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("models")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
-    .addColumn("brand_id", "bigint", (column) =>
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
+    .addColumn("brand_id", "uuid", (column) =>
       column.references("brands.id").notNull().onDelete("cascade"),
     )
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
@@ -46,12 +46,12 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("evaluations")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("database_id", "bigint", (column) =>
       column.references("databases.id").notNull().onDelete("cascade"),
     )
-    .addColumn("model_id", "bigint", (column) =>
+    .addColumn("model_id", "uuid", (column) =>
       column.references("models.id").notNull().onDelete("cascade"),
     )
     .addColumn("review_score", "real")
@@ -62,7 +62,7 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("measurements")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("evaluation_id", "bigint", (column) =>
       column.references("evaluations.id").notNull().onDelete("cascade"),
