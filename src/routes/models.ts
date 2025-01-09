@@ -12,7 +12,7 @@ application.get("/", async (context) => {
   const searchQueryParameter = context.req.query("query");
   const page = await database
     .selectFrom("models")
-    .select(["models.id", "models.name"])
+    .select(["models.id", "models.created_at", "models.name", "models.updated_at"])
     .select((expressionBuilder) =>
       jsonObjectFrom(
         expressionBuilder

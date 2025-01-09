@@ -4,52 +4,124 @@ import { describe, expect, test } from "vitest";
 
 describe("GET /databases", () => {
   test("it works", async () => {
-    let userIds: number[] = [];
-    let databaseIds: number[] = [];
+    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: userId } = await transaction
+        const user = await transaction
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        userIds.push(Number(userId));
-        const { id: databaseId } = await transaction
+        users.push(user);
+        const database = await transaction
           .insertInto("databases")
-          .values({ kind: "earbuds", path: "/", user_id: userId })
-          .returning("id")
+          .values({ kind: "earbuds", path: "/", user_id: user.id })
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        databaseIds.push(Number(databaseId));
+        databases.push(database);
       }
     });
 
     let firstPage = {
       page: [
-        { id: databaseIds[0], kind: "earbuds", path: "/", user_id: userIds[0] },
-        { id: databaseIds[1], kind: "earbuds", path: "/", user_id: userIds[1] },
-        { id: databaseIds[2], kind: "earbuds", path: "/", user_id: userIds[2] },
-        { id: databaseIds[3], kind: "earbuds", path: "/", user_id: userIds[3] },
-        { id: databaseIds[4], kind: "earbuds", path: "/", user_id: userIds[4] },
-        { id: databaseIds[5], kind: "earbuds", path: "/", user_id: userIds[5] },
-        { id: databaseIds[6], kind: "earbuds", path: "/", user_id: userIds[6] },
-        { id: databaseIds[7], kind: "earbuds", path: "/", user_id: userIds[7] },
-        { id: databaseIds[8], kind: "earbuds", path: "/", user_id: userIds[8] },
-        { id: databaseIds[9], kind: "earbuds", path: "/", user_id: userIds[9] },
+        {
+          id: databases[0].id,
+          created_at: databases[0].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[0].updated_at.toISOString(),
+          user_id: users[0].id,
+        },
+        {
+          id: databases[1].id,
+          created_at: databases[1].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[1].updated_at.toISOString(),
+          user_id: users[1].id,
+        },
+        {
+          id: databases[2].id,
+          created_at: databases[2].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[2].updated_at.toISOString(),
+          user_id: users[2].id,
+        },
+        {
+          id: databases[3].id,
+          created_at: databases[3].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[3].updated_at.toISOString(),
+          user_id: users[3].id,
+        },
+        {
+          id: databases[4].id,
+          created_at: databases[4].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[4].updated_at.toISOString(),
+          user_id: users[4].id,
+        },
+        {
+          id: databases[5].id,
+          created_at: databases[5].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[5].updated_at.toISOString(),
+          user_id: users[5].id,
+        },
+        {
+          id: databases[6].id,
+          created_at: databases[6].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[6].updated_at.toISOString(),
+          user_id: users[6].id,
+        },
+        {
+          id: databases[7].id,
+          created_at: databases[7].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[7].updated_at.toISOString(),
+          user_id: users[7].id,
+        },
+        {
+          id: databases[8].id,
+          created_at: databases[8].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[8].updated_at.toISOString(),
+          user_id: users[8].id,
+        },
+        {
+          id: databases[9].id,
+          created_at: databases[9].created_at.toISOString(),
+          kind: "earbuds",
+          path: "/",
+          updated_at: databases[9].updated_at.toISOString(),
+          user_id: users[9].id,
+        },
       ],
       page_count: 2,
     };
     let secondPage = {
       page: [
         {
-          id: databaseIds[10],
+          id: databases[10].id,
+          created_at: databases[10].created_at.toISOString(),
           kind: "earbuds",
           path: "/",
-          user_id: userIds[10],
+          updated_at: databases[10].updated_at.toISOString(),
+          user_id: users[10].id,
         },
       ],
       page_count: 2,
@@ -69,85 +141,115 @@ describe("GET /databases", () => {
   });
 
   test("it queries kind", async () => {
-    let userIds: number[] = [];
-    let databaseIds: number[] = [];
+    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: userId } = await transaction
+        const user = await transaction
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        userIds.push(Number(userId));
-        const { id: databaseId } = await transaction
+        users.push(user);
+        const database = await transaction
           .insertInto("databases")
           .values({
             kind: index > 8 ? "earbuds" : "headphones",
             path: "/",
-            user_id: userId,
+            user_id: user.id,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        databaseIds.push(Number(databaseId));
+        databases.push(database);
       }
     });
 
     let firstPage = {
       page: [
-        { id: databaseIds[8], kind: "earbuds", path: "/", user_id: userIds[8] },
-        { id: databaseIds[9], kind: "earbuds", path: "/", user_id: userIds[9] },
         {
-          id: databaseIds[10],
+          id: databases[8].id,
+          created_at: databases[8].created_at.toISOString(),
           kind: "earbuds",
           path: "/",
-          user_id: userIds[10],
+          updated_at: databases[8].updated_at.toISOString(),
+          user_id: users[8].id,
         },
         {
-          id: databaseIds[0],
-          kind: "headphones",
+          id: databases[9].id,
+          created_at: databases[9].created_at.toISOString(),
+          kind: "earbuds",
           path: "/",
-          user_id: userIds[0],
+          updated_at: databases[9].updated_at.toISOString(),
+          user_id: users[9].id,
         },
         {
-          id: databaseIds[1],
-          kind: "headphones",
+          id: databases[10].id,
+          created_at: databases[10].created_at.toISOString(),
+          kind: "earbuds",
           path: "/",
-          user_id: userIds[1],
+          updated_at: databases[10].updated_at.toISOString(),
+          user_id: users[10].id,
         },
         {
-          id: databaseIds[2],
+          id: databases[0].id,
+          created_at: databases[0].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[2],
+          updated_at: databases[0].updated_at.toISOString(),
+          user_id: users[0].id,
         },
         {
-          id: databaseIds[3],
+          id: databases[1].id,
+          created_at: databases[1].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[3],
+          updated_at: databases[1].updated_at.toISOString(),
+          user_id: users[1].id,
         },
         {
-          id: databaseIds[4],
+          id: databases[2].id,
+          created_at: databases[2].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[4],
+          updated_at: databases[2].updated_at.toISOString(),
+          user_id: users[2].id,
         },
         {
-          id: databaseIds[5],
+          id: databases[3].id,
+          created_at: databases[3].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[5],
+          updated_at: databases[3].updated_at.toISOString(),
+          user_id: users[3].id,
         },
         {
-          id: databaseIds[6],
+          id: databases[4].id,
+          created_at: databases[4].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[6],
+          updated_at: databases[4].updated_at.toISOString(),
+          user_id: users[4].id,
+        },
+        {
+          id: databases[5].id,
+          created_at: databases[5].created_at.toISOString(),
+          kind: "headphones",
+          path: "/",
+          updated_at: databases[5].updated_at.toISOString(),
+          user_id: users[5].id,
+        },
+        {
+          id: databases[6].id,
+          created_at: databases[6].created_at.toISOString(),
+          kind: "headphones",
+          path: "/",
+          updated_at: databases[6].updated_at.toISOString(),
+          user_id: users[6].id,
         },
       ],
       page_count: 2,
@@ -155,10 +257,12 @@ describe("GET /databases", () => {
     let secondPage = {
       page: [
         {
-          id: databaseIds[7],
+          id: databases[7].id,
+          created_at: databases[7].created_at.toISOString(),
           kind: "headphones",
           path: "/",
-          user_id: userIds[7],
+          updated_at: databases[7].updated_at.toISOString(),
+          user_id: users[7].id,
         },
       ],
       page_count: 2,
@@ -178,95 +282,115 @@ describe("GET /databases", () => {
   });
 
   test("it queries path", async () => {
-    let userIds: number[] = [];
-    let databaseIds: number[] = [];
+    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: userId } = await transaction
+        const user = await transaction
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        userIds.push(Number(userId));
-        const { id: databaseId } = await transaction
+        users.push(user);
+        const database = await transaction
           .insertInto("databases")
           .values({
             kind: "earbuds",
             path: index > 8 ? "/foo" : "/bar",
-            user_id: userId,
+            user_id: user.id,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        databaseIds.push(Number(databaseId));
+        databases.push(database);
       }
     });
 
     let firstPage = {
       page: [
         {
-          id: databaseIds[8],
+          id: databases[8].id,
+          created_at: databases[8].created_at.toISOString(),
           kind: "earbuds",
           path: "/foo",
-          user_id: userIds[8],
+          updated_at: databases[8].updated_at.toISOString(),
+          user_id: users[8].id,
         },
         {
-          id: databaseIds[9],
+          id: databases[9].id,
+          created_at: databases[9].created_at.toISOString(),
           kind: "earbuds",
           path: "/foo",
-          user_id: userIds[9],
+          updated_at: databases[9].updated_at.toISOString(),
+          user_id: users[9].id,
         },
         {
-          id: databaseIds[10],
+          id: databases[10].id,
+          created_at: databases[10].created_at.toISOString(),
           kind: "earbuds",
           path: "/foo",
-          user_id: userIds[10],
+          updated_at: databases[10].updated_at.toISOString(),
+          user_id: users[10].id,
         },
         {
-          id: databaseIds[0],
+          id: databases[0].id,
+          created_at: databases[0].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[0],
+          updated_at: databases[0].updated_at.toISOString(),
+          user_id: users[0].id,
         },
         {
-          id: databaseIds[1],
+          id: databases[1].id,
+          created_at: databases[1].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[1],
+          updated_at: databases[1].updated_at.toISOString(),
+          user_id: users[1].id,
         },
         {
-          id: databaseIds[2],
+          id: databases[2].id,
+          created_at: databases[2].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[2],
+          updated_at: databases[2].updated_at.toISOString(),
+          user_id: users[2].id,
         },
         {
-          id: databaseIds[3],
+          id: databases[3].id,
+          created_at: databases[3].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[3],
+          updated_at: databases[3].updated_at.toISOString(),
+          user_id: users[3].id,
         },
         {
-          id: databaseIds[4],
+          id: databases[4].id,
+          created_at: databases[4].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[4],
+          updated_at: databases[4].updated_at.toISOString(),
+          user_id: users[4].id,
         },
         {
-          id: databaseIds[5],
+          id: databases[5].id,
+          created_at: databases[5].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[5],
+          updated_at: databases[5].updated_at.toISOString(),
+          user_id: users[5].id,
         },
         {
-          id: databaseIds[6],
+          id: databases[6].id,
+          created_at: databases[6].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[6],
+          updated_at: databases[6].updated_at.toISOString(),
+          user_id: users[6].id,
         },
       ],
       page_count: 2,
@@ -274,10 +398,12 @@ describe("GET /databases", () => {
     let secondPage = {
       page: [
         {
-          id: databaseIds[7],
+          id: databases[7].id,
+          created_at: databases[7].created_at.toISOString(),
           kind: "earbuds",
           path: "/bar",
-          user_id: userIds[7],
+          updated_at: databases[7].updated_at.toISOString(),
+          user_id: users[7].id,
         },
       ],
       page_count: 2,

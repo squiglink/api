@@ -4,112 +4,152 @@ import { describe, expect, test } from "vitest";
 
 describe("GET /models", () => {
   test("it works", async () => {
-    let brandIds: number[] = [];
-    let modelIds: number[] = [];
+    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: brandId } = await transaction
+        const brand = await transaction
           .insertInto("brands")
           .values({
             name: `Brand ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        brandIds.push(Number(brandId));
-        const { id: modelId } = await transaction
+        brands.push(brand);
+        const model = await transaction
           .insertInto("models")
           .values({
-            brand_id: brandId,
+            brand_id: brand.id,
             name: `Model ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        modelIds.push(Number(modelId));
+        models.push(model);
       }
     });
 
     let firstPage = {
       page: [
         {
-          id: modelIds[0],
+          id: models[0].id,
           brand: {
-            id: brandIds[0],
+            id: brands[0].id,
+            created_at: brands[0].created_at.toISOString(),
             name: "Brand 1",
+            updated_at: brands[0].updated_at.toISOString(),
           },
+          created_at: models[0].created_at.toISOString(),
           name: "Model 1",
+          updated_at: models[0].updated_at.toISOString(),
         },
         {
-          id: modelIds[1],
+          id: models[1].id,
           brand: {
-            id: brandIds[1],
+            id: brands[1].id,
+            created_at: brands[1].created_at.toISOString(),
             name: "Brand 2",
+            updated_at: brands[1].updated_at.toISOString(),
           },
+          created_at: models[1].created_at.toISOString(),
           name: "Model 2",
+          updated_at: models[1].updated_at.toISOString(),
         },
         {
-          id: modelIds[2],
+          id: models[2].id,
           brand: {
-            id: brandIds[2],
+            id: brands[2].id,
+            created_at: brands[2].created_at.toISOString(),
             name: "Brand 3",
+            updated_at: brands[2].updated_at.toISOString(),
           },
+          created_at: models[2].created_at.toISOString(),
           name: "Model 3",
+          updated_at: models[2].updated_at.toISOString(),
         },
         {
-          id: modelIds[3],
+          id: models[3].id,
           brand: {
-            id: brandIds[3],
+            id: brands[3].id,
+            created_at: brands[3].created_at.toISOString(),
             name: "Brand 4",
+            updated_at: brands[3].updated_at.toISOString(),
           },
+          created_at: models[3].created_at.toISOString(),
           name: "Model 4",
+          updated_at: models[3].updated_at.toISOString(),
         },
         {
-          id: modelIds[4],
+          id: models[4].id,
           brand: {
-            id: brandIds[4],
+            id: brands[4].id,
+            created_at: brands[4].created_at.toISOString(),
             name: "Brand 5",
+            updated_at: brands[4].updated_at.toISOString(),
           },
+          created_at: models[4].created_at.toISOString(),
           name: "Model 5",
+          updated_at: models[4].updated_at.toISOString(),
         },
         {
-          id: modelIds[5],
+          id: models[5].id,
           brand: {
-            id: brandIds[5],
+            id: brands[5].id,
+            created_at: brands[5].created_at.toISOString(),
             name: "Brand 6",
+            updated_at: brands[5].updated_at.toISOString(),
           },
+          created_at: models[5].created_at.toISOString(),
           name: "Model 6",
+          updated_at: models[5].updated_at.toISOString(),
         },
         {
-          id: modelIds[6],
+          id: models[6].id,
           brand: {
-            id: brandIds[6],
+            id: brands[6].id,
+            created_at: brands[6].created_at.toISOString(),
             name: "Brand 7",
+            updated_at: brands[6].updated_at.toISOString(),
           },
+          created_at: models[6].created_at.toISOString(),
           name: "Model 7",
+          updated_at: models[6].updated_at.toISOString(),
         },
         {
-          id: modelIds[7],
+          id: models[7].id,
           brand: {
-            id: brandIds[7],
+            id: brands[7].id,
+            created_at: brands[7].created_at.toISOString(),
             name: "Brand 8",
+            updated_at: brands[7].updated_at.toISOString(),
           },
+          created_at: models[7].created_at.toISOString(),
           name: "Model 8",
+          updated_at: models[7].updated_at.toISOString(),
         },
         {
-          id: modelIds[8],
+          id: models[8].id,
           brand: {
-            id: brandIds[8],
+            id: brands[8].id,
+            created_at: brands[8].created_at.toISOString(),
             name: "Brand 9",
+            updated_at: brands[8].updated_at.toISOString(),
           },
+          created_at: models[8].created_at.toISOString(),
           name: "Model 9",
+          updated_at: models[8].updated_at.toISOString(),
         },
         {
-          id: modelIds[9],
+          id: models[9].id,
           brand: {
-            id: brandIds[9],
+            id: brands[9].id,
+            created_at: brands[9].created_at.toISOString(),
             name: "Brand 10",
+            updated_at: brands[9].updated_at.toISOString(),
           },
+          created_at: models[9].created_at.toISOString(),
           name: "Model 10",
+          updated_at: models[9].updated_at.toISOString(),
         },
       ],
       page_count: 2,
@@ -117,12 +157,16 @@ describe("GET /models", () => {
     let secondPage = {
       page: [
         {
-          id: modelIds[10],
+          id: models[10].id,
           brand: {
-            id: brandIds[10],
+            id: brands[10].id,
+            created_at: brands[10].created_at.toISOString(),
             name: "Brand 11",
+            updated_at: brands[10].updated_at.toISOString(),
           },
+          created_at: models[10].created_at.toISOString(),
           name: "Model 11",
+          updated_at: models[10].updated_at.toISOString(),
         },
       ],
       page_count: 2,
@@ -142,112 +186,152 @@ describe("GET /models", () => {
   });
 
   test("queries brand name", async () => {
-    let brandIds: number[] = [];
-    let modelIds: number[] = [];
+    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: brandId } = await transaction
+        const brand = await transaction
           .insertInto("brands")
           .values({
             name: index > 8 ? `Foo Brand ${index}` : `Bar Brand ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        brandIds.push(Number(brandId));
-        const { id: modelId } = await transaction
+        brands.push(brand);
+        const model = await transaction
           .insertInto("models")
           .values({
-            brand_id: brandId,
+            brand_id: brand.id,
             name: `Model ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        modelIds.push(Number(modelId));
+        models.push(model);
       }
     });
 
     let firstPage = {
       page: [
         {
-          id: modelIds[8],
+          id: models[8].id,
           brand: {
-            id: brandIds[8],
+            id: brands[8].id,
+            created_at: brands[8].created_at.toISOString(),
             name: "Foo Brand 9",
+            updated_at: brands[8].updated_at.toISOString(),
           },
+          created_at: models[8].created_at.toISOString(),
           name: "Model 9",
+          updated_at: models[8].updated_at.toISOString(),
         },
         {
-          id: modelIds[9],
+          id: models[9].id,
           brand: {
-            id: brandIds[9],
+            id: brands[9].id,
+            created_at: brands[9].created_at.toISOString(),
             name: "Foo Brand 10",
+            updated_at: brands[9].updated_at.toISOString(),
           },
+          created_at: models[9].created_at.toISOString(),
           name: "Model 10",
+          updated_at: models[9].updated_at.toISOString(),
         },
         {
-          id: modelIds[10],
+          id: models[10].id,
           brand: {
-            id: brandIds[10],
+            id: brands[10].id,
+            created_at: brands[10].created_at.toISOString(),
             name: "Foo Brand 11",
+            updated_at: brands[10].updated_at.toISOString(),
           },
+          created_at: models[10].created_at.toISOString(),
           name: "Model 11",
+          updated_at: models[10].updated_at.toISOString(),
         },
         {
-          id: modelIds[0],
+          id: models[0].id,
           brand: {
-            id: brandIds[0],
+            id: brands[0].id,
+            created_at: brands[0].created_at.toISOString(),
             name: "Bar Brand 1",
+            updated_at: brands[0].updated_at.toISOString(),
           },
+          created_at: models[0].created_at.toISOString(),
           name: "Model 1",
+          updated_at: models[0].updated_at.toISOString(),
         },
         {
-          id: modelIds[1],
+          id: models[1].id,
           brand: {
-            id: brandIds[1],
+            id: brands[1].id,
+            created_at: brands[1].created_at.toISOString(),
             name: "Bar Brand 2",
+            updated_at: brands[1].updated_at.toISOString(),
           },
+          created_at: models[1].created_at.toISOString(),
           name: "Model 2",
+          updated_at: models[1].updated_at.toISOString(),
         },
         {
-          id: modelIds[2],
+          id: models[2].id,
           brand: {
-            id: brandIds[2],
+            id: brands[2].id,
+            created_at: brands[2].created_at.toISOString(),
             name: "Bar Brand 3",
+            updated_at: brands[2].updated_at.toISOString(),
           },
+          created_at: models[2].created_at.toISOString(),
           name: "Model 3",
+          updated_at: models[2].updated_at.toISOString(),
         },
         {
-          id: modelIds[3],
+          id: models[3].id,
           brand: {
-            id: brandIds[3],
+            id: brands[3].id,
+            created_at: brands[3].created_at.toISOString(),
             name: "Bar Brand 4",
+            updated_at: brands[3].updated_at.toISOString(),
           },
+          created_at: models[3].created_at.toISOString(),
           name: "Model 4",
+          updated_at: models[3].updated_at.toISOString(),
         },
         {
-          id: modelIds[4],
+          id: models[4].id,
           brand: {
-            id: brandIds[4],
+            id: brands[4].id,
+            created_at: brands[4].created_at.toISOString(),
             name: "Bar Brand 5",
+            updated_at: brands[4].updated_at.toISOString(),
           },
+          created_at: models[4].created_at.toISOString(),
           name: "Model 5",
+          updated_at: models[4].updated_at.toISOString(),
         },
         {
-          id: modelIds[5],
+          id: models[5].id,
           brand: {
-            id: brandIds[5],
+            id: brands[5].id,
+            created_at: brands[5].created_at.toISOString(),
             name: "Bar Brand 6",
+            updated_at: brands[5].updated_at.toISOString(),
           },
+          created_at: models[5].created_at.toISOString(),
           name: "Model 6",
+          updated_at: models[5].updated_at.toISOString(),
         },
         {
-          id: modelIds[6],
+          id: models[6].id,
           brand: {
-            id: brandIds[6],
+            id: brands[6].id,
+            created_at: brands[6].created_at.toISOString(),
             name: "Bar Brand 7",
+            updated_at: brands[6].updated_at.toISOString(),
           },
+          created_at: models[6].created_at.toISOString(),
           name: "Model 7",
+          updated_at: models[6].updated_at.toISOString(),
         },
       ],
       page_count: 2,
@@ -255,12 +339,16 @@ describe("GET /models", () => {
     let secondPage = {
       page: [
         {
-          id: modelIds[7],
+          id: models[7].id,
           brand: {
-            id: brandIds[7],
+            id: brands[7].id,
+            created_at: brands[7].created_at.toISOString(),
             name: "Bar Brand 8",
+            updated_at: brands[7].updated_at.toISOString(),
           },
+          created_at: models[7].created_at.toISOString(),
           name: "Model 8",
+          updated_at: models[7].updated_at.toISOString(),
         },
       ],
       page_count: 2,
@@ -280,112 +368,152 @@ describe("GET /models", () => {
   });
 
   test("queries name", async () => {
-    let brandIds: number[] = [];
-    let modelIds: number[] = [];
+    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const { id: brandId } = await transaction
+        const brand = await transaction
           .insertInto("brands")
           .values({
             name: `Brand ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        brandIds.push(Number(brandId));
-        const { id: modelId } = await transaction
+        brands.push(brand);
+        const model = await transaction
           .insertInto("models")
           .values({
-            brand_id: brandId,
+            brand_id: brand.id,
             name: index > 8 ? `Foo Model ${index}` : `Bar Model ${index}`,
           })
-          .returning("id")
+          .returning(["id", "created_at", "updated_at"])
           .executeTakeFirstOrThrow();
-        modelIds.push(Number(modelId));
+        models.push(model);
       }
     });
 
     let firstPage = {
       page: [
         {
-          id: modelIds[8],
+          id: models[8].id,
           brand: {
-            id: brandIds[8],
+            id: brands[8].id,
+            created_at: brands[8].created_at.toISOString(),
             name: "Brand 9",
+            updated_at: brands[8].updated_at.toISOString(),
           },
+          created_at: models[8].created_at.toISOString(),
           name: "Foo Model 9",
+          updated_at: models[8].updated_at.toISOString(),
         },
         {
-          id: modelIds[9],
+          id: models[9].id,
           brand: {
-            id: brandIds[9],
+            id: brands[9].id,
+            created_at: brands[9].created_at.toISOString(),
             name: "Brand 10",
+            updated_at: brands[9].updated_at.toISOString(),
           },
+          created_at: models[9].created_at.toISOString(),
           name: "Foo Model 10",
+          updated_at: models[9].updated_at.toISOString(),
         },
         {
-          id: modelIds[10],
+          id: models[10].id,
           brand: {
-            id: brandIds[10],
+            id: brands[10].id,
+            created_at: brands[10].created_at.toISOString(),
             name: "Brand 11",
+            updated_at: brands[10].updated_at.toISOString(),
           },
+          created_at: models[10].created_at.toISOString(),
           name: "Foo Model 11",
+          updated_at: models[10].updated_at.toISOString(),
         },
         {
-          id: modelIds[0],
+          id: models[0].id,
           brand: {
-            id: brandIds[0],
+            id: brands[0].id,
+            created_at: brands[0].created_at.toISOString(),
             name: "Brand 1",
+            updated_at: brands[0].updated_at.toISOString(),
           },
+          created_at: models[0].created_at.toISOString(),
           name: "Bar Model 1",
+          updated_at: models[0].updated_at.toISOString(),
         },
         {
-          id: modelIds[1],
+          id: models[1].id,
           brand: {
-            id: brandIds[1],
+            id: brands[1].id,
+            created_at: brands[1].created_at.toISOString(),
             name: "Brand 2",
+            updated_at: brands[1].updated_at.toISOString(),
           },
+          created_at: models[1].created_at.toISOString(),
           name: "Bar Model 2",
+          updated_at: models[1].updated_at.toISOString(),
         },
         {
-          id: modelIds[2],
+          id: models[2].id,
           brand: {
-            id: brandIds[2],
+            id: brands[2].id,
+            created_at: brands[2].created_at.toISOString(),
             name: "Brand 3",
+            updated_at: brands[2].updated_at.toISOString(),
           },
+          created_at: models[2].created_at.toISOString(),
           name: "Bar Model 3",
+          updated_at: models[2].updated_at.toISOString(),
         },
         {
-          id: modelIds[3],
+          id: models[3].id,
           brand: {
-            id: brandIds[3],
+            id: brands[3].id,
+            created_at: brands[3].created_at.toISOString(),
             name: "Brand 4",
+            updated_at: brands[3].updated_at.toISOString(),
           },
+          created_at: models[3].created_at.toISOString(),
           name: "Bar Model 4",
+          updated_at: models[3].updated_at.toISOString(),
         },
         {
-          id: modelIds[4],
+          id: models[4].id,
           brand: {
-            id: brandIds[4],
+            id: brands[4].id,
+            created_at: brands[4].created_at.toISOString(),
             name: "Brand 5",
+            updated_at: brands[4].updated_at.toISOString(),
           },
+          created_at: models[4].created_at.toISOString(),
           name: "Bar Model 5",
+          updated_at: models[4].updated_at.toISOString(),
         },
         {
-          id: modelIds[5],
+          id: models[5].id,
           brand: {
-            id: brandIds[5],
+            id: brands[5].id,
+            created_at: brands[5].created_at.toISOString(),
             name: "Brand 6",
+            updated_at: brands[5].updated_at.toISOString(),
           },
+          created_at: models[5].created_at.toISOString(),
           name: "Bar Model 6",
+          updated_at: models[5].updated_at.toISOString(),
         },
         {
-          id: modelIds[6],
+          id: models[6].id,
           brand: {
-            id: brandIds[6],
+            id: brands[6].id,
+            created_at: brands[6].created_at.toISOString(),
             name: "Brand 7",
+            updated_at: brands[6].updated_at.toISOString(),
           },
+          created_at: models[6].created_at.toISOString(),
           name: "Bar Model 7",
+          updated_at: models[6].updated_at.toISOString(),
         },
       ],
       page_count: 2,
@@ -393,12 +521,16 @@ describe("GET /models", () => {
     let secondPage = {
       page: [
         {
-          id: modelIds[7],
+          id: models[7].id,
           brand: {
-            id: brandIds[7],
+            id: brands[7].id,
+            created_at: brands[7].created_at.toISOString(),
             name: "Brand 8",
+            updated_at: brands[7].updated_at.toISOString(),
           },
+          created_at: models[7].created_at.toISOString(),
           name: "Bar Model 8",
+          updated_at: models[7].updated_at.toISOString(),
         },
       ],
       page_count: 2,

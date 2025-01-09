@@ -18,3 +18,9 @@ export const database = new Kysely<Database>({
     }),
   }),
 });
+
+export function touch() {
+  return {
+    updated_at: new Date(),
+  };
+}
