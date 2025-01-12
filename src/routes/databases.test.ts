@@ -16,13 +16,13 @@ describe("GET /databases", () => {
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         users.push(user);
         const database = await transaction
           .insertInto("databases")
           .values({ kind: "earbuds", path: "/", user_id: user.id })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         databases.push(database);
       }
@@ -153,7 +153,7 @@ describe("GET /databases", () => {
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         users.push(user);
         const database = await transaction
@@ -163,7 +163,7 @@ describe("GET /databases", () => {
             path: "/",
             user_id: user.id,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         databases.push(database);
       }
@@ -294,7 +294,7 @@ describe("GET /databases", () => {
             scoring_system: "five_star",
             username: `user_${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         users.push(user);
         const database = await transaction
@@ -304,7 +304,7 @@ describe("GET /databases", () => {
             path: index > 8 ? "/foo" : "/bar",
             user_id: user.id,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         databases.push(database);
       }

@@ -14,7 +14,7 @@ describe("GET /models", () => {
           .values({
             name: `Brand ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         brands.push(brand);
         const model = await transaction
@@ -23,7 +23,7 @@ describe("GET /models", () => {
             brand_id: brand.id,
             name: `Model ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         models.push(model);
       }
@@ -196,7 +196,7 @@ describe("GET /models", () => {
           .values({
             name: index > 8 ? `Foo Brand ${index}` : `Bar Brand ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         brands.push(brand);
         const model = await transaction
@@ -205,7 +205,7 @@ describe("GET /models", () => {
             brand_id: brand.id,
             name: `Model ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         models.push(model);
       }
@@ -378,7 +378,7 @@ describe("GET /models", () => {
           .values({
             name: `Brand ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         brands.push(brand);
         const model = await transaction
@@ -387,7 +387,7 @@ describe("GET /models", () => {
             brand_id: brand.id,
             name: index > 8 ? `Foo Model ${index}` : `Bar Model ${index}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         models.push(model);
       }

@@ -13,7 +13,7 @@ describe("GET /brands", () => {
           .values({
             name: `Brand ${brandIndex}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         brands.push(brand);
         for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
@@ -140,7 +140,7 @@ describe("GET /brands", () => {
           .values({
             name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
           })
-          .returning(["id", "created_at", "updated_at"])
+          .returningAll()
           .executeTakeFirstOrThrow();
         brands.push(brand);
         for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
