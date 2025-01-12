@@ -12,22 +12,25 @@ application.get("/", async (context) => {
   const searchQueryParameter = context.req.query("query");
   const page = await database
     .selectFrom("models")
-    .select(["models.id", "models.name"])
+    .innerJoin("brands", "brands.id", "models.brand_id")
+    .select(["models.id", "models.created_at", "models.name", "models.updated_at"])
     .select((expressionBuilder) =>
       jsonObjectFrom(
         expressionBuilder
           .selectFrom("brands")
           .selectAll()
+          .select([
+            sql`to_char(brands.created_at, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z')`.as("created_at"),
+            sql`to_char(brands.updated_at, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z')`.as("updated_at"),
+          ])
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
     )
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
-      selectQueryBuilder
-        .leftJoin("brands", "brands.id", "models.brand_id")
-        .orderBy([
-          sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
-          "models.id",
-        ]),
+      selectQueryBuilder.orderBy([
+        sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
+        "models.id",
+      ]),
     )
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)
