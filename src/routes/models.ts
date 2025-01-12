@@ -28,7 +28,7 @@ application.get("/", async (context) => {
     )
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy([
-        sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
+        sql`concat(brands.name, ' ', models.name) <-> ${searchQueryParameter}`,
         "models.id",
       ]),
     )

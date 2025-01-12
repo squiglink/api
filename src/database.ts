@@ -5,11 +5,8 @@ import type { Database } from "./types.js";
 
 const { Pool } = pg;
 
-const int8TypeId = 20;
-pg.types.setTypeParser(int8TypeId, (value) => parseInt(value, 10));
-
-const timestampTypeId = 1114;
-pg.types.setTypeParser(timestampTypeId, (value) => new Date(value).toISOString());
+pg.types.setTypeParser(pg.types.builtins.INT8, (value) => parseInt(value, 10));
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMP, (value) => new Date(value).toISOString());
 
 export const database = new Kysely<Database>({
   dialect: new PostgresDialect({

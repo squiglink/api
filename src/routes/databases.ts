@@ -14,7 +14,7 @@ application.get("/", async (context) => {
     .selectAll()
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(
-        sql`concat(databases.kind, ' ', databases.path) <-> ${context.req.query("query")}`,
+        sql`concat(databases.kind, ' ', databases.path) <-> ${searchQueryParameter}`,
       ),
     )
     .orderBy("databases.id")
