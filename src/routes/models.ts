@@ -18,6 +18,10 @@ application.get("/", async (context) => {
         expressionBuilder
           .selectFrom("brands")
           .selectAll()
+          .select([
+            sql`to_char(brands.created_at, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z')`.as("created_at"),
+            sql`to_char(brands.updated_at, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z')`.as("updated_at"),
+          ])
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
     )

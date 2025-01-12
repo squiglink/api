@@ -8,6 +8,9 @@ const { Pool } = pg;
 const int8TypeId = 20;
 pg.types.setTypeParser(int8TypeId, (value) => parseInt(value, 10));
 
+const timestampTypeId = 1114;
+pg.types.setTypeParser(timestampTypeId, (value) => new Date(value).toISOString());
+
 export const database = new Kysely<Database>({
   dialect: new PostgresDialect({
     pool: new Pool({

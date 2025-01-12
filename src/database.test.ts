@@ -16,6 +16,8 @@ describe(".touch", () => {
       .returningAll()
       .executeTakeFirstOrThrow();
 
-    expect(updatedBrand.updated_at.getTime()).toBeGreaterThan(createdBrand.updated_at.getTime());
+    expect(new Date(updatedBrand.updated_at).getTime()).toBeGreaterThan(
+      new Date(createdBrand.updated_at).getTime(),
+    );
   });
 });
