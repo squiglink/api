@@ -26,7 +26,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("kind", sql`database_kind`, (column) => column.notNull())
     .addColumn("path", "text", (column) => column.notNull())
     .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn("user_id", "bigint", (column) =>
+    .addColumn("user_id", "uuid", (column) =>
       column.references("users.id").notNull().onDelete("cascade"),
     )
     .addUniqueConstraint("databases_path_and_user_id_unique", ["path", "user_id"])
@@ -48,7 +48,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .createTable("evaluations")
     .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn("database_id", "bigint", (column) =>
+    .addColumn("database_id", "uuid", (column) =>
       column.references("databases.id").notNull().onDelete("cascade"),
     )
     .addColumn("model_id", "uuid", (column) =>
@@ -64,7 +64,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .createTable("measurements")
     .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn("evaluation_id", "bigint", (column) =>
+    .addColumn("evaluation_id", "uuid", (column) =>
       column.references("evaluations.id").notNull().onDelete("cascade"),
     )
     .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())

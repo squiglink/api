@@ -18,19 +18,23 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type UserScoringSystem = "five_star" | "hundred_point" | "ten_point" | "ten_point_decimal";
 
 export interface Brands {
+  created_at: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
   updated_at: Generated<Timestamp>;
 }
 
 export interface Databases {
+  created_at: Generated<Timestamp>;
   id: Generated<string>;
   kind: DatabaseKind;
   path: string;
+  updated_at: Generated<Timestamp>;
   user_id: string;
 }
 
 export interface Evaluations {
+  created_at: Generated<Timestamp>;
   database_id: string;
   id: Generated<string>;
   model_id: string;
@@ -41,6 +45,7 @@ export interface Evaluations {
 }
 
 export interface Measurements {
+  created_at: Generated<Timestamp>;
   evaluation_id: string;
   id: Generated<string>;
   kind: MeasurementKind;
@@ -52,6 +57,7 @@ export interface Measurements {
 
 export interface Models {
   brand_id: string;
+  created_at: Generated<Timestamp>;
   id: Generated<string>;
   name: string;
   updated_at: Generated<Timestamp>;
