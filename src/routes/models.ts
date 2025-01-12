@@ -12,6 +12,7 @@ application.get("/", async (context) => {
   const searchQueryParameter = context.req.query("query");
   const page = await database
     .selectFrom("models")
+    .innerJoin("brands", "brands.id", "models.brand_id")
     .select(["models.id", "models.created_at", "models.name", "models.updated_at"])
     .select((expressionBuilder) =>
       jsonObjectFrom(
@@ -26,12 +27,10 @@ application.get("/", async (context) => {
       ).as("brand"),
     )
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
-      selectQueryBuilder
-        .leftJoin("brands", "brands.id", "models.brand_id")
-        .orderBy([
-          sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
-          "models.id",
-        ]),
+      selectQueryBuilder.orderBy([
+        sql`concat(brands.name, ' ', models.name) <-> ${context.req.query("query")}`,
+        "models.id",
+      ]),
     )
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)
