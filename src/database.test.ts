@@ -1,11 +1,8 @@
-import { aw } from "vitest/dist/chunks/reporters.D7Jzd9GS.js";
-import { application } from "./application.js";
 import { database, touch } from "./database.js";
-import { count } from "./test_helper.js";
 import { describe, expect, test } from "vitest";
 
-describe("touch", () => {
-  test("it refreshes timestamp in the updated_at column", async () => {
+describe(".touch", () => {
+  test("it updates the modification timestamp", async () => {
     const createdBrand = await database
       .insertInto("brands")
       .values({ name: "Zony" })
@@ -19,6 +16,6 @@ describe("touch", () => {
       .returningAll()
       .executeTakeFirstOrThrow();
 
-    expect(updatedBrand.updated_at).toBeGreaterThan(createdBrand.updated_at.getTime());
+    expect(updatedBrand.updated_at.getTime()).toBeGreaterThan(createdBrand.updated_at.getTime());
   });
 });
