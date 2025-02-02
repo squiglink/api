@@ -13,6 +13,11 @@ services:
       - SQUIGLINK_POSTGRES_PASSWORD=postgres
       - SQUIGLINK_POSTGRES_TEST_DATABASE=squiglink_test
       - SQUIGLINK_POSTGRES_USER=postgres
+      # JWT_SECRET should be a random string, you can generate one with `openssl rand -hex 32`
+      - JWT_SECRET=change_me
+      - RESEND_API_KEY=change_me
+      - AUTH_EMAIL=no-reply@example.com
+      - APP_URL=http://localhost:3000
     networks:
       - squiglink
     ports:
