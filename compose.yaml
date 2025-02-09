@@ -7,12 +7,13 @@ services:
     build: .
     depends_on:
       - postgres
+    env_file:
+      - .env
     environment:
+      - SQUIGLINK_APPLICATION_URL=http://localhost:3000
       - SQUIGLINK_POSTGRES_DATABASE=squiglink_dev
       - SQUIGLINK_POSTGRES_HOST=postgres
-      - SQUIGLINK_POSTGRES_PASSWORD=postgres
       - SQUIGLINK_POSTGRES_TEST_DATABASE=squiglink_test
-      - SQUIGLINK_POSTGRES_USER=postgres
     networks:
       - squiglink
     ports:
