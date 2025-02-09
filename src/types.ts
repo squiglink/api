@@ -68,6 +68,7 @@ export interface Models {
 export interface Users {
   created_at: Generated<Timestamp>;
   display_name: string;
+  email: Generated<string>;
   id: Generated<Int8>;
   scoring_system: UserScoringSystem;
   updated_at: Generated<Timestamp>;
