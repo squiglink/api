@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
-    "hono": "^4.7.0",
+    "hono": "^4.7.1",
     "kysely": "^0.27.5",
     "pg": "^8.13.3"
   },
