@@ -19,7 +19,7 @@
     "kysely-codegen": "^0.17.0",
     "kysely-ctl": "^0.11.1",
     "prettier": "^3.5.1",
-    "tsx": "^4.19.2",
+    "tsx": "^4.19.3",
     "vitest": "^3.0.6"
   }
 }
