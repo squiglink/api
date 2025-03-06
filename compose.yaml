@@ -23,7 +23,7 @@ services:
   postgres:
     environment:
       POSTGRES_PASSWORD: postgres
-    image: postgres:17.2-alpine3.21
+    image: postgres:17.4-alpine3.21
     networks:
       - squiglink
     ports:
