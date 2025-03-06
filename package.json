@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "kysely-codegen": "kysely-codegen --env-file kysely-codegen.config.env --out-file kysely-codegen.ts",
     "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely",
     "test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" vitest"
   },
@@ -20,6 +19,7 @@
     "kysely-ctl": "^0.12.1",
     "prettier": "^3.5.3",
     "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
     "vitest": "^3.0.7"
   }
 }

@@ -29,7 +29,7 @@ importers:
         version: 8.11.11
       kysely-codegen:
         specifier: ^0.18.2
-        version: 0.18.2(kysely@0.27.6)(pg@8.13.3)
+        version: 0.18.2(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2)
       kysely-ctl:
         specifier: ^0.12.1
         version: 0.12.1(kysely@0.27.6)
@@ -39,6 +39,9 @@ importers:
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
       vitest:
         specifier: ^3.0.7
         version: 3.0.7(@types/node@22.13.9)(jiti@2.4.2)(tsx@4.19.3)
@@ -945,6 +948,11 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
@@ -1335,12 +1343,14 @@ snapshots:
 
   consola@3.4.0: {}
 
-  cosmiconfig@9.0.0:
+  cosmiconfig@9.0.0(typescript@5.8.2):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
+    optionalDependencies:
+      typescript: 5.8.2
 
   debug@4.4.0:
     dependencies:
@@ -1492,10 +1502,10 @@ snapshots:
 
   json-parse-even-better-errors@2.3.1: {}
 
-  kysely-codegen@0.18.2(kysely@0.27.6)(pg@8.13.3):
+  kysely-codegen@0.18.2(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2):
     dependencies:
       chalk: 4.1.2
-      cosmiconfig: 9.0.0
+      cosmiconfig: 9.0.0(typescript@5.8.2)
       dotenv: 16.4.7
       dotenv-expand: 12.0.1
       git-diff: 2.0.6
@@ -1813,6 +1823,8 @@ snapshots:
       get-tsconfig: 4.10.0
     optionalDependencies:
       fsevents: 2.3.3
+
+  typescript@5.8.2: {}
 
   ufo@1.5.4: {}
 
