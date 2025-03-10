@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { AuthService } from "./services/auth.service.js";
-import { authMiddleware } from "./middleware/auth.middleware.js";
+import { authorizationMiddleware } from "./middleware/authorization.js";
 
+import authLogin from "./routes/auth.login.js";
+import authVerify from "./routes/auth.verify.js";
+import authRefresh from "./routes/auth.refresh.js";
 import brands from "./routes/brands.js";
 import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";
@@ -13,39 +15,18 @@ import modelsNew from "./routes/models.new.js";
 const application = new Hono();
 application.use("/*", cors());
 
-// Auth routes
-application.post("/auth/login", async (c) => {
-  const { email } = await c.req.json();
-  if (!email) {
-    return c.json({ message: "Email is required" }, 400);
-  }
+application.route("/auth", authLogin);
+application.route("/auth", authVerify);
+application.route("/brands", brands);
+application.route("/databases", databases);
+application.route("/models", models);
 
-  await AuthService.sendMagicLink(email);
-  return c.json({ message: "Magic link sent to your email" });
-});
+const authorizedRoutes = new Hono();
+authorizedRoutes.use("/*", authorizationMiddleware);
+authorizedRoutes.route("/auth", authRefresh);
+authorizedRoutes.route("/brands/new", brandsNew);
+authorizedRoutes.route("/models/new", modelsNew);
 
-application.get("/auth/verify", async (c) => {
-  const token = c.req.query("token");
-  if (!token) {
-    return c.json({ message: "Token is required" }, 400);
-  }
-
-  const user = await AuthService.verifyToken(token);
-  if (!user) {
-    return c.json({ message: "Invalid token" }, 401);
-  }
-
-  return c.json({ token });
-});
-
-// Protected routes
-const protectedNamespace = application.use("/*", authMiddleware);
-
-// Existing routes should be moved here and will be automatically protected
-protectedNamespace.route("/brands", brands);
-protectedNamespace.route("/brands", brandsNew);
-protectedNamespace.route("/databases", databases);
-protectedNamespace.route("/models", models);
-protectedNamespace.route("/models", modelsNew);
+application.route("/", authorizedRoutes);
 
 export default application;
