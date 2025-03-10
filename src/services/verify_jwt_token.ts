@@ -1,5 +1,5 @@
-import { verify } from "hono/jwt";
 import { env } from "process";
+import { verify } from "hono/jwt";
 
 export async function verifyJwtToken(token: string) {
   try {
@@ -22,9 +22,7 @@ export async function verifyJwtToken(token: string) {
 }
 
 function getJwtSecretFromEnv() {
-  if (env.SQUIGLINK_JWT_SECRET === undefined) {
-    throw new Error("JWT_SECRET is not set");
-  }
+  if (env.SQUIGLINK_JWT_SECRET === undefined) throw new Error("JWT_SECRET is not set");
 
   return env.SQUIGLINK_JWT_SECRET;
 }

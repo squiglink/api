@@ -1,11 +1,11 @@
-import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { Hono } from "hono";
 
 import { authorizationMiddleware } from "./middleware/authorization.js";
 
 import authLogin from "./routes/auth.login.js";
-import authVerify from "./routes/auth.verify.js";
 import authRefresh from "./routes/auth.refresh.js";
+import authVerify from "./routes/auth.verify.js";
 import brands from "./routes/brands.js";
 import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";

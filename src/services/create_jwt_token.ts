@@ -1,5 +1,5 @@
-import { sign } from "hono/jwt";
 import { env } from "process";
+import { sign } from "hono/jwt";
 
 export async function createJwtToken(expiresIn: number): Promise<string> {
   const currentDate = new Date();
