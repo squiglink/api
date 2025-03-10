@@ -4,6 +4,7 @@ import { database } from "../database.js";
 import { env } from "process";
 import { Hono } from "hono";
 import { Resend } from "resend";
+
 import type { Selectable } from "kysely";
 import type { Users } from "../types.js";
 
@@ -45,28 +46,23 @@ application.post("/login", async (context) => {
 
 export default application;
 
+function getAuthEmailFromEnv() {
+  if (env.SQUIGLINK_AUTHENTICATION_EMAIL === undefined)
+    throw new Error("AUTHENTICATION_EMAIL is not set");
+
+  return env.SQUIGLINK_AUTHENTICATION_EMAIL;
+}
+
 function getApplicationUrlFromEnv() {
-  if (env.SQUIGLINK_APPLICATION_URL === undefined) {
-    throw new Error("APPLICATION_URL is not set");
-  }
+  if (env.SQUIGLINK_APPLICATION_URL === undefined) throw new Error("APPLICATION_URL is not set");
 
   return env.SQUIGLINK_APPLICATION_URL;
 }
 
 function getResendApiKeyFromEnv() {
-  if (env.SQUIGLINK_RESEND_API_KEY === undefined) {
-    throw new Error("RESEND_API_KEY is not set");
-  }
+  if (env.SQUIGLINK_RESEND_API_KEY === undefined) throw new Error("RESEND_API_KEY is not set");
 
   return env.SQUIGLINK_RESEND_API_KEY;
-}
-
-function getAuthEmailFromEnv() {
-  if (env.SQUIGLINK_AUTHENTICATION_EMAIL === undefined) {
-    throw new Error("AUTHENTICATION_EMAIL is not set");
-  }
-
-  return env.SQUIGLINK_AUTHENTICATION_EMAIL;
 }
 
 async function getUserByEmail(email: string): Promise<Selectable<Users> | undefined> {
