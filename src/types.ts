@@ -46,6 +46,29 @@ export interface Evaluations {
   updated_at: Generated<Timestamp>;
 }
 
+export interface JwtAuthorizationTokens {
+  created_at: Generated<Timestamp>;
+  id: Generated<Int8>;
+  token: string;
+  updated_at: Generated<Timestamp>;
+  user_id: Int8;
+}
+
+export interface JwtMagicLinkTokens {
+  created_at: Generated<Timestamp>;
+  id: Generated<Int8>;
+  token: string;
+  user_id: Int8;
+}
+
+export interface JwtRefreshTokens {
+  created_at: Generated<Timestamp>;
+  id: Generated<Int8>;
+  token: string;
+  updated_at: Generated<Timestamp>;
+  user_id: Int8;
+}
+
 export interface Measurements {
   created_at: Generated<Timestamp>;
   evaluation_id: Int8;
@@ -68,6 +91,7 @@ export interface Models {
 export interface Users {
   created_at: Generated<Timestamp>;
   display_name: string;
+  email: string;
   id: Generated<Int8>;
   scoring_system: UserScoringSystem;
   updated_at: Generated<Timestamp>;
@@ -78,6 +102,9 @@ export interface Database {
   brands: Brands;
   databases: Databases;
   evaluations: Evaluations;
+  jwt_authorization_tokens: JwtAuthorizationTokens;
+  jwt_magic_link_tokens: JwtMagicLinkTokens;
+  jwt_refresh_tokens: JwtRefreshTokens;
   measurements: Measurements;
   models: Models;
   users: Users;
