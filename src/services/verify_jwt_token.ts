@@ -16,7 +16,6 @@ export async function verifyJwtToken(token: string) {
 
     return payload;
   } catch (error) {
-    console.log("[verifyJwtToken] error: ", error);
     return null;
   }
 }
