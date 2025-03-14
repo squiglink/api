@@ -28,8 +28,8 @@ importers:
         specifier: ^8.11.11
         version: 8.11.11
       kysely-codegen:
-        specifier: ^0.18.2
-        version: 0.18.2(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2)
+        specifier: ^0.18.3
+        version: 0.18.3(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2)
       kysely-ctl:
         specifier: ^0.12.1
         version: 0.12.1(kysely@0.27.6)
@@ -600,8 +600,8 @@ packages:
   json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
 
-  kysely-codegen@0.18.2:
-    resolution: {integrity: sha512-EuhLJaofXQ2u7j8LdEBafbOKV8+Xdjgr+ywmaTF037SbAYUKmkst1dmDauzxtGp7KyYwoIDZmz7QVOsyYbb6Iw==}
+  kysely-codegen@0.18.3:
+    resolution: {integrity: sha512-u2PFL1i8kaD+Jhcd5aIGPLgDqNriWvfWKtA7+kkvR2zZxr3DkdvT/B3nJWObZ/uj+GeONq0TChvf6mf6RqqWuA==}
     hasBin: true
     peerDependencies:
       '@libsql/kysely-libsql': ^0.3.0 || ^0.4.1
@@ -1499,7 +1499,7 @@ snapshots:
 
   json-parse-even-better-errors@2.3.1: {}
 
-  kysely-codegen@0.18.2(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2):
+  kysely-codegen@0.18.3(kysely@0.27.6)(pg@8.13.3)(typescript@5.8.2):
     dependencies:
       chalk: 4.1.2
       cosmiconfig: 9.0.0(typescript@5.8.2)
