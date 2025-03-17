@@ -1,7 +1,7 @@
 import { database } from "../database.js";
 import { verifyJwtToken } from "./verify_jwt_token.js";
 
-export async function getUserFromJwtToken(token: string) {
+export async function findUserByJwtToken(token: string) {
   const payload = await verifyJwtToken(token);
   if (!payload) return null;
 

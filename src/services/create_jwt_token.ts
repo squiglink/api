@@ -1,5 +1,5 @@
-import { env } from "process";
 import { sign } from "hono/jwt";
+import configuration from "../configuration.js";
 
 export async function createJwtToken(expiresIn: number): Promise<string> {
   const currentDate = new Date();
@@ -16,16 +16,8 @@ export async function createJwtToken(expiresIn: number): Promise<string> {
       iat: Math.floor(currentDate.getTime() / 1000),
       exp: Math.floor(expirationDate.getTime() / 1000),
     },
-    getJwtSecretFromEnv(),
+    configuration.jwtSignature,
   );
 
   return token;
-}
-
-function getJwtSecretFromEnv() {
-  if (env.SQUIGLINK_JWT_SECRET === undefined) {
-    throw new Error("JWT_SECRET is not set");
-  }
-
-  return env.SQUIGLINK_JWT_SECRET;
 }

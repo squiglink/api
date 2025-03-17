@@ -1,12 +1,8 @@
-import {
-  calculateTokenTTL,
-  getRefreshTokenTTL,
-  getAccessTokenTTL,
-} from "../services/calculate_token_ttl.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
+import configuration from "../configuration.js";
 
 const application = new Hono();
 
@@ -17,7 +13,7 @@ application.post("/refresh", async (context) => {
   const payload = await verifyJwtToken(refreshToken);
   if (!payload) return context.body(null, 401);
 
-  const currentUser = context.var.current_user;
+  const currentUser = context.var.currentUser;
 
   const refreshTokenUser = await database
     .selectFrom("users")
@@ -29,8 +25,8 @@ application.post("/refresh", async (context) => {
 
   if (!refreshTokenUser) return context.body(null, 401);
 
-  const newAccessToken = await createJwtToken(calculateTokenTTL(getAccessTokenTTL()));
-  const newRefreshToken = await createJwtToken(calculateTokenTTL(getRefreshTokenTTL()));
+  const newAccessToken = await createJwtToken(configuration.accessTokenExpirationTime * 1000);
+  const newRefreshToken = await createJwtToken(configuration.refreshTokenExpirationTime * 1000);
 
   return await database.transaction().execute(async (transaction) => {
     await transaction

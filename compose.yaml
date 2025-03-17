@@ -6,10 +6,20 @@ services:
   api:
     build: .
     depends_on:
-      postgres:
-        condition: service_healthy
-    env_file:
-      - .env
+      - postgres
+    environment:
+      - SQUIGLINK_ACCESS_TOKEN_EXPIRATION_TIME=86400
+      - SQUIGLINK_APPLICATION_URL=http://localhost:3000
+      - SQUIGLINK_EMAIL_FROM=no-reply@squig.link
+      - SQUIGLINK_JWT_SIGNATURE=placeholder
+      - SQUIGLINK_MAGIC_LINK_TOKEN_EXPIRATION_TIME=900
+      - SQUIGLINK_POSTGRES_DATABASE=squiglink_dev
+      - SQUIGLINK_POSTGRES_HOST=postgres
+      - SQUIGLINK_POSTGRES_PASSWORD=postgres
+      - SQUIGLINK_POSTGRES_TEST_DATABASE=squiglink_test
+      - SQUIGLINK_POSTGRES_USER=postgres
+      - SQUIGLINK_REFRESH_TOKEN_EXPIRATION_TIME=1209600
+      - SQUIGLINK_RESEND_API_KEY=placeholder
     networks:
       - squiglink
     ports:
@@ -32,8 +42,3 @@ services:
       - 5432:5432
     volumes:
       - ./docker/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${SQUIGLINK_POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5

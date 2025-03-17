@@ -62,20 +62,6 @@ export async function up(database: Kysely<any>): Promise<void> {
     .execute();
 
   await database.schema
-    .createTable("measurements")
-    .addColumn("id", "bigserial", (column) => column.primaryKey())
-    .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn("evaluation_id", "bigint", (column) =>
-      column.references("evaluations.id").notNull().onDelete("cascade"),
-    )
-    .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())
-    .addColumn("label", "text", (column) => column.notNull())
-    .addColumn("left_channel", "text", (column) => column.notNull())
-    .addColumn("right_channel", "text", (column) => column.notNull())
-    .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
-    .execute();
-
-  await database.schema
     .createTable("jwt_authorization_tokens")
     .addColumn("id", "bigserial", (column) => column.primaryKey())
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
@@ -105,5 +91,19 @@ export async function up(database: Kysely<any>): Promise<void> {
       column.references("users.id").notNull().onDelete("cascade"),
     )
     .addColumn("token", "text", (column) => column.notNull())
+    .execute();
+
+  await database.schema
+    .createTable("measurements")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("evaluation_id", "bigint", (column) =>
+      column.references("evaluations.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())
+    .addColumn("label", "text", (column) => column.notNull())
+    .addColumn("left_channel", "text", (column) => column.notNull())
+    .addColumn("right_channel", "text", (column) => column.notNull())
+    .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .execute();
 }
