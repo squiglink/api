@@ -6,7 +6,8 @@ services:
   api:
     build: .
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       - SQUIGLINK_POSTGRES_DATABASE=squiglink_dev
       - SQUIGLINK_POSTGRES_HOST=postgres
@@ -30,3 +31,8 @@ services:
       - 5432:5432
     volumes:
       - ./docker/entrypoint.sql:/docker-entrypoint-initdb.d/entrypoint.sql
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${SQUIGLINK_POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
