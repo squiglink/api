@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - run: cp .env.example .env
+      - run: export $(sed 's/#.*//' .env)
+
       - run: docker compose run api pnpm install
       - run: docker compose run api pnpm kysely-test migrate:latest
 
