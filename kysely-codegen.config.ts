@@ -1,9 +1,14 @@
 import { env } from "process";
 
-const database = env.SQUIGLINK_POSTGRES_DATABASE;
-const host = env.SQUIGLINK_POSTGRES_HOST;
-const password = env.SQUIGLINK_POSTGRES_PASSWORD;
-const user = env.SQUIGLINK_POSTGRES_USER;
+const database = envString("SQUIGLINK_POSTGRES_DATABASE");
+const host = envString("SQUIGLINK_POSTGRES_HOST");
+const password = envString("SQUIGLINK_POSTGRES_PASSWORD");
+const user = envString("SQUIGLINK_POSTGRES_USER");
+
+function envString(key: string): string {
+  if (env[key] === undefined) throw new Error(`\`${key}\` is not set.`);
+  return env[key];
+}
 
 export default {
   outFile: "src/types.ts",

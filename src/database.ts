@@ -1,5 +1,5 @@
-import { env } from "process";
 import { Kysely, PostgresDialect } from "kysely";
+import configuration from "./configuration.js";
 import pg from "pg";
 import type { Database } from "./types.js";
 
@@ -11,10 +11,10 @@ pg.types.setTypeParser(pg.types.builtins.TIMESTAMP, (value) => new Date(value).t
 export const database = new Kysely<Database>({
   dialect: new PostgresDialect({
     pool: new Pool({
-      database: env.SQUIGLINK_POSTGRES_DATABASE,
-      host: env.SQUIGLINK_POSTGRES_HOST,
-      password: env.SQUIGLINK_POSTGRES_PASSWORD,
-      user: env.SQUIGLINK_POSTGRES_USER,
+      database: configuration.postgresDatabase,
+      host: configuration.postgresHost,
+      password: configuration.postgresPassword,
+      user: configuration.postgresUser,
     }),
   }),
 });
