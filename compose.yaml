@@ -8,12 +8,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      - SQUIGLINK_POSTGRES_DATABASE=squiglink_dev
-      - SQUIGLINK_POSTGRES_HOST=postgres
-      - SQUIGLINK_POSTGRES_PASSWORD=postgres
-      - SQUIGLINK_POSTGRES_TEST_DATABASE=squiglink_test
-      - SQUIGLINK_POSTGRES_USER=postgres
+    env_file:
+      - .env
     networks:
       - squiglink
     ports:
