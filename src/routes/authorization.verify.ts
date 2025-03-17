@@ -19,8 +19,8 @@ application.get("/verify", async (context) => {
   if (!user) return context.body(null, 401);
 
   return await database.transaction().execute(async (transaction) => {
-    const accessToken = await createJwtToken(configuration.accessTokenExpirationTime * 1000);
-    const refreshToken = await createJwtToken(configuration.refreshTokenExpirationTime * 1000);
+    const accessToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
+    const refreshToken = await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000);
 
     await transaction
       .insertInto("jwt_authorization_tokens")

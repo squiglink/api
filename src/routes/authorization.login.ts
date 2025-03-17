@@ -10,7 +10,7 @@ application.post("/login", async (context) => {
   const { email } = await context.req.json();
   if (!email) return context.body(null, 401);
 
-  const authToken = await createJwtToken(configuration.accessTokenExpirationTime * 1000);
+  const authToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
   const magicLink = `${configuration.applicationUrl}/auth/verify?token=${authToken}`;
   const user = await database
     .selectFrom("users")
@@ -29,7 +29,7 @@ application.post("/login", async (context) => {
       })
       .execute();
 
-    const resend = new Resend(configuration.resendApiKey);
+    const resend = new Resend(configuration.apiKeyResend);
     const resendResponse = await resend.emails.send({
       from: configuration.emailFrom,
       to: email,

@@ -3,7 +3,7 @@ import configuration from "../configuration.js";
 
 export async function verifyJwtToken(token: string) {
   try {
-    const payload = await verify(token, configuration.jwtSignature);
+    const payload = await verify(token, configuration.jwtSecret);
 
     if (payload.expiresIn) {
       const expirationDate = new Date((payload.exp as number) * 1000);

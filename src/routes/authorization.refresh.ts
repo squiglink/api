@@ -25,8 +25,8 @@ application.post("/refresh", async (context) => {
 
   if (!refreshTokenUser) return context.body(null, 401);
 
-  const newAccessToken = await createJwtToken(configuration.accessTokenExpirationTime * 1000);
-  const newRefreshToken = await createJwtToken(configuration.refreshTokenExpirationTime * 1000);
+  const newAccessToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
+  const newRefreshToken = await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000);
 
   return await database.transaction().execute(async (transaction) => {
     await transaction
