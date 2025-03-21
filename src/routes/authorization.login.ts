@@ -7,7 +7,7 @@ import configuration from "../configuration.js";
 
 const application = new Hono();
 
-application.post("/login", async (context) => {
+application.post("/", async (context) => {
   const payload = await context.req.text();
   if (!payload) return context.body(null, 401);
   const { email } = JSON.parse(payload);

@@ -6,7 +6,7 @@ import configuration from "../configuration.js";
 
 const application = new Hono();
 
-application.post("/refresh", async (context) => {
+application.post("/", async (context) => {
   const { refreshToken } = await context.req.json();
   if (!refreshToken) return context.body(null, 401);
 

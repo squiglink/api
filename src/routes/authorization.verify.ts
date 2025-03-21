@@ -8,7 +8,7 @@ import type { Users } from "../types.js";
 
 const application = new Hono();
 
-application.get("/verify", async (context) => {
+application.get("/", async (context) => {
   const authToken = context.req.query("token");
   if (!authToken) return context.body(null, 401);
 
@@ -54,7 +54,7 @@ async function getUserByEmailAuthToken(token: string): Promise<Selectable<Users>
     .selectFrom("users")
     .innerJoin("jwt_magic_link_tokens", "users.id", "jwt_magic_link_tokens.user_id")
     .where("jwt_magic_link_tokens.token", "=", token)
-    .selectAll()
+    .selectAll("users")
     .limit(1)
     .executeTakeFirst();
 }
