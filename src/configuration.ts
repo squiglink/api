@@ -2,6 +2,7 @@ import { env } from "process";
 
 interface Configuration {
   apiKeyResend: string;
+  applicationEnvironment: string;
   applicationUrl: string;
   emailFrom: string;
   jwtExpirationTimeAccessToken: number;
@@ -17,6 +18,7 @@ interface Configuration {
 
 let configuration: Configuration = {
   apiKeyResend: envString("SQUIGLINK_API_KEY_RESEND"),
+  applicationEnvironment: envString("SQUIGLINK_APPLICATION_ENVIRONMENT"),
   applicationUrl: envString("SQUIGLINK_APPLICATION_URL"),
   emailFrom: envString("SQUIGLINK_EMAIL_FROM"),
   jwtExpirationTimeAccessToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_ACCESS_TOKEN"),
