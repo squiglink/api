@@ -1,4 +1,4 @@
-import { application } from "../application.js";
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
 
@@ -13,6 +13,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: `user_${index}@example.com`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })
@@ -150,6 +151,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: `user_${index}@example.com`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })
@@ -291,6 +293,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: `user_${index}@example.com`,
             scoring_system: "five_star",
             username: `user_${index}`,
           })

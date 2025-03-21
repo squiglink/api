@@ -1,4 +1,4 @@
-import { application } from "../application.js";
+import application from "../application.js";
 import { count } from "../test_helper.js";
 import { describe, expect, test } from "vitest";
 

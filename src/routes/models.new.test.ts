@@ -1,4 +1,4 @@
-import { application } from "../application.js";
+import application from "../application.js";
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
@@ -28,6 +28,7 @@ describe("POST /models/new", () => {
             .values({
               display_name: `User`,
               scoring_system: "five_star",
+              email: `user@example.com`,
               username: `user`,
             })
             .returning("id")
@@ -89,6 +90,7 @@ describe("POST /models/new", () => {
       .values({
         display_name: `User`,
         scoring_system: "five_star",
+        email: `user@example.com`,
         username: `user`,
       })
       .returning("id")
@@ -134,6 +136,7 @@ describe("POST /models/new", () => {
       .values({
         display_name: `User`,
         scoring_system: "five_star",
+        email: `user@example.com`,
         username: `user`,
       })
       .returning("id")
