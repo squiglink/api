@@ -33,17 +33,21 @@ application.post("/", async (context) => {
       })
       .execute();
 
-    const resend = new Resend(configuration.apiKeyResend);
-    const resendResponse = await resend.emails.send({
-      from: configuration.emailFrom,
-      to: email,
-      subject: "Your Magic Link",
-      html: `Click here to login: <a href="${magicLink}">${magicLink}</a>`,
-    });
+    if (configuration.applicationEnvironment === "production") {
+      const resend = new Resend(configuration.apiKeyResend);
+      const resendResponse = await resend.emails.send({
+        from: configuration.emailFrom,
+        to: email,
+        subject: "Your Magic Link",
+        html: `Click here to login: <a href="${magicLink}">${magicLink}</a>`,
+      });
 
-    if (resendResponse.error) {
-      throw new Error(resendResponse.error.message);
+      if (resendResponse.error) {
+        throw new Error(resendResponse.error.message);
+      }
     }
+
+    console.log("MAGIC LINK: ", magicLink);
 
     return context.body(null, 200);
   });
