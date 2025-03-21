@@ -5,8 +5,6 @@ import type { Database } from "./types.js";
 import type { TableExpression } from "kysely";
 import { createJwtToken } from "./services/create_jwt_token.js";
 import configuration from "./configuration.js";
-import type { Selectable } from "kysely";
-import type { Users } from "./types.js";
 
 beforeEach(async () => {
   truncateTableCascade("brands");
