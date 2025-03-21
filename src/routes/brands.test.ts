@@ -1,7 +1,7 @@
 import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
-
+import { signIn } from "../test_helper.js";
 describe("GET /brands", () => {
   test("it works", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
@@ -244,15 +244,42 @@ describe("GET /brands", () => {
       page_count: 2,
     };
 
-    const pagelessResponse = await application.request("/brands?query=foo");
+    const user = await database.transaction().execute(async (transaction) => {
+      return await transaction
+        .insertInto("users")
+        .values({
+          email: "test@test.com",
+          display_name: "Test User",
+          scoring_system: "five_star",
+          username: "test_user",
+        })
+        .returningAll()
+        .executeTakeFirstOrThrow();
+    });
+
+    const { accessToken } = await signIn(user.id);
+
+    const pagelessResponse = await application.request("/brands?query=foo", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     expect(await pagelessResponse.json()).toEqual(queryBrandFirstPage);
     expect(pagelessResponse.ok).toBe(true);
 
-    const firstPageResponse = await application.request("/brands?query=foo&page=1");
+    const firstPageResponse = await application.request("/brands?query=foo&page=1", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     expect(await firstPageResponse.json()).toEqual(queryBrandFirstPage);
     expect(firstPageResponse.ok).toBe(true);
 
-    const secondPageResponse = await application.request("/brands?query=foo&page=2");
+    const secondPageResponse = await application.request("/brands?query=foo&page=2", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     expect(await secondPageResponse.json()).toEqual(queryBrandSecondPage);
     expect(secondPageResponse.ok).toBe(true);
   });

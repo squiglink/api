@@ -2,6 +2,7 @@ import application from "../application.js";
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
+import { signIn } from "../test_helper.js";
 
 describe("POST /models/new", () => {
   test("creates a new model", async () => {
@@ -65,12 +66,20 @@ describe("POST /models/new", () => {
       },
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
-    expect(await response.json()).toMatchObject(body);
+    const responseBody = await response.text();
+    console.log(responseBody);
+    const responseJson = JSON.parse(responseBody);
+    expect(responseJson).toMatchObject(body);
     expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
@@ -112,12 +121,20 @@ describe("POST /models/new", () => {
       },
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
-    expect(await response.json()).toMatchObject(body);
+    const responseBody = await response.text();
+    console.log(responseBody);
+    const responseJson = JSON.parse(responseBody);
+    expect(responseJson).toMatchObject(body);
     expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
@@ -152,12 +169,20 @@ describe("POST /models/new", () => {
       name: "Model",
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
-    expect(await response.json()).toMatchObject(body);
+    const responseBody = await response.text();
+    console.log(responseBody);
+    const responseJson = JSON.parse(responseBody);
+    expect(responseJson).toMatchObject(body);
     expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
   });
