@@ -2,7 +2,8 @@ import configuration from "../configuration.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
-import { Resend } from "resend";
+import { sendMail } from "../services/send_mail.js";
+
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 const application = new Hono();
@@ -34,17 +35,11 @@ application.post("/", async (context) => {
       .execute();
 
     if (configuration.applicationEnvironment === "production") {
-      const resend = new Resend(configuration.apiKeyResend);
-      const resendResponse = await resend.emails.send({
-        from: configuration.emailFrom,
+      await sendMail({
         to: email,
         subject: "Your Magic Link",
-        html: `Click here to login: <a href="${magicLink}">${magicLink}</a>`,
+        body: `Click here to login: <a href="${magicLink}">${magicLink}</a>`,
       });
-
-      if (resendResponse.error) {
-        throw new Error(resendResponse.error.message);
-      }
     }
 
     console.log("MAGIC LINK:", magicLink);
