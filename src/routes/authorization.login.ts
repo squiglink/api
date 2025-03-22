@@ -1,9 +1,9 @@
+import configuration from "../configuration.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { Resend } from "resend";
-import emailValidator from "isemail";
-import configuration from "../configuration.js";
+const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 const application = new Hono();
 
@@ -12,7 +12,7 @@ application.post("/", async (context) => {
   if (!payload) return context.body(null, 401);
   const { email } = JSON.parse(payload);
   if (!email) return context.body(null, 401);
-  if (!emailValidator.validate(email)) return context.body(null, 401);
+  if (!EMAIL_REGEX.test(email)) return context.body(null, 401);
 
   const authToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
   const magicLink = `${configuration.applicationUrl}/auth/verify?token=${authToken}`;
@@ -47,7 +47,7 @@ application.post("/", async (context) => {
       }
     }
 
-    console.log("MAGIC LINK: ", magicLink);
+    console.log("MAGIC LINK:", magicLink);
 
     return context.body(null, 200);
   });
