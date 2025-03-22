@@ -1,7 +1,7 @@
-import { database } from "../database.js";
-import { getRandomEmail } from "../test_helper.js";
-import { describe, expect, test, beforeEach } from "vitest";
 import { createJwtToken } from "../services/create_jwt_token.js";
+import { database } from "../database.js";
+import { describe, expect, test } from "vitest";
+import { getRandomEmail } from "../test_helper.js";
 
 import application from "../application.js";
 import configuration from "../configuration.js";

@@ -1,8 +1,9 @@
-import configuration from "../configuration.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { sendMail } from "../services/send_mail.js";
+
+import configuration from "../configuration.js";
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 

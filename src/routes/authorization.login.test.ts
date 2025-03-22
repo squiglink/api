@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { database } from "../database.js";
 import { getRandomEmail } from "../test_helper.js";
-import { vi, describe, expect, test, beforeEach } from "vitest";
 
 import * as sendMailModule from "../services/send_mail.js";
 import application from "../application.js";

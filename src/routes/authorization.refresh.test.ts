@@ -5,7 +5,6 @@ import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
 
 import application from "../application.js";
-import configuration from "../configuration.js";
 
 describe("POST /authorization/refresh", () => {
   test("return 401 if authorization header is not provided", async () => {

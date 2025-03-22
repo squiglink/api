@@ -2,7 +2,9 @@ import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
+
 import configuration from "../configuration.js";
+
 import type { Selectable } from "kysely";
 import type { Users } from "../types.js";
 
