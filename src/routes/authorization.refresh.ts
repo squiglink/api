@@ -20,7 +20,7 @@ application.post("/", async (context) => {
     .innerJoin("jwt_refresh_tokens", "users.id", "jwt_refresh_tokens.user_id")
     .where("jwt_refresh_tokens.token", "=", refreshToken)
     .where("users.id", "=", currentUser.id)
-    .selectAll()
+    .selectAll("users")
     .executeTakeFirst();
 
   if (!refreshTokenUser) return context.body(null, 401);
