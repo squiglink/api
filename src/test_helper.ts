@@ -55,3 +55,7 @@ export async function signIn(
     refreshToken: refreshToken,
   };
 }
+
+export function getRandomEmail() {
+  return `${Math.random().toString(36).substring(2)}@test.com`;
+}

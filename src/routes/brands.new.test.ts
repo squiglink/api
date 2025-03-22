@@ -1,7 +1,9 @@
 import application from "../application.js";
+
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
+import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
 
 describe("POST /brands/new", () => {
@@ -11,7 +13,7 @@ describe("POST /brands/new", () => {
         .insertInto("users")
         .values({
           display_name: "Test User",
-          email: "test@test.com",
+          email: getRandomEmail(),
           scoring_system: "five_star",
           username: "test",
         })

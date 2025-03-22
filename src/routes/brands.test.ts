@@ -1,7 +1,9 @@
 import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, test } from "vitest";
+import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
+
 describe("GET /brands", () => {
   test("it works", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
@@ -248,7 +250,7 @@ describe("GET /brands", () => {
       return await transaction
         .insertInto("users")
         .values({
-          email: "test@test.com",
+          email: getRandomEmail(),
           display_name: "Test User",
           scoring_system: "five_star",
           username: "test_user",
