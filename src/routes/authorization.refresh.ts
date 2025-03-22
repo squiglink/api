@@ -7,11 +7,14 @@ import configuration from "../configuration.js";
 const application = new Hono();
 
 application.post("/", async (context) => {
-  const { refreshToken } = await context.req.json();
+  const requestPayload = await context.req.text();
+  if (!requestPayload) return context.body(null, 401);
+
+  const { refreshToken } = JSON.parse(requestPayload);
   if (!refreshToken) return context.body(null, 401);
 
-  const payload = await verifyJwtToken(refreshToken);
-  if (!payload) return context.body(null, 401);
+  const jwtPayload = await verifyJwtToken(refreshToken);
+  if (!jwtPayload) return context.body(null, 401);
 
   const currentUser = context.var.currentUser;
 
