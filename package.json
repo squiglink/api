@@ -4,13 +4,15 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely",
-    "test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" vitest"
+    "test": "vitest"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
+    "@types/jsonwebtoken": "^9.0.8",
     "hono": "^4.7.5",
     "kysely": "^0.27.6",
-    "pg": "^8.14.1"
+    "pg": "^8.14.1",
+    "resend": "^4.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
