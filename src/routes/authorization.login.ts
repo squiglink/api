@@ -34,7 +34,10 @@ application.post("/", async (context) => {
       })
       .execute();
 
-    if (configuration.applicationEnvironment === "production") {
+    if (
+      configuration.applicationEnvironment === "production" ||
+      configuration.applicationEnvironment === "test"
+    ) {
       await sendMail({
         to: email,
         subject: "Your Magic Link",
