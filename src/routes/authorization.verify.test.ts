@@ -71,10 +71,10 @@ describe("GET /authorization/verify", () => {
       method: "GET",
     });
 
-    const response_json = await response.json();
-
     expect(response.status).toBe(200);
-    expect(response_json).toHaveProperty("accessToken");
-    expect(response_json).toHaveProperty("refreshToken");
+    expect(await response.json()).toEqual({
+      accessToken: expect.any(String),
+      refreshToken: expect.any(String),
+    });
   });
 });
