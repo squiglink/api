@@ -1,8 +1,8 @@
 import { database, touch } from "./database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe(".touch", () => {
-  test("it updates the modification timestamp", async () => {
+  it("updates the modification timestamp", async () => {
     const createdBrand = await database
       .insertInto("brands")
       .values({ name: "Zony" })

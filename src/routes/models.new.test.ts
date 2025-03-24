@@ -1,10 +1,10 @@
 import { application } from "../application.js";
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("POST /models/new", () => {
-  test("creates a new model", async () => {
+  it("responds with success and creates a new model", async () => {
     let brandId: number = -1;
     let userId: number = -1;
     let databaseId: number = -1;
@@ -70,13 +70,13 @@ describe("POST /models/new", () => {
     });
 
     expect(await response.json()).toMatchObject(body);
-    expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
     expect(await count("measurements")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 
-  test("creates a new model without measurements", async () => {
+  it("responds with success and creates a new model without measurements", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -116,12 +116,12 @@ describe("POST /models/new", () => {
     });
 
     expect(await response.json()).toMatchObject(body);
-    expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 
-  test("creates a new model without an evaluation", async () => {
+  it("responds with success and creates a new model without an evaluation", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -155,7 +155,7 @@ describe("POST /models/new", () => {
     });
 
     expect(await response.json()).toMatchObject(body);
-    expect(response.ok).toBe(true);
     expect(await count("models")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 });
