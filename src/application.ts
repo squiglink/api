@@ -15,18 +15,18 @@ import modelsNew from "./routes/models.new.js";
 const application = new Hono();
 application.use("/*", cors());
 
+application.route("/", brands);
+application.route("/", databases);
+application.route("/", models);
 application.route("/authorization/login", authorizationLogin);
 application.route("/authorization/verify", authorizationVerify);
-application.route("/brands", brands);
-application.route("/databases", databases);
-application.route("/models", models);
 
 const authorizedApplication = new Hono();
 authorizedApplication.use("/*", authorizationMiddleware);
 
+authorizedApplication.route("/", brandsNew);
+authorizedApplication.route("/", modelsNew);
 authorizedApplication.route("/authorization/refresh", authorizationRefresh);
-authorizedApplication.route("/brands/new", brandsNew);
-authorizedApplication.route("/models/new", modelsNew);
 
 application.route("/", authorizedApplication);
 

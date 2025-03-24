@@ -4,7 +4,7 @@ import { sql } from "kysely";
 
 const application = new Hono();
 
-application.get("/", async (context) => {
+application.get("/brands", async (context) => {
   const pageNumber = Number(context.req.query("page")) || 1;
   const pageSize = 10;
 

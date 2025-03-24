@@ -3,7 +3,7 @@ import { Hono } from "hono";
 
 const application = new Hono();
 
-application.post("/", async (context) => {
+application.post("/brands/new", async (context) => {
   const body = await context.req.json();
 
   const result = await database
