@@ -9,10 +9,10 @@ import modelsNew from "./routes/models.new.js";
 export const application = new Hono();
 
 application.use("*", cors());
-application.route("/brands", brands);
-application.route("/brands", brandsNew);
-application.route("/databases", databases);
-application.route("/models", models);
-application.route("/models", modelsNew);
+application.route("/", brands);
+application.route("/", brandsNew);
+application.route("/", databases);
+application.route("/", models);
+application.route("/", modelsNew);
 
 export default application;

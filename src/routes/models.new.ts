@@ -4,7 +4,7 @@ import type { MeasurementKind } from "../types.js";
 
 const application = new Hono();
 
-application.post("/new", async (context) => {
+application.post("/models/new", async (context) => {
   const body: {
     brand_id: number;
     name: string;
