@@ -1,11 +1,12 @@
 import { defineConfig } from "vitest/config";
+import configuration from "./src/configuration.js";
 
 export default defineConfig({
   test: {
+    env: {
+      SQUIGLINK_POSTGRES_DATABASE: configuration.postgresTestDatabase,
+    },
     fileParallelism: false,
     setupFiles: ["src/test_helper.ts"],
-    env: {
-      SQUIGLINK_POSTGRES_DATABASE: "squiglink_test",
-    },
   },
 });
