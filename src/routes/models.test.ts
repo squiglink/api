@@ -1,6 +1,6 @@
-import { application } from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import application from "../application.js";
 
 describe("GET /models", () => {
   it("responds with success and returns models", async () => {

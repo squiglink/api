@@ -1,10 +1,11 @@
-import { application } from "../application.js";
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import { signIn } from "../test_helper.js";
+import application from "../application.js";
 
 describe("POST /models/new", () => {
-  it("responds with success and creates a new model", async () => {
+  it("responds with success and creates a model", async () => {
     let brandId: number = -1;
     let userId: number = -1;
     let databaseId: number = -1;
@@ -28,6 +29,7 @@ describe("POST /models/new", () => {
             .values({
               display_name: `User`,
               scoring_system: "five_star",
+              email: `user@example.com`,
               username: `user`,
             })
             .returning("id")
@@ -64,9 +66,14 @@ describe("POST /models/new", () => {
       },
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     expect(await response.json()).toMatchObject(body);
@@ -89,6 +96,7 @@ describe("POST /models/new", () => {
       .values({
         display_name: `User`,
         scoring_system: "five_star",
+        email: `user@example.com`,
         username: `user`,
       })
       .returning("id")
@@ -110,9 +118,14 @@ describe("POST /models/new", () => {
       },
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     expect(await response.json()).toMatchObject(body);
@@ -121,7 +134,7 @@ describe("POST /models/new", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with success and creates a new model without an evaluation", async () => {
+  it("responds with success and creates a model without an evaluation", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -134,6 +147,7 @@ describe("POST /models/new", () => {
       .values({
         display_name: `User`,
         scoring_system: "five_star",
+        email: `user@example.com`,
         username: `user`,
       })
       .returning("id")
@@ -149,9 +163,14 @@ describe("POST /models/new", () => {
       name: "Model",
     };
 
+    const { accessToken } = await signIn(userId);
+
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     expect(await response.json()).toMatchObject(body);

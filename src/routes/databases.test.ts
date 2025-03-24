@@ -1,6 +1,7 @@
-import { application } from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import { getRandomEmail } from "../test_helper.js";
+import application from "../application.js";
 
 describe("GET /databases", () => {
   it("responds with success and returns databases", async () => {
@@ -13,6 +14,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: getRandomEmail(),
             scoring_system: "five_star",
             username: `user_${index}`,
           })
@@ -150,6 +152,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: getRandomEmail(),
             scoring_system: "five_star",
             username: `user_${index}`,
           })
@@ -291,6 +294,7 @@ describe("GET /databases", () => {
           .insertInto("users")
           .values({
             display_name: `User ${index}`,
+            email: getRandomEmail(),
             scoring_system: "five_star",
             username: `user_${index}`,
           })

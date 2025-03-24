@@ -14,6 +14,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("id", "bigserial", (column) => column.primaryKey())
     .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("display_name", "text", (column) => column.notNull())
+    .addColumn("email", "text", (column) => column.notNull().unique())
     .addColumn("scoring_system", sql`user_scoring_system`, (column) => column.notNull())
     .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
     .addColumn("username", "text", (column) => column.notNull().unique())
@@ -58,6 +59,38 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("review_url", "text")
     .addColumn("shop_url", "text")
     .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .execute();
+
+  await database.schema
+    .createTable("jwt_authorization_tokens")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("user_id", "bigint", (column) =>
+      column.references("users.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("token", "text", (column) => column.notNull())
+    .execute();
+
+  await database.schema
+    .createTable("jwt_magic_link_tokens")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("token", "text", (column) => column.notNull())
+    .addColumn("user_id", "bigint", (column) =>
+      column.references("users.id").notNull().unique().onDelete("cascade"),
+    )
+    .execute();
+
+  await database.schema
+    .createTable("jwt_refresh_tokens")
+    .addColumn("id", "bigserial", (column) => column.primaryKey())
+    .addColumn("created_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("updated_at", "timestamp", (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn("user_id", "bigint", (column) =>
+      column.references("users.id").notNull().onDelete("cascade"),
+    )
+    .addColumn("token", "text", (column) => column.notNull())
     .execute();
 
   await database.schema
