@@ -1,11 +1,11 @@
-import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
+import application from "../application.js";
 
 describe("GET /brands", () => {
-  test("it works", async () => {
+  it("responds with success and returns brands", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {
@@ -132,7 +132,7 @@ describe("GET /brands", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
-  test("queries name", async () => {
+  it("responds with success and queries the name", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
 
     await database.transaction().execute(async (transaction) => {

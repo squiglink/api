@@ -1,9 +1,9 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("GET /databases", () => {
-  test("it works", async () => {
+  it("responds with success and returns databases", async () => {
     let users: { id: string; created_at: Date; updated_at: Date }[] = [];
     let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 
@@ -141,7 +141,7 @@ describe("GET /databases", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
-  test("it queries kind", async () => {
+  it("responds with success and queries the kind", async () => {
     let users: { id: string; created_at: Date; updated_at: Date }[] = [];
     let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 
@@ -283,7 +283,7 @@ describe("GET /databases", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
-  test("it queries path", async () => {
+  it("responds with success and queries the path", async () => {
     let users: { id: string; created_at: Date; updated_at: Date }[] = [];
     let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
 

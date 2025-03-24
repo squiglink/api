@@ -1,11 +1,11 @@
-import application from "../application.js";
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { signIn } from "../test_helper.js";
+import application from "../application.js";
 
 describe("POST /models/new", () => {
-  test("creates a new model", async () => {
+  it("responds with success and creates a new model", async () => {
     let brandId: number = -1;
     let userId: number = -1;
     let databaseId: number = -1;
@@ -76,17 +76,14 @@ describe("POST /models/new", () => {
       },
     });
 
-    const responseBody = await response.text();
-    console.log(responseBody);
-    const responseJson = JSON.parse(responseBody);
-    expect(responseJson).toMatchObject(body);
-    expect(response.ok).toBe(true);
+    expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
     expect(await count("measurements")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 
-  test("creates a new model without measurements", async () => {
+  it("responds with success and creates a new model without measurements", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -131,16 +128,13 @@ describe("POST /models/new", () => {
       },
     });
 
-    const responseBody = await response.text();
-    console.log(responseBody);
-    const responseJson = JSON.parse(responseBody);
-    expect(responseJson).toMatchObject(body);
-    expect(response.ok).toBe(true);
+    expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
     expect(await count("evaluations")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 
-  test("creates a new model without an evaluation", async () => {
+  it("responds with success and creates a new model without an evaluation", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({
@@ -179,11 +173,8 @@ describe("POST /models/new", () => {
       },
     });
 
-    const responseBody = await response.text();
-    console.log(responseBody);
-    const responseJson = JSON.parse(responseBody);
-    expect(responseJson).toMatchObject(body);
-    expect(response.ok).toBe(true);
+    expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
+    expect(response.ok).toBe(true);
   });
 });

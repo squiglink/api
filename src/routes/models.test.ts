@@ -1,9 +1,9 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("GET /models", () => {
-  test("it works", async () => {
+  it("responds with success and returns models", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
     let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
@@ -185,7 +185,7 @@ describe("GET /models", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
-  test("queries brand name", async () => {
+  it("responds with success and queries the brand name", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
     let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
@@ -367,7 +367,7 @@ describe("GET /models", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
-  test("queries name", async () => {
+  it("responds with success and queries the name", async () => {
     let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
     let models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
