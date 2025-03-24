@@ -1,12 +1,12 @@
 import { count } from "../test_helper.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("POST /brands/new", () => {
-  test("responds with success and creates a new brand", async () => {
+  it("responds with success and creates a new brand", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")

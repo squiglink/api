@@ -2,12 +2,11 @@ import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
-
 import configuration from "../configuration.js";
 
 const application = new Hono();
 
-application.post("/", async (context) => {
+application.post("/authorization/refresh", async (context) => {
   const requestPayload = await context.req.text();
   if (!requestPayload) return context.body(null, 401);
 

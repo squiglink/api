@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
 import { getRandomEmail } from "../test_helper.js";
-
 import * as sendMailModule from "../services/send_mail.js";
 import application from "../application.js";
 
@@ -10,19 +9,18 @@ vi.mock("../services/send_mail.js");
 describe("POST /authorization/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
     vi.mocked(sendMailModule.sendMail).mockResolvedValue(true);
   });
 
-  test("returns 401 if email is not provided", async () => {
+  it("responds with unauthrorized if the email is not provided", async () => {
     const response = await application.request("/authorization/login", {
       method: "POST",
-      body: null,
+      body: JSON.stringify({}),
     });
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if email is not valid", async () => {
+  it("responds with unauthrorized if the email is not valid", async () => {
     const response = await application.request("/authorization/login", {
       method: "POST",
       body: JSON.stringify({ email: "invalid-email" }),
@@ -30,7 +28,7 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if email is valid but user does not exist", async () => {
+  it("responds with unauthrorized if the email is valid but the user does not exist", async () => {
     const response = await application.request("/authorization/login", {
       method: "POST",
       body: JSON.stringify({ email: "test@test.com" }),
@@ -38,7 +36,7 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 500 if sendMail throws an error", async () => {
+  it("responds with internal server error if sendMail throws an error", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -61,7 +59,7 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(500);
   });
 
-  test("creates JWT magic link token and sends email with magic link", async () => {
+  it("creates a JWT magic link token and sends an email with the magic link", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -93,7 +91,7 @@ describe("POST /authorization/login", () => {
     expect(sendMailModule.sendMail).toHaveBeenCalledWith(
       expect.objectContaining({
         to: user.email,
-        subject: "Your Magic Link",
+        subject: "Log into Squiglink",
         body: expect.stringContaining(magicLinkToken.token),
       }),
     );

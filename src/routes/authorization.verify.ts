@@ -2,15 +2,13 @@ import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
-
 import configuration from "../configuration.js";
-
 import type { Selectable } from "kysely";
 import type { Users } from "../types.js";
 
 const application = new Hono();
 
-application.get("/", async (context) => {
+application.get("/authorization/verify", async (context) => {
   const authToken = context.req.query("token");
   if (!authToken) return context.body(null, 401);
 

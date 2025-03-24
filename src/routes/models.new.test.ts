@@ -5,7 +5,7 @@ import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("POST /models/new", () => {
-  it("responds with success and creates a new model", async () => {
+  it("responds with success and creates a model", async () => {
     let brandId: number = -1;
     let userId: number = -1;
     let databaseId: number = -1;
@@ -134,7 +134,7 @@ describe("POST /models/new", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with success and creates a new model without an evaluation", async () => {
+  it("responds with success and creates a model without an evaluation", async () => {
     const { id: brandId } = await database
       .insertInto("brands")
       .values({

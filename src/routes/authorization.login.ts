@@ -2,14 +2,13 @@ import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { sendMail } from "../services/send_mail.js";
-
 import configuration from "../configuration.js";
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 const application = new Hono();
 
-application.post("/", async (context) => {
+application.post("/authorization/login", async (context) => {
   const payload = await context.req.text();
   if (!payload) return context.body(null, 401);
   const { email } = JSON.parse(payload);
@@ -35,18 +34,11 @@ application.post("/", async (context) => {
       })
       .execute();
 
-    if (
-      configuration.applicationEnvironment === "production" ||
-      configuration.applicationEnvironment === "test"
-    ) {
-      await sendMail({
-        to: email,
-        subject: "Your Magic Link",
-        body: `Click here to login: <a href="${magicLink}">${magicLink}</a>`,
-      });
-    }
-
-    console.log("MAGIC LINK:", magicLink);
+    await sendMail({
+      to: email,
+      subject: "Log into Squiglink",
+      body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
+    });
 
     return context.body(null, 200);
   });

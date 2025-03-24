@@ -1,13 +1,12 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
-import { describe, expect, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
-
 import application from "../application.js";
 
 describe("POST /authorization/refresh", () => {
-  test("return 401 if authorization header is not provided", async () => {
+  it("responds with unauthorized if the authorization header is not provided", async () => {
     const response = await application.request("/authorization/refresh", {
       method: "POST",
       headers: {},
@@ -16,7 +15,7 @@ describe("POST /authorization/refresh", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if request body is not provided", async () => {
+  it("responds with unauthorized if the request body is not provided", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -43,7 +42,7 @@ describe("POST /authorization/refresh", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if refreshToken is not provided", async () => {
+  it("responds with unauthorized if the refresh token is not provided", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -70,7 +69,7 @@ describe("POST /authorization/refresh", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if refreshToken is not valid", async () => {
+  it("responds with unauthorized if the refresh token is not valid", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -99,7 +98,7 @@ describe("POST /authorization/refresh", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 401 if refreshToken is not associated with any user", async () => {
+  it("responds with unauthorized if the refresh token is not associated with a user", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
@@ -128,7 +127,7 @@ describe("POST /authorization/refresh", () => {
     expect(response.status).toBe(401);
   });
 
-  test("returns 200 with new accessToken and refreshToken if refreshToken is valid", async () => {
+  it("responds with success and returns tokens if the refresh token is valid", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await transaction
         .insertInto("users")
