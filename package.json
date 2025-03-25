@@ -15,7 +15,7 @@
     "resend": "^4.1.1"
   },
   "devDependencies": {
-    "@types/node": "^22.13.11",
+    "@types/node": "^22.13.13",
     "@types/pg": "^8.11.11",
     "kysely-codegen": "^0.18.3",
     "kysely-ctl": "^0.12.1",
