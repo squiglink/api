@@ -10,6 +10,9 @@ beforeEach(async () => {
   truncateTableCascade("brands");
   truncateTableCascade("databases");
   truncateTableCascade("evaluations");
+  truncateTableCascade("jwt_authorization_tokens");
+  truncateTableCascade("jwt_magic_link_tokens");
+  truncateTableCascade("jwt_refresh_tokens");
   truncateTableCascade("measurements");
   truncateTableCascade("models");
   truncateTableCascade("users");
