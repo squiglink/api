@@ -8,8 +8,8 @@ import application from "../application.js";
 describe("POST /authorization/refresh", () => {
   it("responds with unauthorized if the authorization header is not provided", async () => {
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       headers: {},
+      method: "POST",
     });
 
     expect(response.status).toBe(401);
@@ -32,11 +32,9 @@ describe("POST /authorization/refresh", () => {
     const { accessToken } = await signIn(user.id);
 
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       body: null,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+      method: "POST",
     });
 
     expect(response.status).toBe(401);
@@ -59,11 +57,9 @@ describe("POST /authorization/refresh", () => {
     const { accessToken } = await signIn(user.id);
 
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       body: JSON.stringify({}),
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+      method: "POST",
     });
 
     expect(response.status).toBe(401);
@@ -88,11 +84,9 @@ describe("POST /authorization/refresh", () => {
     const invalidRefreshToken = await createJwtToken(0);
 
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       body: JSON.stringify({ refreshToken: invalidRefreshToken }),
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+      method: "POST",
     });
 
     expect(response.status).toBe(401);
@@ -117,11 +111,9 @@ describe("POST /authorization/refresh", () => {
     const invalidRefreshToken = await createJwtToken(1000);
 
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       body: JSON.stringify({ refreshToken: invalidRefreshToken }),
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+      method: "POST",
     });
 
     expect(response.status).toBe(401);
@@ -144,9 +136,9 @@ describe("POST /authorization/refresh", () => {
     const { accessToken, refreshToken } = await signIn(user.id);
 
     const response = await application.request("/authorization/refresh", {
-      method: "POST",
       body: JSON.stringify({ refreshToken }),
       headers: { Authorization: `Bearer ${accessToken}` },
+      method: "POST",
     });
 
     expect(response.status).toBe(200);

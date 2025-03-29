@@ -262,25 +262,19 @@ describe("GET /brands", () => {
     const { accessToken } = await signIn(user.id);
 
     const pagelessResponse = await application.request("/brands?query=foo", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     expect(await pagelessResponse.json()).toEqual(queryBrandFirstPage);
     expect(pagelessResponse.ok).toBe(true);
 
     const firstPageResponse = await application.request("/brands?query=foo&page=1", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     expect(await firstPageResponse.json()).toEqual(queryBrandFirstPage);
     expect(firstPageResponse.ok).toBe(true);
 
     const secondPageResponse = await application.request("/brands?query=foo&page=2", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     expect(await secondPageResponse.json()).toEqual(queryBrandSecondPage);
     expect(secondPageResponse.ok).toBe(true);

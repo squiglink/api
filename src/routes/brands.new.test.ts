@@ -26,10 +26,8 @@ describe("POST /brands/new", () => {
 
     const response = await application.request("/brands/new", {
       body: JSON.stringify(body),
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
     });
 
     expect(await response.json()).toMatchObject(body);

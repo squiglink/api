@@ -14,25 +14,28 @@ describe("POST /authorization/login", () => {
 
   it("responds with unauthrorized if the email is not provided", async () => {
     const response = await application.request("/authorization/login", {
-      method: "POST",
       body: JSON.stringify({}),
+      method: "POST",
     });
+
     expect(response.status).toBe(401);
   });
 
   it("responds with unauthrorized if the email is not valid", async () => {
     const response = await application.request("/authorization/login", {
-      method: "POST",
       body: JSON.stringify({ email: "invalid-email" }),
+      method: "POST",
     });
+
     expect(response.status).toBe(401);
   });
 
   it("responds with unauthrorized if the email is valid but the user does not exist", async () => {
     const response = await application.request("/authorization/login", {
-      method: "POST",
       body: JSON.stringify({ email: "test@test.com" }),
+      method: "POST",
     });
+
     expect(response.status).toBe(401);
   });
 
@@ -53,9 +56,10 @@ describe("POST /authorization/login", () => {
     vi.mocked(sendMailModule.sendMail).mockRejectedValue(new Error("Test error"));
 
     const response = await application.request("/authorization/login", {
-      method: "POST",
       body: JSON.stringify({ email: user.email }),
+      method: "POST",
     });
+
     expect(response.status).toBe(500);
   });
 
@@ -76,8 +80,8 @@ describe("POST /authorization/login", () => {
     vi.mocked(sendMailModule.sendMail).mockResolvedValue(true);
 
     const response = await application.request("/authorization/login", {
-      method: "POST",
       body: JSON.stringify({ email: user.email }),
+      method: "POST",
     });
 
     const magicLinkToken = await database
