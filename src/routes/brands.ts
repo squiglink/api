@@ -17,7 +17,7 @@ application.get("/brands", async (context) => {
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(sql`brands.name <-> ${searchQueryParameter}`),
     )
-    .orderBy("brands.id")
+    .orderBy("brands.created_at")
     .groupBy("brands.id")
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)

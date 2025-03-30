@@ -6,10 +6,10 @@ const application = new Hono();
 
 application.post("/models/new", async (context) => {
   const body: {
-    brand_id: number;
+    brand_id: string;
     name: string;
     evaluation?: {
-      database_id: number;
+      database_id: string;
       measurements?: [
         {
           kind: string;

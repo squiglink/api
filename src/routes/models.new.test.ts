@@ -6,45 +6,39 @@ import application from "../application.js";
 
 describe("POST /models/new", () => {
   it("responds with success and creates a model", async () => {
-    let brandId: number = -1;
-    let userId: number = -1;
-    let databaseId: number = -1;
+    let brandId: string = "";
+    let userId: string = "";
+    let databaseId: string = "";
 
     await database.transaction().execute(async (transaction) => {
-      brandId = Number(
-        (
-          await transaction
-            .insertInto("brands")
-            .values({
-              name: `Brand`,
-            })
-            .returning("id")
-            .executeTakeFirstOrThrow()
-        ).id,
-      );
-      userId = Number(
-        (
-          await transaction
-            .insertInto("users")
-            .values({
-              display_name: `User`,
-              scoring_system: "five_star",
-              email: `user@example.com`,
-              username: `user`,
-            })
-            .returning("id")
-            .executeTakeFirstOrThrow()
-        ).id,
-      );
-      databaseId = Number(
-        (
-          await transaction
-            .insertInto("databases")
-            .values({ kind: "earbuds", path: "/", user_id: userId })
-            .returning("id")
-            .executeTakeFirstOrThrow()
-        ).id,
-      );
+      brandId = (
+        await transaction
+          .insertInto("brands")
+          .values({
+            name: `Brand`,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow()
+      ).id;
+      userId = (
+        await transaction
+          .insertInto("users")
+          .values({
+            display_name: `User`,
+            scoring_system: "five_star",
+            email: `user@example.com`,
+            username: `user`,
+          })
+          .returning("id")
+          .executeTakeFirstOrThrow()
+      ).id;
+      databaseId = (
+        await transaction
+          .insertInto("databases")
+          .values({ kind: "earbuds", path: "/", user_id: userId })
+          .returning("id")
+          .executeTakeFirstOrThrow()
+      ).id;
     });
 
     let body = {

@@ -17,7 +17,7 @@ application.get("/databases", async (context) => {
         sql`concat(databases.kind, ' ', databases.path) <-> ${searchQueryParameter}`,
       ),
     )
-    .orderBy("databases.id")
+    .orderBy("databases.created_at")
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)
     .execute();

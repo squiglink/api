@@ -7,8 +7,6 @@ export type Generated<T> =
     ? ColumnType<S, I | undefined, U>
     : ColumnType<T, T | undefined, T>;
 
-export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
-
 export type MeasurementKind =
   | "frequency_response"
   | "harmonic_distortion"
@@ -21,25 +19,25 @@ export type UserScoringSystem = "five_star" | "hundred_point" | "ten_point" | "t
 
 export interface Brands {
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   name: string;
   updated_at: Generated<Timestamp>;
 }
 
 export interface Databases {
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   kind: DatabaseKind;
   path: string;
   updated_at: Generated<Timestamp>;
-  user_id: Int8;
+  user_id: string;
 }
 
 export interface Evaluations {
   created_at: Generated<Timestamp>;
-  database_id: Int8;
-  id: Generated<Int8>;
-  model_id: Int8;
+  database_id: string;
+  id: Generated<string>;
+  model_id: string;
   review_score: number | null;
   review_url: string | null;
   shop_url: string | null;
@@ -48,31 +46,31 @@ export interface Evaluations {
 
 export interface JwtAuthorizationTokens {
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   token: string;
   updated_at: Generated<Timestamp>;
-  user_id: Int8;
+  user_id: string;
 }
 
 export interface JwtMagicLinkTokens {
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   token: string;
-  user_id: Int8;
+  user_id: string;
 }
 
 export interface JwtRefreshTokens {
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   token: string;
   updated_at: Generated<Timestamp>;
-  user_id: Int8;
+  user_id: string;
 }
 
 export interface Measurements {
   created_at: Generated<Timestamp>;
-  evaluation_id: Int8;
-  id: Generated<Int8>;
+  evaluation_id: string;
+  id: Generated<string>;
   kind: MeasurementKind;
   label: string;
   left_channel: string;
@@ -81,9 +79,9 @@ export interface Measurements {
 }
 
 export interface Models {
-  brand_id: Int8;
+  brand_id: string;
   created_at: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   name: string;
   updated_at: Generated<Timestamp>;
 }
@@ -92,7 +90,7 @@ export interface Users {
   created_at: Generated<Timestamp>;
   display_name: string;
   email: string;
-  id: Generated<Int8>;
+  id: Generated<string>;
   scoring_system: UserScoringSystem;
   updated_at: Generated<Timestamp>;
   username: string;

@@ -27,11 +27,11 @@ application.get("/models", async (context) => {
       ).as("brand"),
     )
     .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
-      selectQueryBuilder.orderBy([
+      selectQueryBuilder.orderBy(
         sql`concat(brands.name, ' ', models.name) <-> ${searchQueryParameter}`,
-        "models.id",
-      ]),
+      ),
     )
+    .orderBy("models.created_at")
     .limit(pageSize)
     .offset((pageNumber - 1) * pageSize)
     .execute();
