@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import configuration from "../configuration.js";
 
-export async function sendMail(keywordArguments: {
+export async function sendEmail(keywordArguments: {
   to: string;
   subject: string;
   body: string;

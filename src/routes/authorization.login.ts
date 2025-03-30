@@ -1,7 +1,7 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
-import { sendMail } from "../services/send_mail.js";
+import { sendEmail } from "../services/send_email.js";
 import configuration from "../configuration.js";
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
@@ -34,7 +34,7 @@ application.post("/authorization/login", async (context) => {
       })
       .execute();
 
-    await sendMail({
+    await sendEmail({
       to: email,
       subject: "Log into Squiglink",
       body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,

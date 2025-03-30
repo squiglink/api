@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
 import { getRandomEmail } from "../test_helper.js";
-import * as sendMailModule from "../services/send_mail.js";
+import * as sendEmailModule from "../services/send_email.js";
 import application from "../application.js";
 
-vi.mock("../services/send_mail.js");
+vi.mock("../services/send_email.js");
 
 describe("POST /authorization/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(sendMailModule.sendMail).mockResolvedValue(true);
+    vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
   });
 
   it("responds with unauthrorized if the email is not provided", async () => {
@@ -39,21 +39,19 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(401);
   });
 
-  it("responds with internal server error if sendMail throws an error", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          display_name: "Test User",
-          email: getRandomEmail(),
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+  it("responds with internal server error if sendEmail throws an error", async () => {
+    const user = await database
+      .insertInto("users")
+      .values({
+        display_name: "Test User",
+        email: getRandomEmail(),
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
-    vi.mocked(sendMailModule.sendMail).mockRejectedValue(new Error("Test error"));
+    vi.mocked(sendEmailModule.sendEmail).mockRejectedValue(new Error("Test error"));
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),
@@ -64,20 +62,18 @@ describe("POST /authorization/login", () => {
   });
 
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          display_name: "Test User",
-          email: getRandomEmail(),
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        display_name: "Test User",
+        email: getRandomEmail(),
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
-    vi.mocked(sendMailModule.sendMail).mockResolvedValue(true);
+    vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),
@@ -92,7 +88,7 @@ describe("POST /authorization/login", () => {
 
     expect(response.status).toBe(200);
     expect(magicLinkToken).toBeDefined();
-    expect(sendMailModule.sendMail).toHaveBeenCalledWith(
+    expect(sendEmailModule.sendEmail).toHaveBeenCalledWith(
       expect.objectContaining({
         to: user.email,
         subject: "Log into Squiglink",

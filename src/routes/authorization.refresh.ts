@@ -39,7 +39,6 @@ application.post("/authorization/refresh", async (context) => {
       })
       .where("token", "=", refreshToken)
       .execute();
-
     await transaction
       .insertInto("jwt_authorization_tokens")
       .values({

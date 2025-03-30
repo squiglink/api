@@ -7,15 +7,15 @@ import { createJwtToken } from "./services/create_jwt_token.js";
 import configuration from "./configuration.js";
 
 beforeEach(async () => {
-  truncateTableCascade("brands");
-  truncateTableCascade("databases");
-  truncateTableCascade("evaluations");
-  truncateTableCascade("jwt_authorization_tokens");
-  truncateTableCascade("jwt_magic_link_tokens");
-  truncateTableCascade("jwt_refresh_tokens");
-  truncateTableCascade("measurements");
-  truncateTableCascade("models");
-  truncateTableCascade("users");
+  await truncateTableCascade("brands");
+  await truncateTableCascade("databases");
+  await truncateTableCascade("evaluations");
+  await truncateTableCascade("jwt_authorization_tokens");
+  await truncateTableCascade("jwt_magic_link_tokens");
+  await truncateTableCascade("jwt_refresh_tokens");
+  await truncateTableCascade("measurements");
+  await truncateTableCascade("models");
+  await truncateTableCascade("users");
 });
 
 async function truncateTableCascade(tableName: string) {
@@ -44,9 +44,6 @@ export async function signIn(
       .insertInto("jwt_authorization_tokens")
       .values({ token: accessToken, user_id: userId })
       .execute();
-  });
-
-  await database.transaction().execute(async (transaction) => {
     await transaction
       .insertInto("jwt_refresh_tokens")
       .values({ token: refreshToken, user_id: userId })

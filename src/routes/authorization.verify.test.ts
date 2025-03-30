@@ -1,6 +1,6 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
-import { describe, expect, it, test } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getRandomEmail } from "../test_helper.js";
 import application from "../application.js";
 import configuration from "../configuration.js";

@@ -7,18 +7,16 @@ import application from "../application.js";
 
 describe("POST /brands/new", () => {
   it("responds with success and creates a new brand", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          display_name: "Test User",
-          email: getRandomEmail(),
-          scoring_system: "five_star",
-          username: "test",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        display_name: "Test User",
+        email: getRandomEmail(),
+        scoring_system: "five_star",
+        username: "test",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken } = await signIn(user.id);
 

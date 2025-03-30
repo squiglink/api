@@ -16,18 +16,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the request body is not provided", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          email: getRandomEmail(),
-          display_name: "Test User",
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        email: getRandomEmail(),
+        display_name: "Test User",
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken } = await signIn(user.id);
 
@@ -41,18 +39,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not provided", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          email: getRandomEmail(),
-          display_name: "Test User",
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        email: getRandomEmail(),
+        display_name: "Test User",
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken } = await signIn(user.id);
 
@@ -66,18 +62,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not valid", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          email: getRandomEmail(),
-          display_name: "Test User",
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        email: getRandomEmail(),
+        display_name: "Test User",
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken } = await signIn(user.id);
 
@@ -93,18 +87,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not associated with a user", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          email: getRandomEmail(),
-          display_name: "Test User",
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        email: getRandomEmail(),
+        display_name: "Test User",
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken } = await signIn(user.id);
 
@@ -120,18 +112,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with success and returns tokens if the refresh token is valid", async () => {
-    const user = await database.transaction().execute(async (transaction) => {
-      return await transaction
-        .insertInto("users")
-        .values({
-          email: getRandomEmail(),
-          display_name: "Test User",
-          scoring_system: "five_star",
-          username: "test_user",
-        })
-        .returningAll()
-        .executeTakeFirstOrThrow();
-    });
+    const user = await database
+      .insertInto("users")
+      .values({
+        email: getRandomEmail(),
+        display_name: "Test User",
+        scoring_system: "five_star",
+        username: "test_user",
+      })
+      .returningAll()
+      .executeTakeFirstOrThrow();
 
     const { accessToken, refreshToken } = await signIn(user.id);
 

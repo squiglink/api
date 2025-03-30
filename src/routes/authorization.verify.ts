@@ -29,7 +29,6 @@ application.get("/authorization/verify", async (context) => {
         user_id: user.id,
       })
       .execute();
-
     await transaction
       .insertInto("jwt_refresh_tokens")
       .values({
@@ -37,7 +36,6 @@ application.get("/authorization/verify", async (context) => {
         user_id: user.id,
       })
       .execute();
-
     await transaction.deleteFrom("jwt_magic_link_tokens").where("token", "=", authToken).execute();
 
     return context.json({
