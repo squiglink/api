@@ -67,9 +67,6 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("created_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),
     )
-    .addColumn("database_id", "uuid", (column) =>
-      column.references("databases.id").notNull().onDelete("cascade"),
-    )
     .addColumn("model_id", "uuid", (column) =>
       column.references("models.id").notNull().onDelete("cascade"),
     )
@@ -129,12 +126,15 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("created_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),
     )
-    .addColumn("evaluation_id", "uuid", (column) =>
-      column.references("evaluations.id").notNull().onDelete("cascade"),
+    .addColumn("database_id", "uuid", (column) =>
+      column.references("databases.id").notNull().onDelete("cascade"),
     )
     .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())
     .addColumn("label", "text", (column) => column.notNull())
     .addColumn("left_channel", "text", (column) => column.notNull())
+    .addColumn("model_id", "uuid", (column) =>
+      column.references("models.id").notNull().onDelete("cascade"),
+    )
     .addColumn("right_channel", "text", (column) => column.notNull())
     .addColumn("updated_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),

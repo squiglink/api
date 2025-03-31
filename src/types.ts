@@ -35,7 +35,6 @@ export interface Databases {
 
 export interface Evaluations {
   created_at: Generated<Timestamp>;
-  database_id: string;
   id: Generated<string>;
   model_id: string;
   review_score: number | null;
@@ -69,11 +68,12 @@ export interface JwtRefreshTokens {
 
 export interface Measurements {
   created_at: Generated<Timestamp>;
-  evaluation_id: string;
+  database_id: string;
   id: Generated<string>;
   kind: MeasurementKind;
   label: string;
   left_channel: string;
+  model_id: string;
   right_channel: string;
   updated_at: Generated<Timestamp>;
 }
