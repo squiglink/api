@@ -1,35 +1,30 @@
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import { insertBrand, insertModel } from "../test_helper.factories.js";
 import application from "../application.js";
 
 describe("GET /models", () => {
   it("responds with success and returns models", async () => {
-    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { brands, models } = await database.transaction().execute(async (transaction) => {
+      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const brand = await transaction
-          .insertInto("brands")
-          .values({
-            name: `Brand ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const brand = await insertBrand(transaction, {
+          name: `Brand ${index}`,
+        });
         brands.push(brand);
-        const model = await transaction
-          .insertInto("models")
-          .values({
-            brand_id: brand.id,
-            name: `Model ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const model = await insertModel(transaction, {
+          brand_id: brand.id,
+          name: `Model ${index}`,
+        });
         models.push(model);
       }
+
+      return { brands, models };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: models[0].id,
@@ -154,7 +149,7 @@ describe("GET /models", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: models[10].id,
@@ -186,32 +181,26 @@ describe("GET /models", () => {
   });
 
   it("responds with success and queries the brand name", async () => {
-    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { brands, models } = await database.transaction().execute(async (transaction) => {
+      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const brand = await transaction
-          .insertInto("brands")
-          .values({
-            name: index > 8 ? `Foo Brand ${index}` : `Bar Brand ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const brand = await insertBrand(transaction, {
+          name: index > 8 ? `Foo Brand ${index}` : `Bar Brand ${index}`,
+        });
         brands.push(brand);
-        const model = await transaction
-          .insertInto("models")
-          .values({
-            brand_id: brand.id,
-            name: `Model ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const model = await insertModel(transaction, {
+          brand_id: brand.id,
+          name: `Model ${index}`,
+        });
         models.push(model);
       }
+
+      return { brands, models };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: models[8].id,
@@ -336,7 +325,7 @@ describe("GET /models", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: models[7].id,
@@ -368,32 +357,26 @@ describe("GET /models", () => {
   });
 
   it("responds with success and queries the name", async () => {
-    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let models: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { brands, models } = await database.transaction().execute(async (transaction) => {
+      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const brand = await transaction
-          .insertInto("brands")
-          .values({
-            name: `Brand ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const brand = await insertBrand(transaction, {
+          name: `Brand ${index}`,
+        });
         brands.push(brand);
-        const model = await transaction
-          .insertInto("models")
-          .values({
-            brand_id: brand.id,
-            name: index > 8 ? `Foo Model ${index}` : `Bar Model ${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const model = await insertModel(transaction, {
+          brand_id: brand.id,
+          name: index > 8 ? `Foo Model ${index}` : `Bar Model ${index}`,
+        });
         models.push(model);
       }
+
+      return { brands, models };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: models[8].id,
@@ -518,7 +501,7 @@ describe("GET /models", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: models[7].id,

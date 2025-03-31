@@ -1,48 +1,28 @@
-import { count } from "../test_helper.js";
+import { count, signIn } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
-import { signIn } from "../test_helper.js";
+import { insertBrand, insertUser } from "../test_helper.factories.js";
 import application from "../application.js";
 
 describe("POST /models/new", () => {
   it("responds with success and creates a model", async () => {
-    let brandId: string = "";
-    let userId: string = "";
-
-    await database.transaction().execute(async (transaction) => {
-      brandId = (
-        await transaction
-          .insertInto("brands")
-          .values({
-            name: `Brand`,
-          })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
-      userId = (
-        await transaction
-          .insertInto("users")
-          .values({
-            display_name: `User`,
-            scoring_system: "five_star",
-            email: `user@example.com`,
-            username: `user`,
-          })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
+    const { brandId, userId } = await database.transaction().execute(async (transaction) => {
+      return {
+        brandId: (await insertBrand(transaction)).id,
+        userId: (await insertUser(transaction)).id,
+      };
     });
 
-    let body = {
+    const body = {
       brand_id: brandId,
       name: "Model",
     };
 
-    const { accessToken } = await signIn(userId);
+    const { authorizationToken } = await signIn(userId);
 
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 

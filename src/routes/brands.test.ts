@@ -1,35 +1,30 @@
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import { insertBrand, insertModel } from "../test_helper.factories.js";
 import application from "../application.js";
 
 describe("GET /brands", () => {
   it("responds with success and returns brands", async () => {
-    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const brands = await database.transaction().execute(async (transaction) => {
+      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
-        const brand = await transaction
-          .insertInto("brands")
-          .values({
-            name: `Brand ${brandIndex}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const brand = await insertBrand(transaction, {
+          name: `Brand ${brandIndex}`,
+        });
         brands.push(brand);
         for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
-          await transaction
-            .insertInto("models")
-            .values({
-              brand_id: brand.id,
-              name: `Model ${modelIndex}`,
-            })
-            .returning("id")
-            .executeTakeFirstOrThrow();
+          await insertModel(transaction, {
+            brand_id: brand.id,
+            name: `Model ${modelIndex}`,
+          });
         }
       }
+
+      return brands;
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: brands[0].id,
@@ -104,7 +99,7 @@ describe("GET /brands", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: brands[10].id,
@@ -131,32 +126,26 @@ describe("GET /brands", () => {
   });
 
   it("responds with success and queries the name", async () => {
-    let brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const brands = await database.transaction().execute(async (transaction) => {
+      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
-        const brand = await transaction
-          .insertInto("brands")
-          .values({
-            name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const brand = await insertBrand(transaction, {
+          name: brandIndex > 8 ? `Foo Brand ${brandIndex}` : `Bar Brand ${brandIndex}`,
+        });
         brands.push(brand);
         for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
-          await transaction
-            .insertInto("models")
-            .values({
-              brand_id: brand.id,
-              name: `Model ${modelIndex}`,
-            })
-            .returning("id")
-            .executeTakeFirstOrThrow();
+          await insertModel(transaction, {
+            brand_id: brand.id,
+            name: `Model ${modelIndex}`,
+          });
         }
       }
+
+      return brands;
     });
 
-    let queryBrandFirstPage = {
+    const queryBrandFirstPage = {
       page: [
         {
           id: brands[8].id,
@@ -231,7 +220,7 @@ describe("GET /brands", () => {
       ],
       page_count: 2,
     };
-    let queryBrandSecondPage = {
+    const queryBrandSecondPage = {
       page: [
         {
           id: brands[7].id,

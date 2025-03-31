@@ -1,10 +1,13 @@
 import { beforeEach } from "vitest";
 import { database } from "./database.js";
+import {
+  insertJwtAuthorizationToken,
+  insertJwtRefreshToken,
+  insertUser,
+} from "./test_helper.factories.js";
 import { sql } from "kysely";
 import type { Database } from "./types.js";
 import type { TableExpression } from "kysely";
-import { createJwtToken } from "./services/create_jwt_token.js";
-import configuration from "./configuration.js";
 
 beforeEach(async () => {
   await truncateTableCascade("brands");
@@ -34,28 +37,17 @@ export async function count(tableName: TableExpression<Database, never>): Promis
 }
 
 export async function signIn(
-  userId: string,
-): Promise<{ accessToken: string; refreshToken: string }> {
-  const accessToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
-  const refreshToken = await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000);
+  userId?: string,
+): Promise<{ authorizationToken: string; refreshToken: string }> {
+  const { authorizationToken, refreshToken } = await database
+    .transaction()
+    .execute(async (transaction) => {
+      const id = userId || (await insertUser(transaction)).id;
+      return {
+        authorizationToken: (await insertJwtAuthorizationToken(transaction, { user_id: id })).token,
+        refreshToken: (await insertJwtRefreshToken(transaction, { user_id: id })).token,
+      };
+    });
 
-  await database.transaction().execute(async (transaction) => {
-    await transaction
-      .insertInto("jwt_authorization_tokens")
-      .values({ token: accessToken, user_id: userId })
-      .execute();
-    await transaction
-      .insertInto("jwt_refresh_tokens")
-      .values({ token: refreshToken, user_id: userId })
-      .execute();
-  });
-
-  return {
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-  };
-}
-
-export function getRandomEmail() {
-  return `${Math.random().toString(36).substring(2)}@test.com`;
+  return { authorizationToken, refreshToken };
 }

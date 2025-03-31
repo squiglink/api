@@ -1,36 +1,30 @@
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
-import { getRandomEmail } from "../test_helper.js";
+import { insertDatabase, insertUser } from "../test_helper.factories.js";
 import application from "../application.js";
 
 describe("GET /databases", () => {
   it("responds with success and returns databases", async () => {
-    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { databases, users } = await database.transaction().execute(async (transaction) => {
+      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const user = await transaction
-          .insertInto("users")
-          .values({
-            display_name: `User ${index}`,
-            email: getRandomEmail(),
-            scoring_system: "five_star",
-            username: `user_${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const user = await insertUser(transaction, {
+          display_name: `User ${index}`,
+          username: `user_${index}`,
+        });
         users.push(user);
-        const database = await transaction
-          .insertInto("databases")
-          .values({ kind: "earbuds", path: "/", user_id: user.id })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const database = await insertDatabase(transaction, {
+          user_id: user.id,
+        });
         databases.push(database);
       }
+
+      return { databases, users };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: databases[0].id,
@@ -115,7 +109,7 @@ describe("GET /databases", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: databases[10].id,
@@ -143,36 +137,28 @@ describe("GET /databases", () => {
   });
 
   it("responds with success and queries the kind", async () => {
-    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { databases, users } = await database.transaction().execute(async (transaction) => {
+      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const user = await transaction
-          .insertInto("users")
-          .values({
-            display_name: `User ${index}`,
-            email: getRandomEmail(),
-            scoring_system: "five_star",
-            username: `user_${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const user = await insertUser(transaction, {
+          display_name: `User ${index}`,
+          username: `user_${index}`,
+        });
         users.push(user);
-        const database = await transaction
-          .insertInto("databases")
-          .values({
-            kind: index > 8 ? "earbuds" : "headphones",
-            path: "/",
-            user_id: user.id,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const database = await insertDatabase(transaction, {
+          kind: index > 8 ? "earbuds" : "headphones",
+          path: "/",
+          user_id: user.id,
+        });
         databases.push(database);
       }
+
+      return { databases, users };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: databases[8].id,
@@ -257,7 +243,7 @@ describe("GET /databases", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: databases[7].id,
@@ -285,36 +271,27 @@ describe("GET /databases", () => {
   });
 
   it("responds with success and queries the path", async () => {
-    let users: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+    const { databases, users } = await database.transaction().execute(async (transaction) => {
+      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
 
-    await database.transaction().execute(async (transaction) => {
       for (let index = 1; index <= 11; index++) {
-        const user = await transaction
-          .insertInto("users")
-          .values({
-            display_name: `User ${index}`,
-            email: getRandomEmail(),
-            scoring_system: "five_star",
-            username: `user_${index}`,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const user = await insertUser(transaction, {
+          display_name: `User ${index}`,
+          username: `user_${index}`,
+        });
         users.push(user);
-        const database = await transaction
-          .insertInto("databases")
-          .values({
-            kind: "earbuds",
-            path: index > 8 ? "/foo" : "/bar",
-            user_id: user.id,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
+        const database = await insertDatabase(transaction, {
+          path: index > 8 ? "/foo" : "/bar",
+          user_id: user.id,
+        });
         databases.push(database);
       }
+
+      return { databases, users };
     });
 
-    let firstPage = {
+    const firstPage = {
       page: [
         {
           id: databases[8].id,
@@ -399,7 +376,7 @@ describe("GET /databases", () => {
       ],
       page_count: 2,
     };
-    let secondPage = {
+    const secondPage = {
       page: [
         {
           id: databases[7].id,

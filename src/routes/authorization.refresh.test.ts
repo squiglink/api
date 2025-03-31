@@ -1,7 +1,5 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
-import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
-import { getRandomEmail } from "../test_helper.js";
 import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
@@ -16,22 +14,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the request body is not provided", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        email: getRandomEmail(),
-        display_name: "Test User",
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
-    const { accessToken } = await signIn(user.id);
+    const { authorizationToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: null,
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 
@@ -39,22 +26,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not provided", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        email: getRandomEmail(),
-        display_name: "Test User",
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
-    const { accessToken } = await signIn(user.id);
+    const { authorizationToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({}),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 
@@ -62,24 +38,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not valid", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        email: getRandomEmail(),
-        display_name: "Test User",
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
-    const { accessToken } = await signIn(user.id);
-
-    const invalidRefreshToken = await createJwtToken(0);
+    const { authorizationToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken: invalidRefreshToken }),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ refreshToken: await createJwtToken(0) }),
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 
@@ -87,24 +50,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not associated with a user", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        email: getRandomEmail(),
-        display_name: "Test User",
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
-    const { accessToken } = await signIn(user.id);
-
-    const invalidRefreshToken = await createJwtToken(1000);
+    const { authorizationToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken: invalidRefreshToken }),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ refreshToken: await createJwtToken(1000) }),
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 
@@ -112,28 +62,17 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with success and returns tokens if the refresh token is valid", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        email: getRandomEmail(),
-        display_name: "Test User",
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
-    const { accessToken, refreshToken } = await signIn(user.id);
+    const { authorizationToken, refreshToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken }),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${authorizationToken}` },
       method: "POST",
     });
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
-      accessToken: expect.any(String),
+      authorizationToken: expect.any(String),
       refreshToken: expect.any(String),
     });
   });

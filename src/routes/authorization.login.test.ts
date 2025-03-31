@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
-import { getRandomEmail } from "../test_helper.js";
+import { insertUser } from "../test_helper.factories.js";
 import * as sendEmailModule from "../services/send_email.js";
 import application from "../application.js";
 
@@ -40,18 +40,11 @@ describe("POST /authorization/login", () => {
   });
 
   it("responds with internal server error if sendEmail throws an error", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        display_name: "Test User",
-        email: getRandomEmail(),
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
     vi.mocked(sendEmailModule.sendEmail).mockRejectedValue(new Error("Test error"));
+
+    const user = await database.transaction().execute(async (transaction) => {
+      return await insertUser(transaction);
+    });
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),
@@ -62,18 +55,11 @@ describe("POST /authorization/login", () => {
   });
 
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
-    const user = await database
-      .insertInto("users")
-      .values({
-        display_name: "Test User",
-        email: getRandomEmail(),
-        scoring_system: "five_star",
-        username: "test_user",
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-
     vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
+
+    const user = await database.transaction().execute(async (transaction) => {
+      return await insertUser(transaction);
+    });
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),

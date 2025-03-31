@@ -1,74 +1,31 @@
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
-import { getRandomEmail } from "../test_helper.js";
+import { insertDatabase, insertMeasurement, insertModel } from "../test_helper.factories.js";
 import application from "../application.js";
 
 describe("GET /models/:id/measurements", () => {
   it("responds with success and returns measurements", async () => {
-    let brandId: string = "";
-    let databaseId: string = "";
-    let measurements: { id: string; created_at: Date; updated_at: Date }[] = [];
-    let modelId: string = "";
-    let userId: string = "";
+    const { databaseId, measurements, modelId } = await database
+      .transaction()
+      .execute(async (transaction) => {
+        const databaseId = (await insertDatabase(transaction)).id;
+        const measurements: { id: string; created_at: Date; updated_at: Date }[] = [];
+        const modelId = (await insertModel(transaction)).id;
 
-    await database.transaction().execute(async (transaction) => {
-      userId = (
-        await transaction
-          .insertInto("users")
-          .values({
-            display_name: `User`,
-            email: getRandomEmail(),
-            scoring_system: "five_star",
-            username: `user`,
-          })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
-      databaseId = (
-        await transaction
-          .insertInto("databases")
-          .values({ kind: "earbuds", path: "/", user_id: userId })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
-      brandId = (
-        await transaction
-          .insertInto("brands")
-          .values({
-            name: `Brand`,
-          })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
-      modelId = (
-        await transaction
-          .insertInto("models")
-          .values({
-            brand_id: brandId,
-            name: `Model`,
-          })
-          .returning("id")
-          .executeTakeFirstOrThrow()
-      ).id;
+        for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
+          measurements.push(
+            await insertMeasurement(transaction, {
+              database_id: databaseId,
+              label: `Label ${measurementIndex}`,
+              model_id: modelId,
+            }),
+          );
+        }
 
-      for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
-        const measurement = await transaction
-          .insertInto("measurements")
-          .values({
-            database_id: databaseId,
-            kind: "frequency_response",
-            label: `Label ${measurementIndex}`,
-            left_channel: "123",
-            model_id: modelId,
-            right_channel: "123",
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow();
-        measurements.push(measurement);
-      }
-    });
+        return { databaseId, measurements, modelId };
+      });
 
-    let body = [
+    const body = [
       {
         id: measurements[0].id,
         created_at: measurements[0].created_at,
