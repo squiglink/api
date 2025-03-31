@@ -1,4 +1,5 @@
 import { createJwtToken } from "./services/create_jwt_token.js";
+import { faker } from "@faker-js/faker";
 import configuration from "./configuration.js";
 import type { Database, DatabaseKind, MeasurementKind, UserScoringSystem } from "./types.js";
 import type { Kysely, Transaction } from "kysely";
@@ -21,7 +22,7 @@ export async function insertBrand(
     .insertInto("brands")
     .values({
       ...{
-        name: values.name || "Brand",
+        name: values.name || faker.company.name(),
       },
       ...values,
     })
@@ -51,8 +52,10 @@ export async function insertDatabase(
     .insertInto("databases")
     .values({
       ...{
-        kind: (values.kind as DatabaseKind) || "earbuds",
-        path: values.path || "/",
+        kind:
+          (values.kind as DatabaseKind) ||
+          ["earbuds", "headphones", "iems"][faker.number.int({ min: 0, max: 2 })],
+        path: values.path || faker.system.directoryPath(),
         user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       },
       ...values,
@@ -86,9 +89,9 @@ export async function insertEvaluation(
     .values({
       ...{
         model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
-        review_score: values.review_score || 5,
-        review_url: values.review_url || "https://metu.be",
-        shop_url: values.shop_url || "https://squig.link",
+        review_score: values.review_score || faker.number.int({ min: 0, max: 5 }),
+        review_url: values.review_url || faker.internet.url(),
+        shop_url: values.shop_url || faker.internet.url(),
       },
       ...values,
     })
@@ -202,7 +205,7 @@ export async function insertModel(
     .values({
       ...{
         brand_id: values.brand_id || (await insertBrand(databaseOrTransaction)).id,
-        name: values.name || "Model",
+        name: values.name || faker.commerce.productName(),
       },
       ...values,
     })
@@ -234,10 +237,14 @@ export async function insertUser(
     .insertInto("users")
     .values({
       ...{
-        display_name: values.display_name || "User",
-        email: values.email || `${Math.random().toString(36).substring(2)}@test.com`,
-        scoring_system: (values.scoring_system as UserScoringSystem) || "five_star",
-        username: values.username || "user",
+        display_name: values.display_name || faker.internet.displayName(),
+        email: values.email || faker.internet.email(),
+        scoring_system:
+          (values.scoring_system as UserScoringSystem) ||
+          ["five_star", "hundred_point", "ten_point", "ten_point_decimal"][
+            faker.number.int({ min: 0, max: 3 })
+          ],
+        username: values.username || faker.internet.username(),
       },
       ...values,
     })
@@ -274,8 +281,12 @@ export async function insertMeasurement(
     .values({
       ...{
         database_id: values.database_id || (await insertDatabase(databaseOrTransaction)).id,
-        kind: (values.kind as MeasurementKind) || "frequency_response",
-        label: values.label || "Label",
+        kind:
+          (values.kind as MeasurementKind) ||
+          ["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"][
+            faker.number.int({ min: 0, max: 3 })
+          ],
+        label: values.label || faker.music.genre(),
         left_channel: values.left_channel || "123",
         model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
         right_channel: values.right_channel || "123",

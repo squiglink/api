@@ -9,7 +9,7 @@ describe("GET /models/:id/measurements", () => {
       .transaction()
       .execute(async (transaction) => {
         const databaseId = (await insertDatabase(transaction)).id;
-        const measurements: { id: string; created_at: Date; updated_at: Date }[] = [];
+        const measurements: { created_at: Date; id: string; updated_at: Date; kind: string }[] = [];
         const modelId = (await insertModel(transaction)).id;
 
         for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
@@ -30,7 +30,7 @@ describe("GET /models/:id/measurements", () => {
         id: measurements[0].id,
         created_at: measurements[0].created_at,
         database_id: databaseId,
-        kind: "frequency_response",
+        kind: measurements[0].kind,
         label: "Label 1",
         left_channel: "123",
         model_id: modelId,
@@ -41,7 +41,7 @@ describe("GET /models/:id/measurements", () => {
         id: measurements[1].id,
         created_at: measurements[1].created_at,
         database_id: databaseId,
-        kind: "frequency_response",
+        kind: measurements[1].kind,
         label: "Label 2",
         left_channel: "123",
         model_id: modelId,

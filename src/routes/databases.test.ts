@@ -6,7 +6,13 @@ import application from "../application.js";
 describe("GET /databases", () => {
   it("responds with success and returns databases", async () => {
     const { databases, users } = await database.transaction().execute(async (transaction) => {
-      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const databases: {
+        created_at: Date;
+        id: string;
+        kind: string;
+        path: string;
+        updated_at: Date;
+      }[] = [];
       const users: { id: string; created_at: Date; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
@@ -29,80 +35,80 @@ describe("GET /databases", () => {
         {
           id: databases[0].id,
           created_at: databases[0].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[0].kind,
+          path: databases[0].path,
           updated_at: databases[0].updated_at,
           user_id: users[0].id,
         },
         {
           id: databases[1].id,
           created_at: databases[1].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[1].kind,
+          path: databases[1].path,
           updated_at: databases[1].updated_at,
           user_id: users[1].id,
         },
         {
           id: databases[2].id,
           created_at: databases[2].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[2].kind,
+          path: databases[2].path,
           updated_at: databases[2].updated_at,
           user_id: users[2].id,
         },
         {
           id: databases[3].id,
           created_at: databases[3].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[3].kind,
+          path: databases[3].path,
           updated_at: databases[3].updated_at,
           user_id: users[3].id,
         },
         {
           id: databases[4].id,
           created_at: databases[4].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[4].kind,
+          path: databases[4].path,
           updated_at: databases[4].updated_at,
           user_id: users[4].id,
         },
         {
           id: databases[5].id,
           created_at: databases[5].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[5].kind,
+          path: databases[5].path,
           updated_at: databases[5].updated_at,
           user_id: users[5].id,
         },
         {
           id: databases[6].id,
           created_at: databases[6].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[6].kind,
+          path: databases[6].path,
           updated_at: databases[6].updated_at,
           user_id: users[6].id,
         },
         {
           id: databases[7].id,
           created_at: databases[7].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[7].kind,
+          path: databases[7].path,
           updated_at: databases[7].updated_at,
           user_id: users[7].id,
         },
         {
           id: databases[8].id,
           created_at: databases[8].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[8].kind,
+          path: databases[8].path,
           updated_at: databases[8].updated_at,
           user_id: users[8].id,
         },
         {
           id: databases[9].id,
           created_at: databases[9].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[9].kind,
+          path: databases[9].path,
           updated_at: databases[9].updated_at,
           user_id: users[9].id,
         },
@@ -114,8 +120,8 @@ describe("GET /databases", () => {
         {
           id: databases[10].id,
           created_at: databases[10].created_at,
-          kind: "earbuds",
-          path: "/",
+          kind: databases[10].kind,
+          path: databases[10].path,
           updated_at: databases[10].updated_at,
           user_id: users[10].id,
         },
@@ -282,6 +288,7 @@ describe("GET /databases", () => {
         });
         users.push(user);
         const database = await insertDatabase(transaction, {
+          kind: "earbuds",
           path: index > 8 ? "/foo" : "/bar",
           user_id: user.id,
         });
@@ -381,7 +388,7 @@ describe("GET /databases", () => {
         {
           id: databases[7].id,
           created_at: databases[7].created_at,
-          kind: "earbuds",
+          kind: databases[7].kind,
           path: "/bar",
           updated_at: databases[7].updated_at,
           user_id: users[7].id,
