@@ -9,6 +9,7 @@ import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";
 import measurements from "./routes/measurements.js";
 import measurementsNew from "./routes/measurements.new.js";
+import measurementsShow from "./routes/measurements.show.js";
 import models from "./routes/models.js";
 import modelsNew from "./routes/models.new.js";
 
@@ -20,6 +21,7 @@ application.route("/", authorizationVerify);
 application.route("/", brands);
 application.route("/", databases);
 application.route("/", measurements);
+application.route("/", measurementsShow);
 application.route("/", models);
 
 const authorizedApplication = new Hono();
