@@ -5,7 +5,6 @@ import application from "../application.js";
 describe("POST /brands/new", () => {
   it("responds with success and creates a new brand", async () => {
     const { authorizationToken } = await signIn();
-
     const body = { name: "Brand" };
 
     const response = await application.request("/brands/new", {
@@ -16,6 +15,6 @@ describe("POST /brands/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(await count("brands")).toEqual(1);
-    expect(response.ok).toBe(true);
+    expect(response.status).toBe(200);
   });
 });

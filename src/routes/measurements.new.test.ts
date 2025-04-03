@@ -16,6 +16,7 @@ describe("POST /measurements/new", () => {
         return { databaseId, modelId, userId };
       });
 
+    const { authorizationToken } = await signIn(userId);
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
@@ -25,8 +26,6 @@ describe("POST /measurements/new", () => {
       right_channel: "123",
     };
 
-    const { authorizationToken } = await signIn(userId);
-
     const response = await application.request("/measurements/new", {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${authorizationToken}` },
@@ -35,7 +34,7 @@ describe("POST /measurements/new", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
-    expect(response.ok).toBe(true);
+    expect(response.status).toBe(200);
   });
 
   it("responds with unauthorized if trying to create a measurement for another user's database", async () => {
@@ -50,6 +49,7 @@ describe("POST /measurements/new", () => {
         return { anotherDatabaseId, databaseId, modelId, userId };
       });
 
+    const { authorizationToken } = await signIn(userId);
     const body = {
       database_id: anotherDatabaseId,
       kind: "frequency_response",
@@ -58,8 +58,6 @@ describe("POST /measurements/new", () => {
       model_id: modelId,
       right_channel: "123",
     };
-
-    const { authorizationToken } = await signIn(userId);
 
     const response = await application.request("/measurements/new", {
       body: JSON.stringify(body),

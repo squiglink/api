@@ -11,6 +11,7 @@ const application = new Hono();
 application.post("/authorization/login", async (context) => {
   const payload = await context.req.text();
   if (!payload) return context.body(null, 401);
+
   const { email } = JSON.parse(payload);
   if (!email) return context.body(null, 401);
   if (!EMAIL_REGEX.test(email)) return context.body(null, 401);

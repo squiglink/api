@@ -6,6 +6,7 @@ const application = new Hono();
 application.get("/measurements", async (context) => {
   const databaseId = context.req.query("database_id");
   if (!databaseId) return context.json({ error: "The database ID is not provided." }, 400);
+
   const modelId = context.req.query("model_id");
   if (!modelId) return context.json({ error: "The model ID is not provided." }, 400);
 
