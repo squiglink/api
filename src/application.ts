@@ -7,8 +7,8 @@ import authorizationVerify from "./routes/authorization.verify.js";
 import brands from "./routes/brands.js";
 import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";
+import measurements from "./routes/measurements.js";
 import models from "./routes/models.js";
-import modelsMeasurements from "./routes/models.measurements.js";
 import modelsNew from "./routes/models.new.js";
 
 const application = new Hono();
@@ -18,8 +18,8 @@ application.route("/", authorizationLogin);
 application.route("/", authorizationVerify);
 application.route("/", brands);
 application.route("/", databases);
+application.route("/", measurements);
 application.route("/", models);
-application.route("/", modelsMeasurements);
 
 const authorizedApplication = new Hono();
 
