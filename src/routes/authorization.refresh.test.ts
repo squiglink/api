@@ -70,10 +70,10 @@ describe("POST /authorization/refresh", () => {
       method: "POST",
     });
 
-    expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
       authorizationToken: expect.any(String),
       refreshToken: expect.any(String),
     });
+    expect(response.status).toBe(200);
   });
 });

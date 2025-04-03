@@ -9,7 +9,7 @@ application.get("/measurements/:id", async (context) => {
     .selectAll()
     .where("id", "=", context.req.param("id"))
     .orderBy("measurements.created_at")
-    .executeTakeFirstOrThrow();
+    .executeTakeFirst();
 
   return context.json(result);
 });

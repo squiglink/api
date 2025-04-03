@@ -72,8 +72,6 @@ describe("POST /authorization/login", () => {
       .where("user_id", "=", user.id)
       .executeTakeFirstOrThrow();
 
-    expect(response.status).toBe(200);
-    expect(magicLinkToken).toBeDefined();
     expect(sendEmailModule.sendEmail).toHaveBeenCalledWith(
       expect.objectContaining({
         to: user.email,
@@ -81,5 +79,6 @@ describe("POST /authorization/login", () => {
         body: expect.stringContaining(magicLinkToken.token),
       }),
     );
+    expect(response.status).toBe(200);
   });
 });

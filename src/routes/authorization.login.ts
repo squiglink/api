@@ -22,18 +22,14 @@ application.post("/authorization/login", async (context) => {
     .selectFrom("users")
     .selectAll()
     .where("email", "=", email)
-    .limit(1)
     .executeTakeFirst();
   if (!user) return context.body(null, 401);
 
   return await database.transaction().execute(async (transaction) => {
     await transaction
       .insertInto("jwt_magic_link_tokens")
-      .values({
-        token: authToken,
-        user_id: user.id,
-      })
-      .execute();
+      .values({ token: authToken, user_id: user.id })
+      .executeTakeFirstOrThrow();
 
     await sendEmail({
       to: email,

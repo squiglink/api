@@ -20,6 +20,7 @@ describe("GET /authorization/verify", () => {
 
   it("responds with unauthorized if the magic link token is not associated with a user", async () => {
     const invalidToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
+
     const response = await application.request(`/authorization/verify?token=${invalidToken}`);
 
     expect(response.status).toBe(401);
@@ -27,6 +28,7 @@ describe("GET /authorization/verify", () => {
 
   it("responds with unauthorized if the magic link token is expired", async () => {
     const expiredToken = await createJwtToken(0);
+
     const response = await application.request(`/authorization/verify?token=${expiredToken}`);
 
     expect(response.status).toBe(401);
@@ -41,10 +43,10 @@ describe("GET /authorization/verify", () => {
 
     const response = await application.request(`/authorization/verify?token=${magicLinkToken}`);
 
-    expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
       authorizationToken: expect.any(String),
       refreshToken: expect.any(String),
     });
+    expect(response.status).toBe(200);
   });
 });

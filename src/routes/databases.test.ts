@@ -13,17 +13,12 @@ describe("GET /databases", () => {
         path: string;
         updated_at: Date;
       }[] = [];
-      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const users: { created_at: Date; id: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
-        const user = await insertUser(transaction, {
-          display_name: `User ${index}`,
-          username: `user_${index}`,
-        });
+        const user = await insertUser(transaction);
         users.push(user);
-        const database = await insertDatabase(transaction, {
-          user_id: user.id,
-        });
+        const database = await insertDatabase(transaction, { user_id: user.id });
         databases.push(database);
       }
 
@@ -31,102 +26,102 @@ describe("GET /databases", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[0].id,
           created_at: databases[0].created_at,
+          id: databases[0].id,
           kind: databases[0].kind,
           path: databases[0].path,
           updated_at: databases[0].updated_at,
           user_id: users[0].id,
         },
         {
-          id: databases[1].id,
           created_at: databases[1].created_at,
+          id: databases[1].id,
           kind: databases[1].kind,
           path: databases[1].path,
           updated_at: databases[1].updated_at,
           user_id: users[1].id,
         },
         {
-          id: databases[2].id,
           created_at: databases[2].created_at,
+          id: databases[2].id,
           kind: databases[2].kind,
           path: databases[2].path,
           updated_at: databases[2].updated_at,
           user_id: users[2].id,
         },
         {
-          id: databases[3].id,
           created_at: databases[3].created_at,
+          id: databases[3].id,
           kind: databases[3].kind,
           path: databases[3].path,
           updated_at: databases[3].updated_at,
           user_id: users[3].id,
         },
         {
-          id: databases[4].id,
           created_at: databases[4].created_at,
+          id: databases[4].id,
           kind: databases[4].kind,
           path: databases[4].path,
           updated_at: databases[4].updated_at,
           user_id: users[4].id,
         },
         {
-          id: databases[5].id,
           created_at: databases[5].created_at,
+          id: databases[5].id,
           kind: databases[5].kind,
           path: databases[5].path,
           updated_at: databases[5].updated_at,
           user_id: users[5].id,
         },
         {
-          id: databases[6].id,
           created_at: databases[6].created_at,
+          id: databases[6].id,
           kind: databases[6].kind,
           path: databases[6].path,
           updated_at: databases[6].updated_at,
           user_id: users[6].id,
         },
         {
-          id: databases[7].id,
           created_at: databases[7].created_at,
+          id: databases[7].id,
           kind: databases[7].kind,
           path: databases[7].path,
           updated_at: databases[7].updated_at,
           user_id: users[7].id,
         },
         {
-          id: databases[8].id,
           created_at: databases[8].created_at,
+          id: databases[8].id,
           kind: databases[8].kind,
           path: databases[8].path,
           updated_at: databases[8].updated_at,
           user_id: users[8].id,
         },
         {
-          id: databases[9].id,
           created_at: databases[9].created_at,
+          id: databases[9].id,
           kind: databases[9].kind,
           path: databases[9].path,
           updated_at: databases[9].updated_at,
           user_id: users[9].id,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[10].id,
           created_at: databases[10].created_at,
+          id: databases[10].id,
           kind: databases[10].kind,
           path: databases[10].path,
           updated_at: databases[10].updated_at,
           user_id: users[10].id,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/databases");
@@ -144,14 +139,17 @@ describe("GET /databases", () => {
 
   it("responds with success and queries the kind", async () => {
     const { databases, users } = await database.transaction().execute(async (transaction) => {
-      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
-      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const databases: {
+        created_at: Date;
+        id: string;
+        kind: string;
+        path: string;
+        updated_at: Date;
+      }[] = [];
+      const users: { created_at: Date; id: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
-        const user = await insertUser(transaction, {
-          display_name: `User ${index}`,
-          username: `user_${index}`,
-        });
+        const user = await insertUser(transaction);
         users.push(user);
         const database = await insertDatabase(transaction, {
           kind: index > 8 ? "earbuds" : "headphones",
@@ -165,102 +163,102 @@ describe("GET /databases", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[8].id,
           created_at: databases[8].created_at,
-          kind: "earbuds",
-          path: "/",
+          id: databases[8].id,
+          kind: databases[8].kind,
+          path: databases[8].path,
           updated_at: databases[8].updated_at,
           user_id: users[8].id,
         },
         {
-          id: databases[9].id,
           created_at: databases[9].created_at,
-          kind: "earbuds",
-          path: "/",
+          id: databases[9].id,
+          kind: databases[9].kind,
+          path: databases[9].path,
           updated_at: databases[9].updated_at,
           user_id: users[9].id,
         },
         {
-          id: databases[10].id,
           created_at: databases[10].created_at,
-          kind: "earbuds",
-          path: "/",
+          id: databases[10].id,
+          kind: databases[10].kind,
+          path: databases[10].path,
           updated_at: databases[10].updated_at,
           user_id: users[10].id,
         },
         {
-          id: databases[0].id,
           created_at: databases[0].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[0].id,
+          kind: databases[0].kind,
+          path: databases[0].path,
           updated_at: databases[0].updated_at,
           user_id: users[0].id,
         },
         {
-          id: databases[1].id,
           created_at: databases[1].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[1].id,
+          kind: databases[1].kind,
+          path: databases[1].path,
           updated_at: databases[1].updated_at,
           user_id: users[1].id,
         },
         {
-          id: databases[2].id,
           created_at: databases[2].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[2].id,
+          kind: databases[2].kind,
+          path: databases[2].path,
           updated_at: databases[2].updated_at,
           user_id: users[2].id,
         },
         {
-          id: databases[3].id,
           created_at: databases[3].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[3].id,
+          kind: databases[3].kind,
+          path: databases[3].path,
           updated_at: databases[3].updated_at,
           user_id: users[3].id,
         },
         {
-          id: databases[4].id,
           created_at: databases[4].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[4].id,
+          kind: databases[4].kind,
+          path: databases[4].path,
           updated_at: databases[4].updated_at,
           user_id: users[4].id,
         },
         {
-          id: databases[5].id,
           created_at: databases[5].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[5].id,
+          kind: databases[5].kind,
+          path: databases[5].path,
           updated_at: databases[5].updated_at,
           user_id: users[5].id,
         },
         {
-          id: databases[6].id,
           created_at: databases[6].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[6].id,
+          kind: databases[6].kind,
+          path: databases[6].path,
           updated_at: databases[6].updated_at,
           user_id: users[6].id,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[7].id,
           created_at: databases[7].created_at,
-          kind: "headphones",
-          path: "/",
+          id: databases[7].id,
+          kind: databases[7].kind,
+          path: databases[7].path,
           updated_at: databases[7].updated_at,
           user_id: users[7].id,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/databases?query=earbuds");
@@ -278,14 +276,17 @@ describe("GET /databases", () => {
 
   it("responds with success and queries the path", async () => {
     const { databases, users } = await database.transaction().execute(async (transaction) => {
-      const databases: { id: string; created_at: Date; updated_at: Date }[] = [];
-      const users: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const databases: {
+        created_at: Date;
+        id: string;
+        kind: string;
+        path: string;
+        updated_at: Date;
+      }[] = [];
+      const users: { created_at: Date; id: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
-        const user = await insertUser(transaction, {
-          display_name: `User ${index}`,
-          username: `user_${index}`,
-        });
+        const user = await insertUser(transaction);
         users.push(user);
         const database = await insertDatabase(transaction, {
           kind: "earbuds",
@@ -299,102 +300,102 @@ describe("GET /databases", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[8].id,
           created_at: databases[8].created_at,
-          kind: "earbuds",
-          path: "/foo",
+          id: databases[8].id,
+          kind: databases[8].kind,
+          path: databases[8].path,
           updated_at: databases[8].updated_at,
           user_id: users[8].id,
         },
         {
-          id: databases[9].id,
           created_at: databases[9].created_at,
-          kind: "earbuds",
-          path: "/foo",
+          id: databases[9].id,
+          kind: databases[9].kind,
+          path: databases[9].path,
           updated_at: databases[9].updated_at,
           user_id: users[9].id,
         },
         {
-          id: databases[10].id,
           created_at: databases[10].created_at,
-          kind: "earbuds",
-          path: "/foo",
+          id: databases[10].id,
+          kind: databases[10].kind,
+          path: databases[10].path,
           updated_at: databases[10].updated_at,
           user_id: users[10].id,
         },
         {
-          id: databases[0].id,
           created_at: databases[0].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[0].id,
+          kind: databases[0].kind,
+          path: databases[0].path,
           updated_at: databases[0].updated_at,
           user_id: users[0].id,
         },
         {
-          id: databases[1].id,
           created_at: databases[1].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[1].id,
+          kind: databases[1].kind,
+          path: databases[1].path,
           updated_at: databases[1].updated_at,
           user_id: users[1].id,
         },
         {
-          id: databases[2].id,
           created_at: databases[2].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[2].id,
+          kind: databases[2].kind,
+          path: databases[2].path,
           updated_at: databases[2].updated_at,
           user_id: users[2].id,
         },
         {
-          id: databases[3].id,
           created_at: databases[3].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[3].id,
+          kind: databases[3].kind,
+          path: databases[3].path,
           updated_at: databases[3].updated_at,
           user_id: users[3].id,
         },
         {
-          id: databases[4].id,
           created_at: databases[4].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[4].id,
+          kind: databases[4].kind,
+          path: databases[4].path,
           updated_at: databases[4].updated_at,
           user_id: users[4].id,
         },
         {
-          id: databases[5].id,
           created_at: databases[5].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[5].id,
+          kind: databases[5].kind,
+          path: databases[5].path,
           updated_at: databases[5].updated_at,
           user_id: users[5].id,
         },
         {
-          id: databases[6].id,
           created_at: databases[6].created_at,
-          kind: "earbuds",
-          path: "/bar",
+          id: databases[6].id,
+          kind: databases[6].kind,
+          path: databases[6].path,
           updated_at: databases[6].updated_at,
           user_id: users[6].id,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: databases[7].id,
           created_at: databases[7].created_at,
+          id: databases[7].id,
           kind: databases[7].kind,
-          path: "/bar",
+          path: databases[7].path,
           updated_at: databases[7].updated_at,
           user_id: users[7].id,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/databases?query=foo");

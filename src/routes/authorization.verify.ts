@@ -3,19 +3,22 @@ import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
 import configuration from "../configuration.js";
-import type { Selectable } from "kysely";
-import type { Users } from "../types.js";
 
 const application = new Hono();
 
 application.get("/authorization/verify", async (context) => {
-  const authToken = context.req.query("token");
-  if (!authToken) return context.body(null, 401);
+  const magicLinkToken = context.req.query("token");
+  if (!magicLinkToken) return context.body(null, 401);
 
-  const payload = await verifyJwtToken(authToken);
+  const payload = await verifyJwtToken(magicLinkToken);
   if (!payload) return context.body(null, 401);
 
-  const user = await getUserByEmailAuthToken(authToken);
+  const user = await database
+    .selectFrom("users")
+    .innerJoin("jwt_magic_link_tokens", "users.id", "jwt_magic_link_tokens.user_id")
+    .where("jwt_magic_link_tokens.token", "=", magicLinkToken)
+    .selectAll("users")
+    .executeTakeFirst();
   if (!user) return context.body(null, 401);
 
   return await database.transaction().execute(async (transaction) => {
@@ -26,32 +29,19 @@ application.get("/authorization/verify", async (context) => {
 
     await transaction
       .insertInto("jwt_authorization_tokens")
-      .values({
-        token: authorizationToken,
-        user_id: user.id,
-      })
+      .values({ token: authorizationToken, user_id: user.id })
       .execute();
     await transaction
       .insertInto("jwt_refresh_tokens")
-      .values({
-        token: refreshToken,
-        user_id: user.id,
-      })
+      .values({ token: refreshToken, user_id: user.id })
       .execute();
-    await transaction.deleteFrom("jwt_magic_link_tokens").where("token", "=", authToken).execute();
+    await transaction
+      .deleteFrom("jwt_magic_link_tokens")
+      .where("token", "=", magicLinkToken)
+      .execute();
 
     return context.json({ authorizationToken, refreshToken });
   });
 });
 
 export default application;
-
-async function getUserByEmailAuthToken(token: string): Promise<Selectable<Users> | undefined> {
-  return await database
-    .selectFrom("users")
-    .innerJoin("jwt_magic_link_tokens", "users.id", "jwt_magic_link_tokens.user_id")
-    .where("jwt_magic_link_tokens.token", "=", token)
-    .selectAll("users")
-    .limit(1)
-    .executeTakeFirst();
-}

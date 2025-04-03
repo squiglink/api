@@ -11,10 +11,7 @@ application.post("/models/new", async (context) => {
 
   const result = await database
     .insertInto("models")
-    .values({
-      brand_id: body.brand_id,
-      name: body.name,
-    })
+    .values({ brand_id: body.brand_id, name: body.name })
     .returningAll()
     .executeTakeFirstOrThrow();
 

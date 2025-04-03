@@ -6,18 +6,13 @@ import application from "../application.js";
 describe("GET /models", () => {
   it("responds with success and returns models", async () => {
     const { brands, models } = await database.transaction().execute(async (transaction) => {
-      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
+      const models: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
-        const brand = await insertBrand(transaction, {
-          name: `Brand ${index}`,
-        });
+        const brand = await insertBrand(transaction);
         brands.push(brand);
-        const model = await insertModel(transaction, {
-          brand_id: brand.id,
-          name: `Model ${index}`,
-        });
+        const model = await insertModel(transaction, { brand_id: brand.id });
         models.push(model);
       }
 
@@ -25,146 +20,146 @@ describe("GET /models", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: models[0].id,
           brand: {
-            id: brands[0].id,
             created_at: brands[0].created_at,
-            name: "Brand 1",
+            id: brands[0].id,
+            name: brands[0].name,
             updated_at: brands[0].updated_at,
           },
           created_at: models[0].created_at,
-          name: "Model 1",
+          id: models[0].id,
+          name: models[0].name,
           updated_at: models[0].updated_at,
         },
         {
-          id: models[1].id,
           brand: {
-            id: brands[1].id,
             created_at: brands[1].created_at,
-            name: "Brand 2",
+            id: brands[1].id,
+            name: brands[1].name,
             updated_at: brands[1].updated_at,
           },
           created_at: models[1].created_at,
-          name: "Model 2",
+          id: models[1].id,
+          name: models[1].name,
           updated_at: models[1].updated_at,
         },
         {
-          id: models[2].id,
           brand: {
-            id: brands[2].id,
             created_at: brands[2].created_at,
-            name: "Brand 3",
+            id: brands[2].id,
+            name: brands[2].name,
             updated_at: brands[2].updated_at,
           },
           created_at: models[2].created_at,
-          name: "Model 3",
+          id: models[2].id,
+          name: models[2].name,
           updated_at: models[2].updated_at,
         },
         {
-          id: models[3].id,
           brand: {
-            id: brands[3].id,
             created_at: brands[3].created_at,
-            name: "Brand 4",
+            id: brands[3].id,
+            name: brands[3].name,
             updated_at: brands[3].updated_at,
           },
           created_at: models[3].created_at,
-          name: "Model 4",
+          id: models[3].id,
+          name: models[3].name,
           updated_at: models[3].updated_at,
         },
         {
-          id: models[4].id,
           brand: {
-            id: brands[4].id,
             created_at: brands[4].created_at,
-            name: "Brand 5",
+            id: brands[4].id,
+            name: brands[4].name,
             updated_at: brands[4].updated_at,
           },
           created_at: models[4].created_at,
-          name: "Model 5",
+          id: models[4].id,
+          name: models[4].name,
           updated_at: models[4].updated_at,
         },
         {
-          id: models[5].id,
           brand: {
-            id: brands[5].id,
             created_at: brands[5].created_at,
-            name: "Brand 6",
+            id: brands[5].id,
+            name: brands[5].name,
             updated_at: brands[5].updated_at,
           },
           created_at: models[5].created_at,
-          name: "Model 6",
+          id: models[5].id,
+          name: models[5].name,
           updated_at: models[5].updated_at,
         },
         {
-          id: models[6].id,
           brand: {
-            id: brands[6].id,
             created_at: brands[6].created_at,
-            name: "Brand 7",
+            id: brands[6].id,
+            name: brands[6].name,
             updated_at: brands[6].updated_at,
           },
           created_at: models[6].created_at,
-          name: "Model 7",
+          id: models[6].id,
+          name: models[6].name,
           updated_at: models[6].updated_at,
         },
         {
-          id: models[7].id,
           brand: {
-            id: brands[7].id,
             created_at: brands[7].created_at,
-            name: "Brand 8",
+            id: brands[7].id,
+            name: brands[7].name,
             updated_at: brands[7].updated_at,
           },
           created_at: models[7].created_at,
-          name: "Model 8",
+          id: models[7].id,
+          name: models[7].name,
           updated_at: models[7].updated_at,
         },
         {
-          id: models[8].id,
           brand: {
-            id: brands[8].id,
             created_at: brands[8].created_at,
-            name: "Brand 9",
+            id: brands[8].id,
+            name: brands[8].name,
             updated_at: brands[8].updated_at,
           },
           created_at: models[8].created_at,
-          name: "Model 9",
+          id: models[8].id,
+          name: models[8].name,
           updated_at: models[8].updated_at,
         },
         {
-          id: models[9].id,
           brand: {
-            id: brands[9].id,
             created_at: brands[9].created_at,
-            name: "Brand 10",
+            id: brands[9].id,
+            name: brands[9].name,
             updated_at: brands[9].updated_at,
           },
           created_at: models[9].created_at,
-          name: "Model 10",
+          id: models[9].id,
+          name: models[9].name,
           updated_at: models[9].updated_at,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: models[10].id,
           brand: {
-            id: brands[10].id,
             created_at: brands[10].created_at,
-            name: "Brand 11",
+            id: brands[10].id,
+            name: brands[10].name,
             updated_at: brands[10].updated_at,
           },
           created_at: models[10].created_at,
-          name: "Model 11",
+          id: models[10].id,
+          name: models[10].name,
           updated_at: models[10].updated_at,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/models");
@@ -182,8 +177,8 @@ describe("GET /models", () => {
 
   it("responds with success and queries the brand name", async () => {
     const { brands, models } = await database.transaction().execute(async (transaction) => {
-      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
+      const models: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
         const brand = await insertBrand(transaction, {
@@ -201,146 +196,146 @@ describe("GET /models", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: models[8].id,
           brand: {
-            id: brands[8].id,
             created_at: brands[8].created_at,
-            name: "Foo Brand 9",
+            id: brands[8].id,
+            name: brands[8].name,
             updated_at: brands[8].updated_at,
           },
           created_at: models[8].created_at,
-          name: "Model 9",
+          id: models[8].id,
+          name: models[8].name,
           updated_at: models[8].updated_at,
         },
         {
-          id: models[9].id,
           brand: {
-            id: brands[9].id,
             created_at: brands[9].created_at,
-            name: "Foo Brand 10",
+            id: brands[9].id,
+            name: brands[9].name,
             updated_at: brands[9].updated_at,
           },
           created_at: models[9].created_at,
-          name: "Model 10",
+          id: models[9].id,
+          name: models[9].name,
           updated_at: models[9].updated_at,
         },
         {
-          id: models[10].id,
           brand: {
-            id: brands[10].id,
             created_at: brands[10].created_at,
-            name: "Foo Brand 11",
+            id: brands[10].id,
+            name: brands[10].name,
             updated_at: brands[10].updated_at,
           },
           created_at: models[10].created_at,
-          name: "Model 11",
+          id: models[10].id,
+          name: models[10].name,
           updated_at: models[10].updated_at,
         },
         {
-          id: models[0].id,
           brand: {
-            id: brands[0].id,
             created_at: brands[0].created_at,
-            name: "Bar Brand 1",
+            id: brands[0].id,
+            name: brands[0].name,
             updated_at: brands[0].updated_at,
           },
           created_at: models[0].created_at,
-          name: "Model 1",
+          id: models[0].id,
+          name: models[0].name,
           updated_at: models[0].updated_at,
         },
         {
-          id: models[1].id,
           brand: {
-            id: brands[1].id,
             created_at: brands[1].created_at,
-            name: "Bar Brand 2",
+            id: brands[1].id,
+            name: brands[1].name,
             updated_at: brands[1].updated_at,
           },
           created_at: models[1].created_at,
-          name: "Model 2",
+          id: models[1].id,
+          name: models[1].name,
           updated_at: models[1].updated_at,
         },
         {
-          id: models[2].id,
           brand: {
-            id: brands[2].id,
             created_at: brands[2].created_at,
-            name: "Bar Brand 3",
+            id: brands[2].id,
+            name: brands[2].name,
             updated_at: brands[2].updated_at,
           },
           created_at: models[2].created_at,
-          name: "Model 3",
+          id: models[2].id,
+          name: models[2].name,
           updated_at: models[2].updated_at,
         },
         {
-          id: models[3].id,
           brand: {
-            id: brands[3].id,
             created_at: brands[3].created_at,
-            name: "Bar Brand 4",
+            id: brands[3].id,
+            name: brands[3].name,
             updated_at: brands[3].updated_at,
           },
           created_at: models[3].created_at,
-          name: "Model 4",
+          id: models[3].id,
+          name: models[3].name,
           updated_at: models[3].updated_at,
         },
         {
-          id: models[4].id,
           brand: {
-            id: brands[4].id,
             created_at: brands[4].created_at,
-            name: "Bar Brand 5",
+            id: brands[4].id,
+            name: brands[4].name,
             updated_at: brands[4].updated_at,
           },
           created_at: models[4].created_at,
-          name: "Model 5",
+          id: models[4].id,
+          name: models[4].name,
           updated_at: models[4].updated_at,
         },
         {
-          id: models[5].id,
           brand: {
-            id: brands[5].id,
             created_at: brands[5].created_at,
-            name: "Bar Brand 6",
+            id: brands[5].id,
+            name: brands[5].name,
             updated_at: brands[5].updated_at,
           },
           created_at: models[5].created_at,
-          name: "Model 6",
+          id: models[5].id,
+          name: models[5].name,
           updated_at: models[5].updated_at,
         },
         {
-          id: models[6].id,
           brand: {
-            id: brands[6].id,
             created_at: brands[6].created_at,
-            name: "Bar Brand 7",
+            id: brands[6].id,
+            name: brands[6].name,
             updated_at: brands[6].updated_at,
           },
           created_at: models[6].created_at,
-          name: "Model 7",
+          id: models[6].id,
+          name: models[6].name,
           updated_at: models[6].updated_at,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: models[7].id,
           brand: {
-            id: brands[7].id,
             created_at: brands[7].created_at,
-            name: "Bar Brand 8",
+            id: brands[7].id,
+            name: brands[7].name,
             updated_at: brands[7].updated_at,
           },
           created_at: models[7].created_at,
-          name: "Model 8",
+          id: models[7].id,
+          name: models[7].name,
           updated_at: models[7].updated_at,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/models?query=foo");
@@ -358,13 +353,11 @@ describe("GET /models", () => {
 
   it("responds with success and queries the name", async () => {
     const { brands, models } = await database.transaction().execute(async (transaction) => {
-      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
-      const models: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
+      const models: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
 
       for (let index = 1; index <= 11; index++) {
-        const brand = await insertBrand(transaction, {
-          name: `Brand ${index}`,
-        });
+        const brand = await insertBrand(transaction, { name: `Brand ${index}` });
         brands.push(brand);
         const model = await insertModel(transaction, {
           brand_id: brand.id,
@@ -377,146 +370,146 @@ describe("GET /models", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: models[8].id,
           brand: {
-            id: brands[8].id,
             created_at: brands[8].created_at,
-            name: "Brand 9",
+            id: brands[8].id,
+            name: brands[8].name,
             updated_at: brands[8].updated_at,
           },
           created_at: models[8].created_at,
-          name: "Foo Model 9",
+          id: models[8].id,
+          name: models[8].name,
           updated_at: models[8].updated_at,
         },
         {
-          id: models[9].id,
           brand: {
-            id: brands[9].id,
             created_at: brands[9].created_at,
-            name: "Brand 10",
+            id: brands[9].id,
+            name: brands[9].name,
             updated_at: brands[9].updated_at,
           },
           created_at: models[9].created_at,
-          name: "Foo Model 10",
+          id: models[9].id,
+          name: models[9].name,
           updated_at: models[9].updated_at,
         },
         {
-          id: models[10].id,
           brand: {
-            id: brands[10].id,
             created_at: brands[10].created_at,
-            name: "Brand 11",
+            id: brands[10].id,
+            name: brands[10].name,
             updated_at: brands[10].updated_at,
           },
           created_at: models[10].created_at,
-          name: "Foo Model 11",
+          id: models[10].id,
+          name: models[10].name,
           updated_at: models[10].updated_at,
         },
         {
-          id: models[0].id,
           brand: {
-            id: brands[0].id,
             created_at: brands[0].created_at,
-            name: "Brand 1",
+            id: brands[0].id,
+            name: brands[0].name,
             updated_at: brands[0].updated_at,
           },
           created_at: models[0].created_at,
-          name: "Bar Model 1",
+          id: models[0].id,
+          name: models[0].name,
           updated_at: models[0].updated_at,
         },
         {
-          id: models[1].id,
           brand: {
-            id: brands[1].id,
             created_at: brands[1].created_at,
-            name: "Brand 2",
+            id: brands[1].id,
+            name: brands[1].name,
             updated_at: brands[1].updated_at,
           },
           created_at: models[1].created_at,
-          name: "Bar Model 2",
+          id: models[1].id,
+          name: models[1].name,
           updated_at: models[1].updated_at,
         },
         {
-          id: models[2].id,
           brand: {
-            id: brands[2].id,
             created_at: brands[2].created_at,
-            name: "Brand 3",
+            id: brands[2].id,
+            name: brands[2].name,
             updated_at: brands[2].updated_at,
           },
           created_at: models[2].created_at,
-          name: "Bar Model 3",
+          id: models[2].id,
+          name: models[2].name,
           updated_at: models[2].updated_at,
         },
         {
-          id: models[3].id,
           brand: {
-            id: brands[3].id,
             created_at: brands[3].created_at,
-            name: "Brand 4",
+            id: brands[3].id,
+            name: brands[3].name,
             updated_at: brands[3].updated_at,
           },
           created_at: models[3].created_at,
-          name: "Bar Model 4",
+          id: models[3].id,
+          name: models[3].name,
           updated_at: models[3].updated_at,
         },
         {
-          id: models[4].id,
           brand: {
-            id: brands[4].id,
             created_at: brands[4].created_at,
-            name: "Brand 5",
+            id: brands[4].id,
+            name: brands[4].name,
             updated_at: brands[4].updated_at,
           },
           created_at: models[4].created_at,
-          name: "Bar Model 5",
+          id: models[4].id,
+          name: models[4].name,
           updated_at: models[4].updated_at,
         },
         {
-          id: models[5].id,
           brand: {
-            id: brands[5].id,
             created_at: brands[5].created_at,
-            name: "Brand 6",
+            id: brands[5].id,
+            name: brands[5].name,
             updated_at: brands[5].updated_at,
           },
           created_at: models[5].created_at,
-          name: "Bar Model 6",
+          id: models[5].id,
+          name: models[5].name,
           updated_at: models[5].updated_at,
         },
         {
-          id: models[6].id,
           brand: {
-            id: brands[6].id,
             created_at: brands[6].created_at,
-            name: "Brand 7",
+            id: brands[6].id,
+            name: brands[6].name,
             updated_at: brands[6].updated_at,
           },
           created_at: models[6].created_at,
-          name: "Bar Model 7",
+          id: models[6].id,
+          name: models[6].name,
           updated_at: models[6].updated_at,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: models[7].id,
           brand: {
-            id: brands[7].id,
             created_at: brands[7].created_at,
-            name: "Brand 8",
+            id: brands[7].id,
+            name: brands[7].name,
             updated_at: brands[7].updated_at,
           },
           created_at: models[7].created_at,
-          name: "Bar Model 8",
+          id: models[7].id,
+          name: models[7].name,
           updated_at: models[7].updated_at,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/models?query=foo");

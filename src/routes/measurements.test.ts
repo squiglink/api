@@ -9,14 +9,19 @@ describe("GET /measurements", () => {
       .transaction()
       .execute(async (transaction) => {
         const databaseId = (await insertDatabase(transaction)).id;
-        const measurements: { created_at: Date; id: string; updated_at: Date; kind: string }[] = [];
+        const measurements: {
+          created_at: Date;
+          id: string;
+          kind: string;
+          label: string;
+          updated_at: Date;
+        }[] = [];
         const modelId = (await insertModel(transaction)).id;
 
         for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
           measurements.push(
             await insertMeasurement(transaction, {
               database_id: databaseId,
-              label: `Label ${measurementIndex}`,
               model_id: modelId,
             }),
           );
@@ -27,20 +32,20 @@ describe("GET /measurements", () => {
 
     const body = [
       {
-        id: measurements[0].id,
         created_at: measurements[0].created_at,
         database_id: databaseId,
+        id: measurements[0].id,
         kind: measurements[0].kind,
-        label: "Label 1",
+        label: measurements[0].label,
         model_id: modelId,
         updated_at: measurements[0].updated_at,
       },
       {
-        id: measurements[1].id,
         created_at: measurements[1].created_at,
         database_id: databaseId,
+        id: measurements[1].id,
         kind: measurements[1].kind,
-        label: "Label 2",
+        label: measurements[1].label,
         model_id: modelId,
         updated_at: measurements[1].updated_at,
       },
@@ -56,14 +61,13 @@ describe("GET /measurements", () => {
   it("responds with bad request if the database ID is not provided", async () => {
     const modelId = await database.transaction().execute(async (transaction) => {
       const databaseId = (await insertDatabase(transaction)).id;
-      const measurements: { created_at: Date; id: string; updated_at: Date; kind: string }[] = [];
+      const measurements: { created_at: Date; id: string; kind: string; updated_at: Date }[] = [];
       const modelId = (await insertModel(transaction)).id;
 
       for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
         measurements.push(
           await insertMeasurement(transaction, {
             database_id: databaseId,
-            label: `Label ${measurementIndex}`,
             model_id: modelId,
           }),
         );
@@ -82,14 +86,13 @@ describe("GET /measurements", () => {
   it("responds with bad request if the model ID is not provided", async () => {
     const databaseId = await database.transaction().execute(async (transaction) => {
       const databaseId = (await insertDatabase(transaction)).id;
-      const measurements: { created_at: Date; id: string; updated_at: Date; kind: string }[] = [];
+      const measurements: { created_at: Date; id: string; kind: string; updated_at: Date }[] = [];
       const modelId = (await insertModel(transaction)).id;
 
       for (let measurementIndex = 1; measurementIndex <= 2; measurementIndex++) {
         measurements.push(
           await insertMeasurement(transaction, {
             database_id: databaseId,
-            label: `Label ${measurementIndex}`,
             model_id: modelId,
           }),
         );

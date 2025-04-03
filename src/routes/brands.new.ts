@@ -8,9 +8,7 @@ application.post("/brands/new", async (context) => {
 
   const result = await database
     .insertInto("brands")
-    .values({
-      name: body.name,
-    })
+    .values({ name: body.name })
     .returningAll()
     .executeTakeFirstOrThrow();
 

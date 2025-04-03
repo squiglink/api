@@ -6,18 +6,13 @@ import application from "../application.js";
 describe("GET /brands", () => {
   it("responds with success and returns brands", async () => {
     const brands = await database.transaction().execute(async (transaction) => {
-      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
 
       for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
-        const brand = await insertBrand(transaction, {
-          name: `Brand ${brandIndex}`,
-        });
+        const brand = await insertBrand(transaction);
         brands.push(brand);
         for (let modelIndex = 1; modelIndex <= brandIndex; modelIndex++) {
-          await insertModel(transaction, {
-            brand_id: brand.id,
-            name: `Model ${modelIndex}`,
-          });
+          await insertModel(transaction, { brand_id: brand.id });
         }
       }
 
@@ -25,91 +20,91 @@ describe("GET /brands", () => {
     });
 
     const firstPage = {
+      page_count: 2,
       page: [
         {
-          id: brands[0].id,
           created_at: brands[0].created_at,
+          id: brands[0].id,
           model_count: 1,
-          name: "Brand 1",
+          name: brands[0].name,
           updated_at: brands[0].updated_at,
         },
         {
-          id: brands[1].id,
           created_at: brands[1].created_at,
+          id: brands[1].id,
           model_count: 2,
-          name: "Brand 2",
+          name: brands[1].name,
           updated_at: brands[1].updated_at,
         },
         {
-          id: brands[2].id,
           created_at: brands[2].created_at,
+          id: brands[2].id,
           model_count: 3,
-          name: "Brand 3",
+          name: brands[2].name,
           updated_at: brands[2].updated_at,
         },
         {
-          id: brands[3].id,
           created_at: brands[3].created_at,
+          id: brands[3].id,
           model_count: 4,
-          name: "Brand 4",
+          name: brands[3].name,
           updated_at: brands[3].updated_at,
         },
         {
-          id: brands[4].id,
           created_at: brands[4].created_at,
+          id: brands[4].id,
           model_count: 5,
-          name: "Brand 5",
+          name: brands[4].name,
           updated_at: brands[4].updated_at,
         },
         {
-          id: brands[5].id,
           created_at: brands[5].created_at,
+          id: brands[5].id,
           model_count: 6,
-          name: "Brand 6",
+          name: brands[5].name,
           updated_at: brands[5].updated_at,
         },
         {
-          id: brands[6].id,
           created_at: brands[6].created_at,
+          id: brands[6].id,
           model_count: 7,
-          name: "Brand 7",
+          name: brands[6].name,
           updated_at: brands[6].updated_at,
         },
         {
-          id: brands[7].id,
           created_at: brands[7].created_at,
+          id: brands[7].id,
           model_count: 8,
-          name: "Brand 8",
+          name: brands[7].name,
           updated_at: brands[7].updated_at,
         },
         {
-          id: brands[8].id,
           created_at: brands[8].created_at,
+          id: brands[8].id,
           model_count: 9,
-          name: "Brand 9",
+          name: brands[8].name,
           updated_at: brands[8].updated_at,
         },
         {
-          id: brands[9].id,
           created_at: brands[9].created_at,
+          id: brands[9].id,
           model_count: 10,
-          name: "Brand 10",
+          name: brands[9].name,
           updated_at: brands[9].updated_at,
         },
       ],
-      page_count: 2,
     };
     const secondPage = {
+      page_count: 2,
       page: [
         {
-          id: brands[10].id,
           created_at: brands[10].created_at,
+          id: brands[10].id,
           model_count: 11,
-          name: "Brand 11",
+          name: brands[10].name,
           updated_at: brands[10].updated_at,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/brands");
@@ -127,7 +122,7 @@ describe("GET /brands", () => {
 
   it("responds with success and queries the name", async () => {
     const brands = await database.transaction().execute(async (transaction) => {
-      const brands: { id: string; created_at: Date; updated_at: Date }[] = [];
+      const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];
 
       for (let brandIndex = 1; brandIndex <= 11; brandIndex++) {
         const brand = await insertBrand(transaction, {
@@ -146,91 +141,91 @@ describe("GET /brands", () => {
     });
 
     const queryBrandFirstPage = {
+      page_count: 2,
       page: [
         {
-          id: brands[8].id,
           created_at: brands[8].created_at,
+          id: brands[8].id,
           model_count: 9,
-          name: "Foo Brand 9",
+          name: brands[8].name,
           updated_at: brands[8].updated_at,
         },
         {
-          id: brands[9].id,
           created_at: brands[9].created_at,
+          id: brands[9].id,
           model_count: 10,
-          name: "Foo Brand 10",
+          name: brands[9].name,
           updated_at: brands[9].updated_at,
         },
         {
-          id: brands[10].id,
           created_at: brands[10].created_at,
+          id: brands[10].id,
           model_count: 11,
-          name: "Foo Brand 11",
+          name: brands[10].name,
           updated_at: brands[10].updated_at,
         },
         {
-          id: brands[0].id,
           created_at: brands[0].created_at,
+          id: brands[0].id,
           model_count: 1,
-          name: "Bar Brand 1",
+          name: brands[0].name,
           updated_at: brands[0].updated_at,
         },
         {
-          id: brands[1].id,
           created_at: brands[1].created_at,
+          id: brands[1].id,
           model_count: 2,
-          name: "Bar Brand 2",
+          name: brands[1].name,
           updated_at: brands[1].updated_at,
         },
         {
-          id: brands[2].id,
           created_at: brands[2].created_at,
+          id: brands[2].id,
           model_count: 3,
-          name: "Bar Brand 3",
+          name: brands[2].name,
           updated_at: brands[2].updated_at,
         },
         {
-          id: brands[3].id,
           created_at: brands[3].created_at,
+          id: brands[3].id,
           model_count: 4,
-          name: "Bar Brand 4",
+          name: brands[3].name,
           updated_at: brands[3].updated_at,
         },
         {
-          id: brands[4].id,
           created_at: brands[4].created_at,
+          id: brands[4].id,
           model_count: 5,
-          name: "Bar Brand 5",
+          name: brands[4].name,
           updated_at: brands[4].updated_at,
         },
         {
-          id: brands[5].id,
           created_at: brands[5].created_at,
+          id: brands[5].id,
           model_count: 6,
-          name: "Bar Brand 6",
+          name: brands[5].name,
           updated_at: brands[5].updated_at,
         },
         {
-          id: brands[6].id,
           created_at: brands[6].created_at,
+          id: brands[6].id,
           model_count: 7,
-          name: "Bar Brand 7",
+          name: brands[6].name,
           updated_at: brands[6].updated_at,
         },
       ],
-      page_count: 2,
     };
     const queryBrandSecondPage = {
+      page_count: 2,
       page: [
         {
-          id: brands[7].id,
           created_at: brands[7].created_at,
+          id: brands[7].id,
           model_count: 8,
-          name: "Bar Brand 8",
+          name: brands[7].name,
           updated_at: brands[7].updated_at,
         },
       ],
-      page_count: 2,
     };
 
     const pagelessResponse = await application.request("/brands?query=foo");

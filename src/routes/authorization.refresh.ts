@@ -25,7 +25,6 @@ application.post("/authorization/refresh", async (context) => {
     .where("users.id", "=", currentUser.id)
     .selectAll("users")
     .executeTakeFirst();
-
   if (!refreshTokenUser) return context.body(null, 401);
 
   const newAuthorizationToken = await createJwtToken(
@@ -36,17 +35,12 @@ application.post("/authorization/refresh", async (context) => {
   return await database.transaction().execute(async (transaction) => {
     await transaction
       .updateTable("jwt_refresh_tokens")
-      .set({
-        token: newRefreshToken,
-      })
+      .set({ token: newRefreshToken })
       .where("token", "=", refreshToken)
       .execute();
     await transaction
       .insertInto("jwt_authorization_tokens")
-      .values({
-        token: newAuthorizationToken,
-        user_id: refreshTokenUser.id,
-      })
+      .values({ token: newAuthorizationToken, user_id: refreshTokenUser.id })
       .execute();
 
     return context.json({

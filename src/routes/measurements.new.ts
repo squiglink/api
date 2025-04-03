@@ -8,7 +8,7 @@ application.post("/measurements/new", async (context) => {
   const body: {
     database_id: string;
     kind: MeasurementKind;
-    label?: string;
+    label: string;
     left_channel: string;
     model_id: string;
     right_channel: string;
@@ -20,8 +20,8 @@ application.post("/measurements/new", async (context) => {
       .selectFrom("databases")
       .select("user_id")
       .where("id", "=", body.database_id)
-      .executeTakeFirstOrThrow()
-  ).user_id;
+      .executeTakeFirst()
+  )?.user_id;
   if (currentUserId != databaseUserId) return context.body(null, 401);
 
   const result = await database

@@ -9,6 +9,12 @@ application.get("/models", async (context) => {
   const pageNumber = Number(context.req.query("page")) || 1;
   const pageSize = 10;
 
+  const { count } = await database
+    .selectFrom("models")
+    .select(database.fn.countAll().as("count"))
+    .executeTakeFirstOrThrow();
+  const pageCount = Math.ceil(Number(count) / 10);
+
   const searchQueryParameter = context.req.query("query");
   const page = await database
     .selectFrom("models")
@@ -36,13 +42,7 @@ application.get("/models", async (context) => {
     .offset((pageNumber - 1) * pageSize)
     .execute();
 
-  const { count } = await database
-    .selectFrom("models")
-    .select(database.fn.countAll().as("count"))
-    .executeTakeFirstOrThrow();
-  const pageCount = Math.ceil(Number(count) / 10);
-
-  return context.json({ page: page, page_count: pageCount });
+  return context.json({ page_count: pageCount, page: page });
 });
 
 export default application;
