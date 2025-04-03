@@ -8,6 +8,7 @@ import brands from "./routes/brands.js";
 import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";
 import measurements from "./routes/measurements.js";
+import measurementsNew from "./routes/measurements.new.js";
 import models from "./routes/models.js";
 import modelsNew from "./routes/models.new.js";
 
@@ -26,6 +27,7 @@ const authorizedApplication = new Hono();
 authorizedApplication.use("/*", authorizationMiddleware);
 authorizedApplication.route("/", authorizationRefresh);
 authorizedApplication.route("/", brandsNew);
+authorizedApplication.route("/", measurementsNew);
 authorizedApplication.route("/", modelsNew);
 
 application.route("/", authorizedApplication);
