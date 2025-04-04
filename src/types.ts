@@ -55,6 +55,7 @@ export interface JwtMagicLinkTokens {
   created_at: Generated<Timestamp>;
   id: Generated<string>;
   token: string;
+  updated_at: Generated<Timestamp>;
   user_id: string;
 }
 
