@@ -1,3 +1,4 @@
+import { allowParameters } from "../services/allow_parameters.js";
 import { database, touch } from "../database.js";
 import { Hono } from "hono";
 import { verifyDatabaseUser } from "../services/verify_database_user.js";
@@ -13,7 +14,14 @@ application.patch("/measurements/:id/edit", async (context) => {
     left_channel?: string;
     model_id: string;
     right_channel?: string;
-  } = await context.req.json();
+  } = allowParameters(await context.req.json(), [
+    "database_id",
+    "kind",
+    "label",
+    "left_channel",
+    "model_id",
+    "right_channel",
+  ]);
   const id = context.req.param("id");
 
   const measurement = await database

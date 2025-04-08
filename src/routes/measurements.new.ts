@@ -1,3 +1,4 @@
+import { allowParameters } from "../services/allow_parameters.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 import { verifyDatabaseUser } from "../services/verify_database_user.js";
@@ -13,7 +14,14 @@ application.post("/measurements/new", async (context) => {
     left_channel: string;
     model_id: string;
     right_channel: string;
-  } = await context.req.json();
+  } = allowParameters(await context.req.json(), [
+    "database_id",
+    "kind",
+    "label",
+    "left_channel",
+    "model_id",
+    "right_channel",
+  ]);
 
   if (!(await verifyDatabaseUser(context.var.currentUser.id, database, body.database_id))) {
     return context.body(null, 401);

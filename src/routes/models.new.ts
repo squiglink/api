@@ -1,3 +1,4 @@
+import { allowParameters } from "../services/allow_parameters.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
 
@@ -7,7 +8,7 @@ application.post("/models/new", async (context) => {
   const body: {
     brand_id: string;
     name: string;
-  } = await context.req.json();
+  } = allowParameters(await context.req.json(), ["brand_id", "name"]);
 
   const result = await database
     .insertInto("models")
