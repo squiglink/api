@@ -1,5 +1,6 @@
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { verifyDatabaseUser } from "../services/verify_database_user.js";
 import type { MeasurementKind } from "../types.js";
 
 const application = new Hono();
@@ -14,15 +15,9 @@ application.post("/measurements/new", async (context) => {
     right_channel: string;
   } = await context.req.json();
 
-  const currentUserId = context.var.currentUser.id;
-  const databaseUserId = (
-    await database
-      .selectFrom("databases")
-      .select("user_id")
-      .where("id", "=", body.database_id)
-      .executeTakeFirst()
-  )?.user_id;
-  if (currentUserId != databaseUserId) return context.body(null, 401);
+  if (!(await verifyDatabaseUser(context.var.currentUser.id, database, body.database_id))) {
+    return context.body(null, 401);
+  }
 
   const result = await database
     .insertInto("measurements")
