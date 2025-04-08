@@ -37,7 +37,7 @@ describe("POST /measurements/new", () => {
     expect(response.status).toBe(200);
   });
 
-  it("responds with unauthorized if trying to create a measurement for another user's database", async () => {
+  it("responds with unauthorized if trying to create a measurement from another user's database", async () => {
     const { anotherDatabaseId, modelId, userId } = await database
       .transaction()
       .execute(async (transaction) => {

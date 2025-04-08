@@ -10,6 +10,7 @@ application.get("/measurements/:id", async (context) => {
     .where("id", "=", context.req.param("id"))
     .orderBy("measurements.created_at")
     .executeTakeFirst();
+  if (!result) return context.body(null, 404);
 
   return context.json(result);
 });
