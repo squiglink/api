@@ -9,7 +9,7 @@
   "dependencies": {
     "@hono/node-server": "^1.14.1",
     "@types/jsonwebtoken": "^9.0.9",
-    "hono": "^4.7.6",
+    "hono": "^4.7.7",
     "kysely": "^0.27.6",
     "pg": "^8.14.1",
     "resend": "^4.3.0"
