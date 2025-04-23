@@ -24,8 +24,8 @@ importers:
         specifier: ^8.14.1
         version: 8.14.1
       resend:
-        specifier: ^4.3.0
-        version: 4.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^4.4.0
+        version: 4.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@faker-js/faker':
         specifier: ^9.7.0
@@ -1101,8 +1101,8 @@ packages:
     resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
     engines: {node: '>= 0.10'}
 
-  resend@4.3.0:
-    resolution: {integrity: sha512-4OBHeusMVSl0vcba2J3AaGzdZ1SXAAhX/Wkcwobe16AHmlW9h3li8wG62Fhvlsc61e+wlQoxcwJZP6WrBTbghQ==}
+  resend@4.4.0:
+    resolution: {integrity: sha512-SmVI3JCpgPNt4/m3Uy403LjoSeeleUE2X+KwPYQZcw+jiBCFsqL6vdf1r/XuQ7yOjvxYmlI8GD/oIWonFF9t9w==}
     engines: {node: '>=18'}
 
   resolve-from@4.0.0:
@@ -2168,7 +2168,7 @@ snapshots:
     dependencies:
       resolve: 1.22.10
 
-  resend@4.3.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  resend@4.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@react-email/render': 1.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     transitivePeerDependencies:
