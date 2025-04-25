@@ -11,13 +11,13 @@
     "@types/jsonwebtoken": "^9.0.9",
     "hono": "^4.7.7",
     "kysely": "^0.27.6",
-    "pg": "^8.15.1",
+    "pg": "^8.15.5",
     "resend": "^4.4.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.7.0",
     "@types/node": "^22.15.0",
-    "@types/pg": "^8.11.13",
+    "@types/pg": "^8.11.14",
     "kysely-codegen": "^0.18.3",
     "kysely-ctl": "^0.12.2",
     "prettier": "^3.5.3",
