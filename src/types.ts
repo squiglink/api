@@ -41,6 +41,7 @@ export interface Evaluations {
   review_url: string | null;
   shop_url: string | null;
   updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface JwtAuthorizationTokens {

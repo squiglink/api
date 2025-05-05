@@ -76,6 +76,9 @@ export async function up(database: Kysely<any>): Promise<void> {
     .addColumn("updated_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),
     )
+    .addColumn("user_id", "uuid", (column) =>
+      column.references("users.id").notNull().onDelete("cascade"),
+    )
     .execute();
 
   await database.schema

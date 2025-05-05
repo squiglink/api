@@ -74,6 +74,7 @@ export async function insertEvaluation(
     review_url?: string | null;
     shop_url?: string | null;
     updated_at?: Date;
+    user_id?: string;
   } = {},
 ): Promise<{
   created_at: Date;
@@ -83,6 +84,7 @@ export async function insertEvaluation(
   review_url: string | null;
   shop_url: string | null;
   updated_at: Date;
+  user_id: string;
 }> {
   return await databaseOrTransaction
     .insertInto("evaluations")
@@ -92,6 +94,7 @@ export async function insertEvaluation(
         review_score: values.review_score || faker.number.int({ min: 0, max: 5 }),
         review_url: values.review_url || faker.internet.url(),
         shop_url: values.shop_url || faker.internet.url(),
+        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       },
       ...values,
     })
