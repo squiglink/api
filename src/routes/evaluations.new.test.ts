@@ -1,6 +1,7 @@
 import { count, signIn } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
+import { faker } from "@faker-js/faker";
 import { insertEvaluation, insertModel, insertUser } from "../test_helper.factories.js";
 import application from "../application.js";
 
@@ -16,9 +17,9 @@ describe("POST /evaluations/new", () => {
     const { authorizationToken } = await signIn(userId);
     const body = {
       model_id: modelId,
-      review_score: 123,
-      review_url: "123",
-      shop_url: "123",
+      review_score: faker.number.int({ min: 0, max: 5 }),
+      review_url: faker.internet.url(),
+      shop_url: faker.internet.url(),
     };
 
     const response = await application.request("/evaluations/new", {

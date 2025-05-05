@@ -12,7 +12,7 @@ application.patch("/measurements/:id/edit", async (context) => {
     kind?: MeasurementKind;
     label?: string;
     left_channel?: string;
-    model_id: string;
+    model_id?: string;
     right_channel?: string;
   } = allowParameters(await context.req.json(), [
     "database_id",

@@ -21,8 +21,8 @@ describe("GET /measurements/:id", () => {
       updated_at: measurement.updated_at,
     };
 
-    const pagelessResponse = await application.request(`/measurements/${measurement.id}`);
-    expect(await pagelessResponse.json()).toEqual(body);
-    expect(pagelessResponse.ok).toBe(true);
+    const response = await application.request(`/measurements/${measurement.id}`);
+    expect(await response.json()).toEqual(body);
+    expect(response.ok).toBe(true);
   });
 });
