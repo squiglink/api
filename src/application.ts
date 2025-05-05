@@ -1,4 +1,4 @@
-import { authorizationMiddleware } from "./middleware/authorization.js";
+import { authorizationMiddleware } from "./middlewares/authorization.js";
 import { cors } from "hono/cors";
 import { Hono } from "hono";
 import authorizationLogin from "./routes/authorization.login.js";
