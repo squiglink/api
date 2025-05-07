@@ -11,9 +11,6 @@ importers:
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.8)
-      '@types/jsonwebtoken':
-        specifier: ^9.0.9
-        version: 9.0.9
       hono:
         specifier: ^4.7.8
         version: 4.7.8
@@ -30,6 +27,9 @@ importers:
       '@faker-js/faker':
         specifier: ^9.7.0
         version: 9.7.0
+      '@types/jsonwebtoken':
+        specifier: ^9.0.9
+        version: 9.0.9
       '@types/node':
         specifier: ^22.15.14
         version: 22.15.14
