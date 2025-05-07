@@ -18,6 +18,7 @@
 
 ```sh
 docker compose run api pnpm kysely-codegen
+docker compose run api pnpm oxlint --deny-warnings
 docker compose run api pnpm prettier --check .
 docker compose run api pnpm prettier --write .
 docker compose run api pnpm test

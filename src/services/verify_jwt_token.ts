@@ -15,7 +15,7 @@ export async function verifyJwtToken(token: string) {
     }
 
     return payload;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

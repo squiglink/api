@@ -21,9 +21,7 @@ export async function insertBrand(
   return await databaseOrTransaction
     .insertInto("brands")
     .values({
-      ...{
-        name: values.name || faker.company.name(),
-      },
+      name: values.name || faker.company.name(),
       ...values,
     })
     .returningAll()
@@ -51,13 +49,11 @@ export async function insertDatabase(
   return await databaseOrTransaction
     .insertInto("databases")
     .values({
-      ...{
-        kind:
-          (values.kind as DatabaseKind) ||
-          ["earbuds", "headphones", "iems"][faker.number.int({ min: 0, max: 2 })],
-        path: values.path || faker.system.directoryPath(),
-        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
-      },
+      kind:
+        (values.kind as DatabaseKind) ||
+        ["earbuds", "headphones", "iems"][faker.number.int({ min: 0, max: 2 })],
+      path: values.path || faker.system.directoryPath(),
+      user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
     .returningAll()
@@ -89,13 +85,11 @@ export async function insertEvaluation(
   return await databaseOrTransaction
     .insertInto("evaluations")
     .values({
-      ...{
-        model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
-        review_score: values.review_score || faker.number.int({ min: 0, max: 5 }),
-        review_url: values.review_url || faker.internet.url(),
-        shop_url: values.shop_url || faker.internet.url(),
-        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
-      },
+      model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
+      review_score: values.review_score || faker.number.int({ min: 0, max: 5 }),
+      review_url: values.review_url || faker.internet.url(),
+      shop_url: values.shop_url || faker.internet.url(),
+      user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
     .returningAll()
@@ -121,10 +115,8 @@ export async function insertJwtAuthorizationToken(
   return await databaseOrTransaction
     .insertInto("jwt_authorization_tokens")
     .values({
-      ...{
-        token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
-        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
-      },
+      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
     .returningAll()
@@ -148,10 +140,8 @@ export async function insertJwtMagicLinkToken(
   return await databaseOrTransaction
     .insertInto("jwt_magic_link_tokens")
     .values({
-      ...{
-        token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
-        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
-      },
+      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
     .returningAll()
@@ -177,10 +167,8 @@ export async function insertJwtRefreshToken(
   return await databaseOrTransaction
     .insertInto("jwt_refresh_tokens")
     .values({
-      ...{
-        token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
-        user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
-      },
+      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
     .returningAll()
@@ -206,10 +194,8 @@ export async function insertModel(
   return await databaseOrTransaction
     .insertInto("models")
     .values({
-      ...{
-        brand_id: values.brand_id || (await insertBrand(databaseOrTransaction)).id,
-        name: values.name || faker.commerce.productName(),
-      },
+      brand_id: values.brand_id || (await insertBrand(databaseOrTransaction)).id,
+      name: values.name || faker.commerce.productName(),
       ...values,
     })
     .returningAll()
@@ -239,16 +225,14 @@ export async function insertUser(
   return await databaseOrTransaction
     .insertInto("users")
     .values({
-      ...{
-        display_name: values.display_name || faker.internet.displayName(),
-        email: values.email || faker.internet.email(),
-        scoring_system:
-          (values.scoring_system as UserScoringSystem) ||
-          ["five_star", "hundred_point", "ten_point", "ten_point_decimal"][
-            faker.number.int({ min: 0, max: 3 })
-          ],
-        username: values.username || faker.internet.username(),
-      },
+      display_name: values.display_name || faker.internet.displayName(),
+      email: values.email || faker.internet.email(),
+      scoring_system:
+        (values.scoring_system as UserScoringSystem) ||
+        ["five_star", "hundred_point", "ten_point", "ten_point_decimal"][
+          faker.number.int({ min: 0, max: 3 })
+        ],
+      username: values.username || faker.internet.username(),
       ...values,
     })
     .returningAll()
@@ -282,18 +266,16 @@ export async function insertMeasurement(
   return await databaseOrTransaction
     .insertInto("measurements")
     .values({
-      ...{
-        database_id: values.database_id || (await insertDatabase(databaseOrTransaction)).id,
-        kind:
-          (values.kind as MeasurementKind) ||
-          ["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"][
-            faker.number.int({ min: 0, max: 3 })
-          ],
-        label: values.label || faker.music.genre(),
-        left_channel: values.left_channel || "123",
-        model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
-        right_channel: values.right_channel || "123",
-      },
+      database_id: values.database_id || (await insertDatabase(databaseOrTransaction)).id,
+      kind:
+        (values.kind as MeasurementKind) ||
+        ["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"][
+          faker.number.int({ min: 0, max: 3 })
+        ],
+      label: values.label || faker.music.genre(),
+      left_channel: values.left_channel || "123",
+      model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
+      right_channel: values.right_channel || "123",
       ...values,
     })
     .returningAll()

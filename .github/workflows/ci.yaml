@@ -15,5 +15,6 @@ jobs:
       - run: docker compose run api pnpm install
       - run: docker compose run api pnpm kysely-test migrate:latest
 
+      - run: docker compose run api pnpm oxlint --deny-warnings
       - run: docker compose run api pnpm prettier --check .
       - run: docker compose run api pnpm test run
