@@ -82,7 +82,7 @@ export async function up(database: Kysely<any>): Promise<void> {
     .execute();
 
   await database.schema
-    .createTable("jwt_authorization_tokens")
+    .createTable("jwt_access_tokens")
     .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),

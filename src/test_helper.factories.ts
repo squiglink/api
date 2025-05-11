@@ -96,7 +96,7 @@ export async function insertEvaluation(
     .executeTakeFirstOrThrow();
 }
 
-export async function insertJwtAuthorizationToken(
+export async function insertJwtAccessToken(
   databaseOrTransaction: Kysely<Database> | Transaction<Database>,
   values: {
     created_at?: Date;
@@ -113,9 +113,9 @@ export async function insertJwtAuthorizationToken(
   user_id: string;
 }> {
   return await databaseOrTransaction
-    .insertInto("jwt_authorization_tokens")
+    .insertInto("jwt_access_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -140,7 +140,7 @@ export async function insertJwtMagicLinkToken(
   return await databaseOrTransaction
     .insertInto("jwt_magic_link_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -167,7 +167,7 @@ export async function insertJwtRefreshToken(
   return await databaseOrTransaction
     .insertInto("jwt_refresh_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAuthorizationToken * 1000),
+      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })

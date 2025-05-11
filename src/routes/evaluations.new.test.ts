@@ -14,7 +14,7 @@ describe("POST /evaluations/new", () => {
       return { modelId, userId };
     });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const body = {
       model_id: modelId,
       review_score: faker.number.int({ min: 0, max: 5 }),
@@ -24,7 +24,7 @@ describe("POST /evaluations/new", () => {
 
     const response = await application.request("/evaluations/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -42,7 +42,7 @@ describe("POST /evaluations/new", () => {
       return { userId, modelId };
     });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const requestBody = {
       model_id: modelId,
       review_score: 123,
@@ -53,7 +53,7 @@ describe("POST /evaluations/new", () => {
 
     const response = await application.request(`/evaluations/new`, {
       body: JSON.stringify(requestBody),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 

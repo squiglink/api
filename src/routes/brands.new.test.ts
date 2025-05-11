@@ -4,12 +4,12 @@ import application from "../application.js";
 
 describe("POST /brands/new", () => {
   it("responds with success and creates a new brand", async () => {
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
     const body = { name: "Brand" };
 
     const response = await application.request("/brands/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 

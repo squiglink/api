@@ -1,7 +1,7 @@
 import { beforeEach } from "vitest";
 import { database } from "./database.js";
 import {
-  insertJwtAuthorizationToken,
+  insertJwtAccessToken,
   insertJwtRefreshToken,
   insertUser,
 } from "./test_helper.factories.js";
@@ -13,7 +13,7 @@ beforeEach(async () => {
   await truncateTableCascade("brands");
   await truncateTableCascade("databases");
   await truncateTableCascade("evaluations");
-  await truncateTableCascade("jwt_authorization_tokens");
+  await truncateTableCascade("jwt_access_tokens");
   await truncateTableCascade("jwt_magic_link_tokens");
   await truncateTableCascade("jwt_refresh_tokens");
   await truncateTableCascade("measurements");
@@ -38,16 +38,16 @@ export async function count(tableName: TableExpression<Database, never>): Promis
 
 export async function signIn(
   userId?: string,
-): Promise<{ authorizationToken: string; refreshToken: string }> {
-  const { authorizationToken, refreshToken } = await database
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const { accessToken, refreshToken } = await database
     .transaction()
     .execute(async (transaction) => {
       const id = userId || (await insertUser(transaction)).id;
       return {
-        authorizationToken: (await insertJwtAuthorizationToken(transaction, { user_id: id })).token,
+        accessToken: (await insertJwtAccessToken(transaction, { user_id: id })).token,
         refreshToken: (await insertJwtRefreshToken(transaction, { user_id: id })).token,
       };
     });
 
-  return { authorizationToken, refreshToken };
+  return { accessToken, refreshToken };
 }

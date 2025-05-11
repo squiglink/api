@@ -44,7 +44,7 @@ describe("GET /authorization/verify", () => {
     const response = await application.request(`/authorization/verify?token=${magicLinkToken}`);
 
     expect(await response.json()).toEqual({
-      authorizationToken: expect.any(String),
+      accessToken: expect.any(String),
       refreshToken: expect.any(String),
     });
     expect(response.status).toBe(200);
