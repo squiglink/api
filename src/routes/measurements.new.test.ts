@@ -16,7 +16,7 @@ describe("POST /measurements/new", () => {
         return { databaseId, modelId, userId };
       });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
@@ -28,7 +28,7 @@ describe("POST /measurements/new", () => {
 
     const response = await application.request("/measurements/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -44,12 +44,12 @@ describe("POST /measurements/new", () => {
       return { databaseId };
     });
 
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
     const body = { database_id: databaseId };
 
     const response = await application.request("/measurements/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 

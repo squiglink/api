@@ -22,14 +22,12 @@ application.get("/authorization/verify", async (context) => {
   if (!user) return context.body(null, 401);
 
   return await database.transaction().execute(async (transaction) => {
-    const authorizationToken = await createJwtToken(
-      configuration.jwtExpirationTimeAuthorizationToken * 1000,
-    );
+    const accessToken = await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000);
     const refreshToken = await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000);
 
     await transaction
-      .insertInto("jwt_authorization_tokens")
-      .values({ token: authorizationToken, user_id: user.id })
+      .insertInto("jwt_access_tokens")
+      .values({ token: accessToken, user_id: user.id })
       .execute();
     await transaction
       .insertInto("jwt_refresh_tokens")
@@ -40,7 +38,7 @@ application.get("/authorization/verify", async (context) => {
       .where("token", "=", magicLinkToken)
       .execute();
 
-    return context.json({ authorizationToken, refreshToken });
+    return context.json({ accessToken, refreshToken });
   });
 });
 

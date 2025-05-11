@@ -24,7 +24,7 @@ describe("PATCH /measurements/:id/edit", () => {
         return { databaseId, measurementId, modelId, userId };
       });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
@@ -36,7 +36,7 @@ describe("PATCH /measurements/:id/edit", () => {
 
     const response = await application.request(`/measurements/${measurementId}/edit`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",
     });
 
@@ -55,7 +55,7 @@ describe("PATCH /measurements/:id/edit", () => {
         return { databaseId, measurementId, modelId };
       });
 
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
@@ -67,7 +67,7 @@ describe("PATCH /measurements/:id/edit", () => {
 
     const response = await application.request(`/measurements/${measurementId}/edit`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",
     });
 
