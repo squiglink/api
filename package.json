@@ -10,7 +10,7 @@
     "@hono/node-server": "^1.14.1",
     "hono": "^4.7.9",
     "kysely": "^0.27.6",
-    "pg": "^8.15.6",
+    "pg": "^8.16.0",
     "resend": "^4.5.1"
   },
   "devDependencies": {
