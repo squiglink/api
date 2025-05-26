@@ -44,7 +44,7 @@ export interface Evaluations {
   user_id: string;
 }
 
-export interface JwtAuthorizationTokens {
+export interface JwtAccessTokens {
   created_at: Generated<Timestamp>;
   id: Generated<string>;
   token: string;
@@ -102,7 +102,7 @@ export interface Database {
   brands: Brands;
   databases: Databases;
   evaluations: Evaluations;
-  jwt_authorization_tokens: JwtAuthorizationTokens;
+  jwt_access_tokens: JwtAccessTokens;
   jwt_magic_link_tokens: JwtMagicLinkTokens;
   jwt_refresh_tokens: JwtRefreshTokens;
   measurements: Measurements;

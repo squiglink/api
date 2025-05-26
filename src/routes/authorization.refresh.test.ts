@@ -14,11 +14,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the request body is not provided", async () => {
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: null,
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -26,11 +26,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not provided", async () => {
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({}),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -38,11 +38,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not valid", async () => {
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken: await createJwtToken(0) }),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -50,11 +50,11 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not associated with a user", async () => {
-    const { authorizationToken } = await signIn();
+    const { accessToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken: await createJwtToken(1000) }),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -62,16 +62,16 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with success and returns tokens if the refresh token is valid", async () => {
-    const { authorizationToken, refreshToken } = await signIn();
+    const { accessToken, refreshToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken }),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
     expect(await response.json()).toEqual({
-      authorizationToken: expect.any(String),
+      accessToken: expect.any(String),
       refreshToken: expect.any(String),
     });
     expect(response.status).toBe(200);

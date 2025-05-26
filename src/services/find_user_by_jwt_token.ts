@@ -7,8 +7,8 @@ export async function findUserByJwtToken(token: string) {
 
   return await database
     .selectFrom("users")
-    .innerJoin("jwt_authorization_tokens", "users.id", "jwt_authorization_tokens.user_id")
-    .where("jwt_authorization_tokens.token", "=", token)
+    .innerJoin("jwt_access_tokens", "users.id", "jwt_access_tokens.user_id")
+    .where("jwt_access_tokens.token", "=", token)
     .selectAll("users")
     .executeTakeFirst();
 }

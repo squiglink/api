@@ -13,7 +13,7 @@ describe("POST /models/new", () => {
       };
     });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const body = {
       brand_id: brandId,
       name: "Model",
@@ -21,7 +21,7 @@ describe("POST /models/new", () => {
 
     const response = await application.request("/models/new", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 

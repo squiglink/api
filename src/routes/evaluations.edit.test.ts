@@ -17,7 +17,7 @@ describe("PATCH /evaluations/:id/edit", () => {
         return { evaluationId, modelId, userId };
       });
 
-    const { authorizationToken } = await signIn(userId);
+    const { accessToken } = await signIn(userId);
     const body = {
       model_id: modelId,
       review_score: faker.number.int({ min: 0, max: 5 }),
@@ -27,7 +27,7 @@ describe("PATCH /evaluations/:id/edit", () => {
 
     const response = await application.request(`/evaluations/${evaluationId}/edit`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${authorizationToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",
     });
 
