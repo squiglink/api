@@ -10,10 +10,10 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.14.3
-        version: 1.14.3(hono@4.7.10)
+        version: 1.14.3(hono@4.7.11)
       hono:
-        specifier: ^4.7.10
-        version: 4.7.10
+        specifier: ^4.7.11
+        version: 4.7.11
       kysely:
         specifier: ^0.28.2
         version: 0.28.2
@@ -810,8 +810,8 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  hono@4.7.10:
-    resolution: {integrity: sha512-QkACju9MiN59CKSY5JsGZCYmPZkA6sIW6OFCUp7qDjZu6S6KHtJHhAc9Uy9mV9F8PJ1/HQ3ybZF2yjCa/73fvQ==}
+  hono@4.7.11:
+    resolution: {integrity: sha512-rv0JMwC0KALbbmwJDEnxvQCeJh+xbS3KEWW5PC9cMJ08Ur9xgatI0HmtgYZfOdOSOeYsp5LO2cOhdI8cLEbDEQ==}
     engines: {node: '>=16.9.0'}
 
   html-to-text@9.0.5:
@@ -1485,9 +1485,9 @@ snapshots:
 
   '@faker-js/faker@9.8.0': {}
 
-  '@hono/node-server@1.14.3(hono@4.7.10)':
+  '@hono/node-server@1.14.3(hono@4.7.11)':
     dependencies:
-      hono: 4.7.10
+      hono: 4.7.11
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
@@ -1914,7 +1914,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.7.10: {}
+  hono@4.7.11: {}
 
   html-to-text@9.0.5:
     dependencies:
