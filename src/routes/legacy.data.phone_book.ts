@@ -59,7 +59,6 @@ application.get("/legacy/data/phone_book.json", async (context) => {
         });
       }
       const brand = brands.get(record.brand_name)!;
-
       if (!brand.phones.has(record.model_name)) {
         const phone: {
           name: string;
