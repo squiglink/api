@@ -19,7 +19,7 @@
     "@types/node": "^24.2.1",
     "@types/pg": "^8.15.5",
     "kysely-codegen": "^0.18.5",
-    "kysely-ctl": "^0.14.0",
+    "kysely-ctl": "^0.15.1",
     "oxlint": "^1.11.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.3",
