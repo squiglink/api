@@ -11,7 +11,7 @@
     "hono": "^4.8.10",
     "kysely": "^0.28.4",
     "pg": "^8.16.3",
-    "resend": "^4.8.0"
+    "resend": "^6.0.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
