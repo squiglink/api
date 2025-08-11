@@ -6,8 +6,8 @@ export async function sendEmail(keywordArguments: {
   subject: string;
   body: string;
 }): Promise<boolean> {
-  if (configuration.applicationEnvironment === "production") {
-    const resend = new Resend(configuration.apiKeyResend);
+  if (configuration.apiEnvironment === "production") {
+    const resend = new Resend(configuration.resendApiKey);
     const { error } = await resend.emails.send({
       from: configuration.emailFrom,
       to: keywordArguments.to,

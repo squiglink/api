@@ -4,7 +4,7 @@ import configuration from "./src/configuration.js";
 export default defineConfig({
   test: {
     env: {
-      SQUIGLINK_APPLICATION_ENVIRONMENT: "test",
+      SQUIGLINK_API_ENVIRONMENT: "test",
       SQUIGLINK_POSTGRES_DATABASE: configuration.postgresTestDatabase,
     },
     fileParallelism: false,

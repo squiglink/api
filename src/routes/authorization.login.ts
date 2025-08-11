@@ -17,7 +17,7 @@ application.post("/authorization/login", async (context) => {
   if (!EMAIL_REGEX.test(email)) return context.body(null, 401);
 
   const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
-  const magicLink = `${configuration.frontendUrl}/auth/verify?token=${authToken}`;
+  const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
   const user = await database
     .selectFrom("users")
     .selectAll()

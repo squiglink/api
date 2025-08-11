@@ -1,11 +1,9 @@
 import { env } from "process";
 
 interface Configuration {
-  apiKeyResend: string;
-  applicationEnvironment: string;
-  applicationUrl: string;
+  apiEnvironment: string;
+  apiUrl: string;
   emailFrom: string;
-  frontendUrl: string;
   jwtExpirationTimeAccessToken: number;
   jwtExpirationTimeMagicLinkToken: number;
   jwtExpirationTimeRefreshToken: number;
@@ -15,14 +13,14 @@ interface Configuration {
   postgresPassword: string;
   postgresTestDatabase: string;
   postgresUser: string;
+  resendApiKey: string;
+  studioUrl: string;
 }
 
 let configuration: Configuration = {
-  apiKeyResend: envString("SQUIGLINK_API_KEY_RESEND"),
-  applicationEnvironment: envString("SQUIGLINK_APPLICATION_ENVIRONMENT"),
-  applicationUrl: envString("SQUIGLINK_APPLICATION_URL"),
+  apiEnvironment: envString("SQUIGLINK_API_ENVIRONMENT"),
+  apiUrl: envString("SQUIGLINK_API_URL"),
   emailFrom: envString("SQUIGLINK_EMAIL_FROM"),
-  frontendUrl: envString("SQUIGLINK_FRONTEND_URL"),
   jwtExpirationTimeAccessToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_ACCESS_TOKEN"),
   jwtExpirationTimeMagicLinkToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_MAGIC_LINK_TOKEN"),
   jwtExpirationTimeRefreshToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_REFRESH_TOKEN"),
@@ -32,6 +30,8 @@ let configuration: Configuration = {
   postgresPassword: envString("SQUIGLINK_POSTGRES_PASSWORD"),
   postgresTestDatabase: envString("SQUIGLINK_POSTGRES_TEST_DATABASE"),
   postgresUser: envString("SQUIGLINK_POSTGRES_USER"),
+  resendApiKey: envString("SQUIGLINK_RESEND_API_KEY"),
+  studioUrl: envString("SQUIGLINK_STUDIO_URL"),
 };
 
 function envNumber(key: string): number {
