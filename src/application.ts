@@ -22,6 +22,7 @@ const application = new Hono();
 
 application.use("/*", cors());
 application.route("/", authorizationLogin);
+application.route("/", authorizationRefresh);
 application.route("/", authorizationVerify);
 application.route("/", brands);
 application.route("/", databases);
@@ -34,7 +35,6 @@ application.route("/", models);
 const authorizedApplication = new Hono();
 
 authorizedApplication.use("/*", authorizationMiddleware);
-authorizedApplication.route("/", authorizationRefresh);
 authorizedApplication.route("/", brandsNew);
 authorizedApplication.route("/", evaluationsEdit);
 authorizedApplication.route("/", evaluationsNew);

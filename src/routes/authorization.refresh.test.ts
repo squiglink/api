@@ -14,11 +14,8 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the request body is not provided", async () => {
-    const { accessToken } = await signIn();
-
     const response = await application.request("/authorization/refresh", {
       body: null,
-      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -26,11 +23,8 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not provided", async () => {
-    const { accessToken } = await signIn();
-
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({}),
-      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -38,11 +32,8 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not valid", async () => {
-    const { accessToken } = await signIn();
-
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken: await createJwtToken(0) }),
-      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -50,11 +41,8 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with unauthorized if the refresh token is not associated with a user", async () => {
-    const { accessToken } = await signIn();
-
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken: await createJwtToken(1000) }),
-      headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
     });
 
@@ -62,11 +50,10 @@ describe("POST /authorization/refresh", () => {
   });
 
   it("responds with success and returns tokens if the refresh token is valid", async () => {
-    const { accessToken, refreshToken } = await signIn();
+    const { refreshToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken }),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ refreshToken: refreshToken }),
       method: "POST",
     });
 
