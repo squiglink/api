@@ -107,7 +107,7 @@ export async function up(database: Kysely<any>): Promise<void> {
       column.notNull().defaultTo(sql`clock_timestamp()`),
     )
     .addColumn("user_id", "uuid", (column) =>
-      column.references("users.id").notNull().unique().onDelete("cascade"),
+      column.references("users.id").notNull().onDelete("cascade"),
     )
     .execute();
 
