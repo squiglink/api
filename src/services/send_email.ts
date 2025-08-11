@@ -25,7 +25,7 @@ export async function sendEmail(keywordArguments: {
     subject: keywordArguments.subject,
     body: keywordArguments.body,
   };
-  console.log(`Sent an email: \`${options}\`.`);
+  console.log(`Sent an email: \`${JSON.stringify(options)}\`.`);
 
   return true;
 }
