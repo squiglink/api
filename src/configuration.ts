@@ -5,6 +5,7 @@ interface Configuration {
   applicationEnvironment: string;
   applicationUrl: string;
   emailFrom: string;
+  frontendUrl: string;
   jwtExpirationTimeAccessToken: number;
   jwtExpirationTimeMagicLinkToken: number;
   jwtExpirationTimeRefreshToken: number;
@@ -21,6 +22,7 @@ let configuration: Configuration = {
   applicationEnvironment: envString("SQUIGLINK_APPLICATION_ENVIRONMENT"),
   applicationUrl: envString("SQUIGLINK_APPLICATION_URL"),
   emailFrom: envString("SQUIGLINK_EMAIL_FROM"),
+  frontendUrl: envString("SQUIGLINK_FRONTEND_URL"),
   jwtExpirationTimeAccessToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_ACCESS_TOKEN"),
   jwtExpirationTimeMagicLinkToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_MAGIC_LINK_TOKEN"),
   jwtExpirationTimeRefreshToken: envNumber("SQUIGLINK_JWT_EXPIRATION_TIME_REFRESH_TOKEN"),
