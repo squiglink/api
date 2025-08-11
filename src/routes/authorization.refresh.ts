@@ -16,13 +16,10 @@ application.post("/authorization/refresh", async (context) => {
   const jwtPayload = await verifyJwtToken(refreshToken);
   if (!jwtPayload) return context.body(null, 401);
 
-  const currentUser = context.var.currentUser;
-
   const refreshTokenUser = await database
     .selectFrom("users")
     .innerJoin("jwt_refresh_tokens", "users.id", "jwt_refresh_tokens.user_id")
     .where("jwt_refresh_tokens.token", "=", refreshToken)
-    .where("users.id", "=", currentUser.id)
     .selectAll("users")
     .executeTakeFirst();
   if (!refreshTokenUser) return context.body(null, 401);
