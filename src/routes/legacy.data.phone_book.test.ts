@@ -12,7 +12,7 @@ import application from "../application.js";
 
 describe("GET /legacy/data/phone_book.json", () => {
   it("responds with success", async () => {
-    const { brands, databaseId, evaluations, measurements, models, userId } = await database
+    const { brands, databaseId, evaluations, measurements, models } = await database
       .transaction()
       .execute(async (transaction) => {
         const userId = (await insertUser(transaction)).id;
@@ -52,7 +52,6 @@ describe("GET /legacy/data/phone_book.json", () => {
           evaluations,
           measurements,
           models,
-          userId,
         };
       });
 
@@ -102,14 +101,14 @@ describe("GET /legacy/data/phone_book.json", () => {
     ];
 
     const response = await application.request(
-      `/legacy/data/phone_book.json?database_id=${databaseId}&user_id=${userId}`,
+      `/legacy/data/phone_book.json?database_id=${databaseId}`,
     );
     expect(await response.json()).toEqual(body);
     expect(response.ok).toBe(true);
   });
 
   it("responds with success without evaluations", async () => {
-    const { brands, databaseId, measurements, models, userId } = await database
+    const { brands, databaseId, measurements, models } = await database
       .transaction()
       .execute(async (transaction) => {
         const userId = (await insertUser(transaction)).id;
@@ -141,7 +140,6 @@ describe("GET /legacy/data/phone_book.json", () => {
           databaseId,
           measurements,
           models,
-          userId,
         };
       });
 
@@ -179,7 +177,7 @@ describe("GET /legacy/data/phone_book.json", () => {
     ];
 
     const response = await application.request(
-      `/legacy/data/phone_book.json?database_id=${databaseId}&user_id=${userId}`,
+      `/legacy/data/phone_book.json?database_id=${databaseId}`,
     );
     expect(await response.json()).toEqual(body);
     expect(response.ok).toBe(true);

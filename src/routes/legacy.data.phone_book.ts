@@ -7,9 +7,6 @@ application.get("/legacy/data/phone_book.json", async (context) => {
   const databaseId = context.req.query("database_id");
   if (!databaseId) return context.body(null, 400);
 
-  const userId = context.req.query("user_id");
-  if (!userId) return context.body(null, 400);
-
   const { result } = await database.transaction().execute(async (transaction) => {
     const records = await transaction
       .selectFrom("brands")
@@ -17,7 +14,6 @@ application.get("/legacy/data/phone_book.json", async (context) => {
       .innerJoin("measurements", "measurements.model_id", "models.id")
       .innerJoin("databases", "databases.id", "measurements.database_id")
       .leftJoin("evaluations", "evaluations.model_id", "models.id")
-      .where("databases.user_id", "=", userId)
       .where("measurements.database_id", "=", databaseId)
       .select([
         "brands.name as brand_name",
