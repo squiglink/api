@@ -17,11 +17,11 @@ docker compose run api pnpm install
 # Migrate the database.
 docker compose run api pnpm kysely migrate:latest
 
-# Seed the database (development-only).
-docker compose run api pnpm kysely seed run
-
 # Migrate the test database (development-only).
 docker compose run api pnpm kysely-test migrate:latest
+
+# Seed the database (development-only).
+docker compose run api pnpm kysely seed run
 
 # Start the containers.
 docker compose up
