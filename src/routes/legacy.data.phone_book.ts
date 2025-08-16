@@ -68,10 +68,10 @@ application.get("/legacy/data/phone_book.json", async (context) => {
           file: [record.measurement_id],
           suffix: [record.measurement_label],
         };
-        if (record.evaluation_review_score != null)
+        if (record.evaluation_review_score !== null)
           phone.reviewScore = record.evaluation_review_score.toString();
-        if (record.evaluation_review_url != null) phone.reviewLink = record.evaluation_review_url;
-        if (record.evaluation_shop_url != null) phone.shopLink = record.evaluation_shop_url;
+        if (record.evaluation_review_url !== null) phone.reviewLink = record.evaluation_review_url;
+        if (record.evaluation_shop_url !== null) phone.shopLink = record.evaluation_shop_url;
         brand.phones.set(record.model_name, phone);
       } else {
         const phone = brand.phones.get(record.model_name)!;

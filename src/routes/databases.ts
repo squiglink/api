@@ -12,13 +12,13 @@ application.get("/databases", async (context) => {
     .selectFrom("databases")
     .select(database.fn.countAll().as("count"))
     .executeTakeFirstOrThrow();
-  const pageCount = Math.ceil(Number(count) / 10);
+  const pageCount = Math.ceil(Number(count) / pageSize);
 
   const searchQueryParameter = context.req.query("query");
   const page = await database
     .selectFrom("databases")
     .selectAll()
-    .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
+    .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(
         sql`concat(databases.kind, ' ', databases.path) <-> ${searchQueryParameter}`,
       ),

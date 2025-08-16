@@ -12,7 +12,7 @@ application.get("/brands", async (context) => {
     .selectFrom("brands")
     .select(database.fn.countAll().as("count"))
     .executeTakeFirstOrThrow();
-  const pageCount = Math.ceil(Number(count) / 10);
+  const pageCount = Math.ceil(Number(count) / pageSize);
 
   const searchQueryParameter = context.req.query("query");
   const page = await database
@@ -20,7 +20,7 @@ application.get("/brands", async (context) => {
     .leftJoin("models", "brands.id", "models.brand_id")
     .selectAll("brands")
     .select(database.fn.count("models.id").as("model_count"))
-    .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
+    .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(sql`brands.name <-> ${searchQueryParameter}`),
     )
     .orderBy("brands.created_at")

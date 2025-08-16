@@ -17,7 +17,7 @@ interface Configuration {
   studioUrl: string;
 }
 
-let configuration: Configuration = {
+const configuration: Configuration = {
   apiEnvironment: envString("SQUIGLINK_API_ENVIRONMENT"),
   apiUrl: envString("SQUIGLINK_API_URL"),
   emailFrom: envString("SQUIGLINK_EMAIL_FROM"),

@@ -13,11 +13,11 @@ application.get("/legacy/data/:file_name{.* (L|R)\.txt}", async (context) => {
     .where("id", "=", id)
     .executeTakeFirst();
 
-  if (result == undefined) {
+  if (result === undefined) {
     return context.body(null, 404);
   } else {
-    if (channel == "L") return context.text(result.left_channel);
-    if (channel == "R") return context.text(result.right_channel);
+    if (channel === "L") return context.text(result.left_channel);
+    if (channel === "R") return context.text(result.right_channel);
   }
 });
 

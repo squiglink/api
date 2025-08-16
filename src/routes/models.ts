@@ -13,7 +13,7 @@ application.get("/models", async (context) => {
     .selectFrom("models")
     .select(database.fn.countAll().as("count"))
     .executeTakeFirstOrThrow();
-  const pageCount = Math.ceil(Number(count) / 10);
+  const pageCount = Math.ceil(Number(count) / pageSize);
 
   const searchQueryParameter = context.req.query("query");
   const page = await database
@@ -32,7 +32,7 @@ application.get("/models", async (context) => {
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
     )
-    .$if(searchQueryParameter != undefined, (selectQueryBuilder) =>
+    .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(
         sql`concat(brands.name, ' ', models.name) <-> ${searchQueryParameter}`,
       ),

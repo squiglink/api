@@ -14,6 +14,6 @@ export async function verifyDatabaseUser(
       .executeTakeFirst()
   )?.user_id;
   if (!databaseUserId) return false;
-  if (currentUserId != databaseUserId) return false;
+  if (currentUserId !== databaseUserId) return false;
   return true;
 }

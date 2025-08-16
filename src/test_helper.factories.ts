@@ -51,7 +51,7 @@ export async function insertDatabase(
     .values({
       kind:
         (values.kind as DatabaseKind) ||
-        ["earbuds", "headphones", "iems"][faker.number.int({ min: 0, max: 2 })],
+        faker.helpers.arrayElement(["earbuds", "headphones", "iems"]),
       path: values.path || faker.system.directoryPath(),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
@@ -140,7 +140,7 @@ export async function insertJwtMagicLinkToken(
   return await databaseOrTransaction
     .insertInto("jwt_magic_link_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
+      token: await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -167,7 +167,7 @@ export async function insertJwtRefreshToken(
   return await databaseOrTransaction
     .insertInto("jwt_refresh_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
+      token: await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -229,9 +229,12 @@ export async function insertUser(
       email: values.email || faker.internet.email(),
       scoring_system:
         (values.scoring_system as UserScoringSystem) ||
-        ["five_star", "hundred_point", "ten_point", "ten_point_decimal"][
-          faker.number.int({ min: 0, max: 3 })
-        ],
+        faker.helpers.arrayElement([
+          "five_star",
+          "hundred_point",
+          "ten_point",
+          "ten_point_decimal",
+        ]),
       username: values.username || faker.internet.username(),
       ...values,
     })
@@ -269,9 +272,12 @@ export async function insertMeasurement(
       database_id: values.database_id || (await insertDatabase(databaseOrTransaction)).id,
       kind:
         (values.kind as MeasurementKind) ||
-        ["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"][
-          faker.number.int({ min: 0, max: 3 })
-        ],
+        faker.helpers.arrayElement([
+          "frequency_response",
+          "harmonic_distortion",
+          "impedance",
+          "sound_isolation",
+        ]),
       label: values.label || faker.music.genre(),
       left_channel: values.left_channel || "123",
       model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,

@@ -3,9 +3,7 @@ import configuration from "../configuration.js";
 
 export async function createJwtToken(expiresIn: number): Promise<string> {
   const currentDate = new Date();
-  let expirationDate: Date;
-
-  expirationDate = new Date(currentDate.getTime() + expiresIn);
+  const expirationDate = new Date(currentDate.getTime() + expiresIn);
 
   if (expirationDate < currentDate) {
     throw new Error("Expiration date must be in the future");
