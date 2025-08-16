@@ -7,7 +7,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@hono/node-server": "^1.18.1",
+    "@hono/node-server": "^1.18.2",
     "hono": "^4.9.2",
     "kysely": "^0.28.5",
     "pg": "^8.16.3",
