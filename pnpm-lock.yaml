@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@hono/node-server':
-        specifier: ^1.18.1
-        version: 1.18.1(hono@4.9.2)
+        specifier: ^1.18.2
+        version: 1.18.2(hono@4.9.2)
       hono:
         specifier: ^4.9.2
         version: 4.9.2
@@ -222,8 +222,8 @@ packages:
     resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
-  '@hono/node-server@1.18.1':
-    resolution: {integrity: sha512-O3puG/b7owYYmoQ2XPBf3SxBz6Dhk5VmWFhbaBU8/5wcUaXUPS0goxaI2Zfyg+Cu14ILJHEU7IFRw7miFxuXxg==}
+  '@hono/node-server@1.18.2':
+    resolution: {integrity: sha512-icgNvC0vRYivzyuSSaUv9ttcwtN8fDyd1k3AOIBDJgYd84tXRZSS6na8X54CY/oYoFTNhEmZraW/Rb9XYwX4KA==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
@@ -1290,7 +1290,7 @@ snapshots:
 
   '@faker-js/faker@9.9.0': {}
 
-  '@hono/node-server@1.18.1(hono@4.9.2)':
+  '@hono/node-server@1.18.2(hono@4.9.2)':
     dependencies:
       hono: 4.9.2
 
