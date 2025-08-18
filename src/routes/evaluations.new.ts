@@ -25,7 +25,7 @@ application.post("/evaluations/new", validationMiddleware({ bodySchema }), async
     .where("user_id", "=", context.var.currentUser.id)
     .executeTakeFirst();
   if (evaluation) {
-    return context.json({ error: "An evaluation for the model already exists." }, 400);
+    return context.body(null, 409);
   }
 
   const result = await database

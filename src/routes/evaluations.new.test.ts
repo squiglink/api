@@ -49,7 +49,6 @@ describe("POST /evaluations/new", () => {
       review_url: "123",
       shop_url: "123",
     };
-    const responseBody = { error: "An evaluation for the model already exists." };
 
     const response = await application.request(`/evaluations/new`, {
       body: JSON.stringify(requestBody),
@@ -57,7 +56,6 @@ describe("POST /evaluations/new", () => {
       method: "POST",
     });
 
-    expect(await response.json()).toEqual(responseBody);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(409);
   });
 });
