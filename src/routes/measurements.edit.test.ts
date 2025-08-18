@@ -9,7 +9,7 @@ import {
 import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
-describe("PATCH /measurements/:id/edit", () => {
+describe("PATCH /measurements/:id", () => {
   it("responds with success and edits a measurement", async () => {
     const { databaseId, measurementId, modelId, userId } = await database
       .transaction()
@@ -34,7 +34,7 @@ describe("PATCH /measurements/:id/edit", () => {
       right_channel: "123",
     };
 
-    const response = await application.request(`/measurements/${measurementId}/edit`, {
+    const response = await application.request(`/measurements/${measurementId}`, {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",
@@ -65,7 +65,7 @@ describe("PATCH /measurements/:id/edit", () => {
       right_channel: "123",
     };
 
-    const response = await application.request(`/measurements/${measurementId}/edit`, {
+    const response = await application.request(`/measurements/${measurementId}`, {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",

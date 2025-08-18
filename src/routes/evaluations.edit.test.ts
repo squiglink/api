@@ -5,7 +5,7 @@ import { insertEvaluation, insertModel, insertUser } from "../test_helper.factor
 import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
-describe("PATCH /evaluations/:id/edit", () => {
+describe("PATCH /evaluations/:id", () => {
   it("responds with success and edits an evaluation", async () => {
     const { evaluationId, modelId, userId } = await database
       .transaction()
@@ -25,7 +25,7 @@ describe("PATCH /evaluations/:id/edit", () => {
       shop_url: faker.internet.url(),
     };
 
-    const response = await application.request(`/evaluations/${evaluationId}/edit`, {
+    const response = await application.request(`/evaluations/${evaluationId}`, {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "PATCH",

@@ -27,7 +27,7 @@ const pathSchema = zod.object({
 });
 
 application.patch(
-  "/measurements/:id/edit",
+  "/measurements/:id",
   validationMiddleware({ bodySchema, pathSchema }),
   async (context) => {
     const jsonParameters = context.get("jsonParameters");
