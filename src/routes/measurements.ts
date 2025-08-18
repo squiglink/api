@@ -1,20 +1,25 @@
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: { queryParameters: zod.infer<typeof querySchema> };
+}>();
 
-application.get("/measurements", async (context) => {
-  const databaseId = context.req.query("database_id");
-  if (!databaseId) return context.json({ error: "The database ID is not provided." }, 400);
+const querySchema = zod.object({
+  database_id: zod.string(),
+  model_id: zod.string(),
+});
 
-  const modelId = context.req.query("model_id");
-  if (!modelId) return context.json({ error: "The model ID is not provided." }, 400);
+application.get("/measurements", validationMiddleware({ querySchema }), async (context) => {
+  const queryParameters = context.get("queryParameters");
 
   const result = await database
     .selectFrom("measurements")
     .select(["created_at", "database_id", "id", "kind", "label", "model_id", "updated_at"])
-    .where("database_id", "=", databaseId)
-    .where("model_id", "=", modelId)
+    .where("database_id", "=", queryParameters.database_id)
+    .where("model_id", "=", queryParameters.model_id)
     .orderBy("measurements.created_at")
     .execute();
 

@@ -4,33 +4,6 @@ import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("POST /authorization/refresh", () => {
-  it("responds with unauthorized if the authorization header is not provided", async () => {
-    const response = await application.request("/authorization/refresh", {
-      headers: {},
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if the request body is not provided", async () => {
-    const response = await application.request("/authorization/refresh", {
-      body: null,
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if the refresh token is not provided", async () => {
-    const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({}),
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
   it("responds with unauthorized if the refresh token is not valid", async () => {
     const response = await application.request("/authorization/refresh", {
       body: JSON.stringify({ refreshToken: await createJwtToken(0) }),

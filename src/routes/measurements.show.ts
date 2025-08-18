@@ -1,13 +1,23 @@
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: { pathParameters: zod.infer<typeof pathSchema> };
+}>();
 
-application.get("/measurements/:id", async (context) => {
+const pathSchema = zod.object({
+  id: zod.string(),
+});
+
+application.get("/measurements/:id", validationMiddleware({ pathSchema }), async (context) => {
+  const pathParameters = context.get("pathParameters");
+
   const result = await database
     .selectFrom("measurements")
     .selectAll()
-    .where("id", "=", context.req.param("id"))
+    .where("id", "=", pathParameters.id)
     .orderBy("measurements.created_at")
     .executeTakeFirst();
   if (!result) return context.body(null, 404);

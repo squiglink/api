@@ -1,18 +1,23 @@
-import { allowParameters } from "../services/allow_parameters.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: { jsonParameters: zod.infer<typeof bodySchema> };
+}>();
 
-application.post("/models/new", async (context) => {
-  const body: {
-    brand_id: string;
-    name: string;
-  } = allowParameters(await context.req.json(), ["brand_id", "name"]);
+const bodySchema = zod.object({
+  brand_id: zod.string(),
+  name: zod.string(),
+});
+
+application.post("/models/new", validationMiddleware({ bodySchema }), async (context) => {
+  const jsonParameters = context.get("jsonParameters");
 
   const result = await database
     .insertInto("models")
-    .values({ brand_id: body.brand_id, name: body.name })
+    .values({ brand_id: jsonParameters.brand_id, name: jsonParameters.name })
     .returningAll()
     .executeTakeFirstOrThrow();
 

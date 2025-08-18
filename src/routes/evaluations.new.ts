@@ -1,25 +1,27 @@
-import { allowParameters } from "../services/allow_parameters.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: {
+    jsonParameters: zod.infer<typeof bodySchema>;
+  };
+}>();
 
-application.post("/evaluations/new", async (context) => {
-  const body: {
-    model_id: string;
-    review_score?: number;
-    review_url?: string;
-    shop_url?: string;
-  } = allowParameters(await context.req.json(), [
-    "model_id",
-    "review_score",
-    "review_url",
-    "shop_url",
-  ]);
+const bodySchema = zod.object({
+  model_id: zod.string(),
+  review_score: zod.number().optional(),
+  review_url: zod.string().optional(),
+  shop_url: zod.string().optional(),
+});
+
+application.post("/evaluations/new", validationMiddleware({ bodySchema }), async (context) => {
+  const jsonParameters = context.get("jsonParameters");
 
   const evaluation = await database
     .selectFrom("evaluations")
-    .where("model_id", "=", body.model_id)
+    .where("model_id", "=", jsonParameters.model_id)
     .where("user_id", "=", context.var.currentUser.id)
     .executeTakeFirst();
   if (evaluation) {
@@ -29,10 +31,10 @@ application.post("/evaluations/new", async (context) => {
   const result = await database
     .insertInto("evaluations")
     .values({
-      model_id: body.model_id,
-      review_score: body.review_score,
-      review_url: body.review_url,
-      shop_url: body.shop_url,
+      model_id: jsonParameters.model_id,
+      review_score: jsonParameters.review_score,
+      review_url: jsonParameters.review_url,
+      shop_url: jsonParameters.shop_url,
       user_id: context.var.currentUser.id,
     })
     .returningAll()

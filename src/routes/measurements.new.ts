@@ -1,41 +1,42 @@
-import { allowParameters } from "../services/allow_parameters.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
 import { verifyDatabaseUser } from "../services/verify_database_user.js";
-import type { MeasurementKind } from "../types.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: {
+    jsonParameters: zod.infer<typeof bodySchema>;
+  };
+}>();
 
-application.post("/measurements/new", async (context) => {
-  const body: {
-    database_id: string;
-    kind: MeasurementKind;
-    label: string;
-    left_channel: string;
-    model_id: string;
-    right_channel: string;
-  } = allowParameters(await context.req.json(), [
-    "database_id",
-    "kind",
-    "label",
-    "left_channel",
-    "model_id",
-    "right_channel",
-  ]);
+const bodySchema = zod.object({
+  database_id: zod.string(),
+  kind: zod.enum(["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"]),
+  label: zod.string(),
+  left_channel: zod.string(),
+  model_id: zod.string(),
+  right_channel: zod.string(),
+});
 
-  if (!(await verifyDatabaseUser(context.var.currentUser.id, database, body.database_id))) {
+application.post("/measurements/new", validationMiddleware({ bodySchema }), async (context) => {
+  const jsonParameters = context.get("jsonParameters");
+
+  if (
+    !(await verifyDatabaseUser(context.var.currentUser.id, database, jsonParameters.database_id))
+  ) {
     return context.body(null, 401);
   }
 
   const result = await database
     .insertInto("measurements")
     .values({
-      database_id: body.database_id,
-      kind: body.kind,
-      label: body.label,
-      left_channel: body.left_channel,
-      model_id: body.model_id,
-      right_channel: body.right_channel,
+      database_id: jsonParameters.database_id,
+      kind: jsonParameters.kind,
+      label: jsonParameters.label,
+      left_channel: jsonParameters.left_channel,
+      model_id: jsonParameters.model_id,
+      right_channel: jsonParameters.right_channel,
     })
     .returningAll()
     .executeTakeFirstOrThrow();

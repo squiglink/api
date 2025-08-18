@@ -1,54 +1,64 @@
-import { allowParameters } from "../services/allow_parameters.js";
 import { database, touch } from "../database.js";
 import { Hono } from "hono";
+import { validationMiddleware } from "../middlewares/validation.js";
 import { verifyDatabaseUser } from "../services/verify_database_user.js";
-import type { MeasurementKind } from "../types.js";
+import zod from "zod";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: {
+    jsonParameters: zod.infer<typeof bodySchema>;
+    pathParameters: zod.infer<typeof pathSchema>;
+  };
+}>();
 
-application.patch("/measurements/:id/edit", async (context) => {
-  const body: {
-    database_id?: string;
-    kind?: MeasurementKind;
-    label?: string;
-    left_channel?: string;
-    model_id?: string;
-    right_channel?: string;
-  } = allowParameters(await context.req.json(), [
-    "database_id",
-    "kind",
-    "label",
-    "left_channel",
-    "model_id",
-    "right_channel",
-  ]);
-  const id = context.req.param("id");
-
-  const measurement = await database
-    .selectFrom("measurements")
-    .select("database_id")
-    .where("id", "=", id)
-    .executeTakeFirst();
-  if (!measurement) return context.body(null, 404);
-  if (
-    !(await verifyDatabaseUser(
-      context.var.currentUser.id,
-      database,
-      body.database_id || measurement.database_id,
-    ))
-  ) {
-    return context.body(null, 401);
-  }
-
-  const result = await database
-    .updateTable("measurements")
-    .set(body)
-    .set(touch)
-    .where("id", "=", id)
-    .returningAll()
-    .executeTakeFirstOrThrow();
-
-  return context.json(result);
+const bodySchema = zod.object({
+  database_id: zod.string().optional(),
+  kind: zod
+    .enum(["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"])
+    .optional(),
+  label: zod.string().optional(),
+  left_channel: zod.string().optional(),
+  model_id: zod.string().optional(),
+  right_channel: zod.string().optional(),
 });
+
+const pathSchema = zod.object({
+  id: zod.string(),
+});
+
+application.patch(
+  "/measurements/:id/edit",
+  validationMiddleware({ bodySchema, pathSchema }),
+  async (context) => {
+    const jsonParameters = context.get("jsonParameters");
+    const pathParameters = context.get("pathParameters");
+
+    const measurement = await database
+      .selectFrom("measurements")
+      .select("database_id")
+      .where("id", "=", pathParameters.id)
+      .executeTakeFirst();
+    if (!measurement) return context.body(null, 404);
+    if (
+      !(await verifyDatabaseUser(
+        context.var.currentUser.id,
+        database,
+        jsonParameters.database_id || measurement.database_id,
+      ))
+    ) {
+      return context.body(null, 401);
+    }
+
+    const result = await database
+      .updateTable("measurements")
+      .set(jsonParameters)
+      .set(touch)
+      .where("id", "=", pathParameters.id)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    return context.json(result);
+  },
+);
 
 export default application;

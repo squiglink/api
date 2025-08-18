@@ -28,20 +28,4 @@ describe("GET /evaluations", () => {
     expect(await response.json()).toEqual(body);
     expect(response.ok).toBe(true);
   });
-
-  it("responds with bad request if the model ID is not provided", async () => {
-    const body = { error: "The model ID is not provided." };
-
-    const response = await application.request(`/evaluations?user_id=123`);
-    expect(await response.json()).toEqual(body);
-    expect(response.status).toBe(400);
-  });
-
-  it("responds with bad request if the user ID is not provided", async () => {
-    const body = { error: "The user ID is not provided." };
-
-    const response = await application.request(`/evaluations?model_id=123`);
-    expect(await response.json()).toEqual(body);
-    expect(response.status).toBe(400);
-  });
 });

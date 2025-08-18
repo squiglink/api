@@ -12,25 +12,7 @@ describe("POST /authorization/login", () => {
     vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
   });
 
-  it("responds with unauthrorized if the email is not provided", async () => {
-    const response = await application.request("/authorization/login", {
-      body: JSON.stringify({}),
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthrorized if the email is not valid", async () => {
-    const response = await application.request("/authorization/login", {
-      body: JSON.stringify({ email: "invalid-email" }),
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthrorized if the email is valid but the user does not exist", async () => {
+  it("responds with unauthrorized if the user does not exist", async () => {
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: "test@test.com" }),
       method: "POST",

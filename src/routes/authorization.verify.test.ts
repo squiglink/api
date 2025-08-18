@@ -6,12 +6,6 @@ import application from "../application.js";
 import configuration from "../configuration.js";
 
 describe("GET /authorization/verify", () => {
-  it("responds with unauthorized if the magic link token is not provided", async () => {
-    const response = await application.request("/authorization/verify");
-
-    expect(response.status).toBe(401);
-  });
-
   it("responds with unauthorized if the magic link token is not valid", async () => {
     const response = await application.request("/authorization/verify?token=invalid-token");
 

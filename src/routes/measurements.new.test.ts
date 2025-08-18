@@ -38,14 +38,22 @@ describe("POST /measurements/new", () => {
   });
 
   it("responds with unauthorized if trying to create a measurement in another user's database", async () => {
-    const { databaseId } = await database.transaction().execute(async (transaction) => {
+    const { databaseId, modelId } = await database.transaction().execute(async (transaction) => {
       const databaseId = (await insertDatabase(transaction)).id;
+      const modelId = (await insertModel(transaction)).id;
 
-      return { databaseId };
+      return { databaseId, modelId };
     });
 
     const { accessToken } = await signIn();
-    const body = { database_id: databaseId };
+    const body = {
+      database_id: databaseId,
+      kind: "frequency_response",
+      label: "Test Label",
+      left_channel: "123",
+      model_id: modelId,
+      right_channel: "123",
+    };
 
     const response = await application.request("/measurements/new", {
       body: JSON.stringify(body),
