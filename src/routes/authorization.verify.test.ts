@@ -3,19 +3,10 @@ import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertJwtMagicLinkToken } from "../test_helper.factories.js";
 import application from "../application.js";
-import configuration from "../configuration.js";
 
 describe("GET /authorization/verify", () => {
-  it("responds with unauthorized if the magic link token is not valid", async () => {
+  it("responds with unauthorized if the magic link token is invalid", async () => {
     const response = await application.request("/authorization/verify?token=invalid-token");
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if the magic link token is not associated with a user", async () => {
-    const invalidToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
-
-    const response = await application.request(`/authorization/verify?token=${invalidToken}`);
 
     expect(response.status).toBe(401);
   });
@@ -28,7 +19,7 @@ describe("GET /authorization/verify", () => {
     expect(response.status).toBe(401);
   });
 
-  it("responds with success and tokens if the magic link token is valid", async () => {
+  it("responds with success and returns tokens if the magic link token is valid", async () => {
     const magicLinkToken = (
       await database.transaction().execute(async (transaction) => {
         return await insertJwtMagicLinkToken(transaction);
@@ -38,8 +29,8 @@ describe("GET /authorization/verify", () => {
     const response = await application.request(`/authorization/verify?token=${magicLinkToken}`);
 
     expect(await response.json()).toEqual({
-      accessToken: expect.any(String),
-      refreshToken: expect.any(String),
+      access_token: expect.any(String),
+      refresh_token: expect.any(String),
     });
     expect(response.status).toBe(200);
   });

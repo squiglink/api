@@ -1,6 +1,6 @@
 import { database } from "../database.js";
 import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation.js";
+import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
 
 const application = new Hono<{

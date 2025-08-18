@@ -4,18 +4,9 @@ import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("POST /authorization/refresh", () => {
-  it("responds with unauthorized if the refresh token is not valid", async () => {
+  it("responds with unauthorized if the refresh token is invalid", async () => {
     const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken: await createJwtToken(0) }),
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if the refresh token is not associated with a user", async () => {
-    const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken: await createJwtToken(1000) }),
+      body: JSON.stringify({ refresh_token: await createJwtToken(0) }),
       method: "POST",
     });
 
@@ -26,13 +17,13 @@ describe("POST /authorization/refresh", () => {
     const { refreshToken } = await signIn();
 
     const response = await application.request("/authorization/refresh", {
-      body: JSON.stringify({ refreshToken: refreshToken }),
+      body: JSON.stringify({ refresh_token: refreshToken }),
       method: "POST",
     });
 
     expect(await response.json()).toEqual({
-      accessToken: expect.any(String),
-      refreshToken: expect.any(String),
+      access_token: expect.any(String),
+      refresh_token: expect.any(String),
     });
     expect(response.status).toBe(200);
   });

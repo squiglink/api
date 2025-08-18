@@ -21,7 +21,7 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(401);
   });
 
-  it("responds with internal server error if sendEmail throws an error", async () => {
+  it("responds with internal server error if sending the email has failed", async () => {
     vi.mocked(sendEmailModule.sendEmail).mockRejectedValue(new Error("Test error"));
 
     const user = await database.transaction().execute(async (transaction) => {

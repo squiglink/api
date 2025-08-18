@@ -1,13 +1,13 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation.js";
+import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
 import configuration from "../configuration.js";
 import zod from "zod";
 
 const schema = zod.object({
-  refreshToken: zod.string(),
+  refresh_token: zod.string(),
 });
 
 const application = new Hono<{
@@ -20,13 +20,13 @@ application.post(
   async (context) => {
     const jsonParameters = context.get("jsonParameters");
 
-    const jwtPayload = await verifyJwtToken(jsonParameters.refreshToken);
+    const jwtPayload = await verifyJwtToken(jsonParameters.refresh_token);
     if (!jwtPayload) return context.body(null, 401);
 
     const refreshTokenUser = await database
       .selectFrom("users")
       .innerJoin("jwt_refresh_tokens", "users.id", "jwt_refresh_tokens.user_id")
-      .where("jwt_refresh_tokens.token", "=", jsonParameters.refreshToken)
+      .where("jwt_refresh_tokens.token", "=", jsonParameters.refresh_token)
       .selectAll("users")
       .executeTakeFirst();
     if (!refreshTokenUser) return context.body(null, 401);
@@ -40,7 +40,7 @@ application.post(
       await transaction
         .updateTable("jwt_refresh_tokens")
         .set({ token: newRefreshToken })
-        .where("token", "=", jsonParameters.refreshToken)
+        .where("token", "=", jsonParameters.refresh_token)
         .execute();
       await transaction
         .insertInto("jwt_access_tokens")
@@ -48,8 +48,8 @@ application.post(
         .execute();
 
       return context.json({
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
+        access_token: newAccessToken,
+        refresh_token: newRefreshToken,
       });
     });
   },

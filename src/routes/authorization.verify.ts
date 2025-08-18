@@ -1,7 +1,7 @@
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation.js";
+import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import { verifyJwtToken } from "../services/verify_jwt_token.js";
 import configuration from "../configuration.js";
 import zod from "zod";
@@ -50,7 +50,10 @@ application.get(
         .where("token", "=", magicLinkToken)
         .execute();
 
-      return context.json({ accessToken, refreshToken });
+      return context.json({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
     });
   },
 );

@@ -2,7 +2,7 @@ import { database } from "../database.js";
 import { Hono } from "hono";
 import { jsonObjectFrom } from "kysely/helpers/postgres";
 import { sql } from "kysely";
-import { validationMiddleware } from "../middlewares/validation.js";
+import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
 
 const application = new Hono<{
@@ -17,7 +17,6 @@ const querySchema = zod.object({
 application.get("/models", validationMiddleware({ querySchema }), async (context) => {
   const queryParameters = context.get("queryParameters");
 
-  const pageNumber = queryParameters.page;
   const pageSize = 10;
 
   const { count } = await database
@@ -50,7 +49,7 @@ application.get("/models", validationMiddleware({ querySchema }), async (context
     )
     .orderBy("models.created_at")
     .limit(pageSize)
-    .offset((pageNumber - 1) * pageSize)
+    .offset((queryParameters.page - 1) * pageSize)
     .execute();
 
   return context.json({ page_count: pageCount, page: page });

@@ -33,7 +33,7 @@ describe("POST /evaluations/new", () => {
     expect(response.status).toBe(200);
   });
 
-  it("responds with bad request is trying to create an evaluation when it already exists", async () => {
+  it("responds with bad request if trying to create an evaluation when it already exists", async () => {
     const { userId, modelId } = await database.transaction().execute(async (transaction) => {
       const userId = (await insertUser(transaction)).id;
       const modelId = (await insertModel(transaction)).id;
