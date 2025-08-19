@@ -1,6 +1,6 @@
-FROM node:23.11-alpine3.21
+FROM node:24.6-alpine3.22
 
-RUN npm install --global pnpm@^10.10.0
+RUN npm install --global pnpm@^10.15.0
 
 WORKDIR /api
 
