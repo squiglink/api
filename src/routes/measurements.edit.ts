@@ -6,7 +6,7 @@ import zod from "zod";
 
 const application = new Hono<{
   Variables: {
-    jsonParameters: zod.infer<typeof bodySchema>;
+    bodyParameters: zod.infer<typeof bodySchema>;
     pathParameters: zod.infer<typeof pathSchema>;
   };
 }>();
@@ -30,7 +30,7 @@ application.patch(
   "/measurements/:id",
   validationMiddleware({ bodySchema, pathSchema }),
   async (context) => {
-    const jsonParameters = context.get("jsonParameters");
+    const bodyParameters = context.get("bodyParameters");
     const pathParameters = context.get("pathParameters");
 
     const measurement = await database
@@ -43,7 +43,7 @@ application.patch(
       !(await verifyDatabaseUser(
         context.var.currentUser.id,
         database,
-        jsonParameters.database_id || measurement.database_id,
+        bodyParameters.database_id || measurement.database_id,
       ))
     ) {
       return context.body(null, 401);
@@ -51,7 +51,7 @@ application.patch(
 
     const result = await database
       .updateTable("measurements")
-      .set(jsonParameters)
+      .set(bodyParameters)
       .set(touch)
       .where("id", "=", pathParameters.id)
       .returningAll()

@@ -11,22 +11,22 @@ const schema = zod.object({
 });
 
 const application = new Hono<{
-  Variables: { jsonParameters: zod.infer<typeof schema> };
+  Variables: { bodyParameters: zod.infer<typeof schema> };
 }>();
 
 application.post(
   "/authorization/refresh",
   validationMiddleware({ bodySchema: schema, statusCode: 401 }),
   async (context) => {
-    const jsonParameters = context.get("jsonParameters");
+    const bodyParameters = context.get("bodyParameters");
 
-    const jwtPayload = await verifyJwtToken(jsonParameters.refresh_token);
+    const jwtPayload = await verifyJwtToken(bodyParameters.refresh_token);
     if (!jwtPayload) return context.body(null, 401);
 
     const refreshTokenUser = await database
       .selectFrom("users")
       .innerJoin("jwt_refresh_tokens", "users.id", "jwt_refresh_tokens.user_id")
-      .where("jwt_refresh_tokens.token", "=", jsonParameters.refresh_token)
+      .where("jwt_refresh_tokens.token", "=", bodyParameters.refresh_token)
       .selectAll("users")
       .executeTakeFirst();
     if (!refreshTokenUser) return context.body(null, 401);
@@ -40,7 +40,7 @@ application.post(
       await transaction
         .updateTable("jwt_refresh_tokens")
         .set({ token: newRefreshToken })
-        .where("token", "=", jsonParameters.refresh_token)
+        .where("token", "=", bodyParameters.refresh_token)
         .execute();
       await transaction
         .insertInto("jwt_access_tokens")

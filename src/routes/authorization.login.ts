@@ -11,21 +11,21 @@ const bodySchema = zod.object({
 });
 
 const application = new Hono<{
-  Variables: { jsonParameters: zod.infer<typeof bodySchema> };
+  Variables: { bodyParameters: zod.infer<typeof bodySchema> };
 }>();
 
 application.post(
   "/authorization/login",
   validationMiddleware({ bodySchema, statusCode: 401 }),
   async (context) => {
-    const jsonParameters = context.get("jsonParameters");
+    const bodyParameters = context.get("bodyParameters");
 
     const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
     const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
     const user = await database
       .selectFrom("users")
       .selectAll()
-      .where("email", "=", jsonParameters.email)
+      .where("email", "=", bodyParameters.email)
       .executeTakeFirst();
     if (!user) return context.body(null, 401);
 
@@ -36,7 +36,7 @@ application.post(
         .executeTakeFirstOrThrow();
 
       await sendEmail({
-        to: jsonParameters.email,
+        to: bodyParameters.email,
         subject: "Log into Squiglink",
         body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
       });

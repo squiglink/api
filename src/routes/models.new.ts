@@ -4,7 +4,7 @@ import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
 
 const application = new Hono<{
-  Variables: { jsonParameters: zod.infer<typeof bodySchema> };
+  Variables: { bodyParameters: zod.infer<typeof bodySchema> };
 }>();
 
 const bodySchema = zod.object({
@@ -13,11 +13,11 @@ const bodySchema = zod.object({
 });
 
 application.post("/models/new", validationMiddleware({ bodySchema }), async (context) => {
-  const jsonParameters = context.get("jsonParameters");
+  const bodyParameters = context.get("bodyParameters");
 
   const result = await database
     .insertInto("models")
-    .values({ brand_id: jsonParameters.brand_id, name: jsonParameters.name })
+    .values({ brand_id: bodyParameters.brand_id, name: bodyParameters.name })
     .returningAll()
     .executeTakeFirstOrThrow();
 

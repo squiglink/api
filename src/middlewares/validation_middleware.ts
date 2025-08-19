@@ -2,13 +2,13 @@ import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { Context, Next } from "hono";
 import zod from "zod";
 
-export const validationMiddleware = <TJson = any, TPath = any, TQuery = any>({
+export const validationMiddleware = <TBody = any, TPath = any, TQuery = any>({
   bodySchema,
   pathSchema,
   querySchema,
   statusCode = 400,
 }: {
-  bodySchema?: zod.ZodSchema<TJson>;
+  bodySchema?: zod.ZodSchema<TBody>;
   pathSchema?: zod.ZodSchema<TPath>;
   querySchema?: zod.ZodSchema<TQuery>;
   statusCode?: ContentfulStatusCode;
@@ -16,7 +16,7 @@ export const validationMiddleware = <TJson = any, TPath = any, TQuery = any>({
   return async (
     context: Context<{
       Variables: {
-        jsonParameters: TJson;
+        bodyParameters: TBody;
         pathParameters: TPath;
         queryParameters: TQuery;
       };
@@ -27,12 +27,12 @@ export const validationMiddleware = <TJson = any, TPath = any, TQuery = any>({
       const text = await context.req.text();
       if (!text) return context.body(null, statusCode);
 
-      const json = JSON.parse(text);
-      const JsonZodSafeParseResult = bodySchema.safeParse(json);
-      if (!JsonZodSafeParseResult.success) {
-        return context.json(JsonZodSafeParseResult.error, statusCode);
+      const body = JSON.parse(text);
+      const bodyZodSafeParseResult = bodySchema.safeParse(body);
+      if (!bodyZodSafeParseResult.success) {
+        return context.json(bodyZodSafeParseResult.error, statusCode);
       }
-      context.set("jsonParameters", JsonZodSafeParseResult.data);
+      context.set("bodyParameters", bodyZodSafeParseResult.data);
     }
 
     if (pathSchema) {

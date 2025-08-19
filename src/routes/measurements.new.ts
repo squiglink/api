@@ -6,7 +6,7 @@ import zod from "zod";
 
 const application = new Hono<{
   Variables: {
-    jsonParameters: zod.infer<typeof bodySchema>;
+    bodyParameters: zod.infer<typeof bodySchema>;
   };
 }>();
 
@@ -20,10 +20,10 @@ const bodySchema = zod.object({
 });
 
 application.post("/measurements/new", validationMiddleware({ bodySchema }), async (context) => {
-  const jsonParameters = context.get("jsonParameters");
+  const bodyParameters = context.get("bodyParameters");
 
   if (
-    !(await verifyDatabaseUser(context.var.currentUser.id, database, jsonParameters.database_id))
+    !(await verifyDatabaseUser(context.var.currentUser.id, database, bodyParameters.database_id))
   ) {
     return context.body(null, 401);
   }
@@ -31,12 +31,12 @@ application.post("/measurements/new", validationMiddleware({ bodySchema }), asyn
   const result = await database
     .insertInto("measurements")
     .values({
-      database_id: jsonParameters.database_id,
-      kind: jsonParameters.kind,
-      label: jsonParameters.label,
-      left_channel: jsonParameters.left_channel,
-      model_id: jsonParameters.model_id,
-      right_channel: jsonParameters.right_channel,
+      database_id: bodyParameters.database_id,
+      kind: bodyParameters.kind,
+      label: bodyParameters.label,
+      left_channel: bodyParameters.left_channel,
+      model_id: bodyParameters.model_id,
+      right_channel: bodyParameters.right_channel,
     })
     .returningAll()
     .executeTakeFirstOrThrow();

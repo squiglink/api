@@ -5,7 +5,7 @@ import zod from "zod";
 
 const application = new Hono<{
   Variables: {
-    jsonParameters: zod.infer<typeof bodySchema>;
+    bodyParameters: zod.infer<typeof bodySchema>;
   };
 }>();
 
@@ -17,11 +17,11 @@ const bodySchema = zod.object({
 });
 
 application.post("/evaluations/new", validationMiddleware({ bodySchema }), async (context) => {
-  const jsonParameters = context.get("jsonParameters");
+  const bodyParameters = context.get("bodyParameters");
 
   const evaluation = await database
     .selectFrom("evaluations")
-    .where("model_id", "=", jsonParameters.model_id)
+    .where("model_id", "=", bodyParameters.model_id)
     .where("user_id", "=", context.var.currentUser.id)
     .executeTakeFirst();
   if (evaluation) {
@@ -31,10 +31,10 @@ application.post("/evaluations/new", validationMiddleware({ bodySchema }), async
   const result = await database
     .insertInto("evaluations")
     .values({
-      model_id: jsonParameters.model_id,
-      review_score: jsonParameters.review_score,
-      review_url: jsonParameters.review_url,
-      shop_url: jsonParameters.shop_url,
+      model_id: bodyParameters.model_id,
+      review_score: bodyParameters.review_score,
+      review_url: bodyParameters.review_url,
+      shop_url: bodyParameters.shop_url,
       user_id: context.var.currentUser.id,
     })
     .returningAll()
