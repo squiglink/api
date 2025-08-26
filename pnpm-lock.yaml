@@ -24,8 +24,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1(@react-email/render@1.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       zod:
-        specifier: ^4.0.17
-        version: 4.0.17
+        specifier: ^4.1.2
+        version: 4.1.2
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.0.0
@@ -1209,11 +1209,11 @@ packages:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
 
-  zod@3.24.4:
-    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.0.17:
-    resolution: {integrity: sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==}
+  zod@4.1.2:
+    resolution: {integrity: sha512-SMwLPyHGp8HbPjJGqJOBJjPFAua5oSBf6+4ZA1/g4LW+rnYdd3JwAlDHa7fJ+nHSiGDWmE2jRWsLPV0OLlAuHQ==}
 
 snapshots:
 
@@ -1810,7 +1810,7 @@ snapshots:
       micromatch: 4.0.8
       minimist: 1.2.8
       pluralize: 8.0.0
-      zod: 3.24.4
+      zod: 3.25.76
     optionalDependencies:
       pg: 8.16.3
     transitivePeerDependencies:
@@ -2232,6 +2232,6 @@ snapshots:
 
   xtend@4.0.2: {}
 
-  zod@3.24.4: {}
+  zod@3.25.76: {}
 
-  zod@4.0.17: {}
+  zod@4.1.2: {}
