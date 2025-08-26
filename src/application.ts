@@ -5,6 +5,7 @@ import authorizationLogin from "./routes/authorization.login.js";
 import authorizationRefresh from "./routes/authorization.refresh.js";
 import authorizationVerify from "./routes/authorization.verify.js";
 import brands from "./routes/brands.js";
+import brandsEdit from "./routes/brands.edit.js";
 import brandsNew from "./routes/brands.new.js";
 import databases from "./routes/databases.js";
 import evaluations from "./routes/evaluations.js";
@@ -37,6 +38,7 @@ application.route("/", models);
 const authorizedApplication = new Hono();
 
 authorizedApplication.use("/*", authorizationMiddleware);
+authorizedApplication.route("/", brandsEdit);
 authorizedApplication.route("/", brandsNew);
 authorizedApplication.route("/", evaluationsEdit);
 authorizedApplication.route("/", evaluationsNew);
