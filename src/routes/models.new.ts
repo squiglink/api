@@ -17,7 +17,7 @@ application.post("/models/new", validationMiddleware({ bodySchema }), async (con
 
   const result = await database
     .insertInto("models")
-    .values({ brand_id: bodyParameters.brand_id, name: bodyParameters.name })
+    .values(bodyParameters)
     .returningAll()
     .executeTakeFirstOrThrow();
 

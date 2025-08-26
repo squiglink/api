@@ -30,13 +30,7 @@ application.post("/evaluations/new", validationMiddleware({ bodySchema }), async
 
   const result = await database
     .insertInto("evaluations")
-    .values({
-      model_id: bodyParameters.model_id,
-      review_score: bodyParameters.review_score,
-      review_url: bodyParameters.review_url,
-      shop_url: bodyParameters.shop_url,
-      user_id: context.var.currentUser.id,
-    })
+    .values({ ...bodyParameters, user_id: context.var.currentUser.id })
     .returningAll()
     .executeTakeFirstOrThrow();
 

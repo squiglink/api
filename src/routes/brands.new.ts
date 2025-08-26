@@ -16,7 +16,7 @@ application.post("/brands/new", validationMiddleware({ bodySchema }), async (con
 
   const result = await database
     .insertInto("brands")
-    .values({ name: bodyParameters.name })
+    .values(bodyParameters)
     .returningAll()
     .executeTakeFirstOrThrow();
 

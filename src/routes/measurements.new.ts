@@ -30,14 +30,7 @@ application.post("/measurements/new", validationMiddleware({ bodySchema }), asyn
 
   const result = await database
     .insertInto("measurements")
-    .values({
-      database_id: bodyParameters.database_id,
-      kind: bodyParameters.kind,
-      label: bodyParameters.label,
-      left_channel: bodyParameters.left_channel,
-      model_id: bodyParameters.model_id,
-      right_channel: bodyParameters.right_channel,
-    })
+    .values(bodyParameters)
     .returningAll()
     .executeTakeFirstOrThrow();
 
