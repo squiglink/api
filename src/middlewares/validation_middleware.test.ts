@@ -63,7 +63,7 @@ describe(".validationMiddleware", () => {
     const json = vi.fn();
     const context: any = {
       json,
-      req: { text: vi.fn().mockResolvedValue(JSON.stringify({ uuid: "invalid-uuid" })) },
+      req: { text: vi.fn().mockResolvedValue(JSON.stringify({ uuid: "invalid" })) },
     };
 
     await validationMiddleware({ bodySchema: zod.object({ uuid: zod.uuid() }) })(
@@ -80,7 +80,7 @@ describe(".validationMiddleware", () => {
     const json = vi.fn();
     const context: any = {
       json,
-      req: { param: vi.fn().mockReturnValue({ id: "invalid-uuid" }) },
+      req: { param: vi.fn().mockReturnValue({ id: "invalid" }) },
     };
 
     await validationMiddleware({ pathSchema: zod.object({ id: zod.uuid() }) })(
@@ -97,7 +97,7 @@ describe(".validationMiddleware", () => {
     const json = vi.fn();
     const context: any = {
       json,
-      req: { query: vi.fn().mockReturnValue({ uuid: "invalid-uuid" }) },
+      req: { query: vi.fn().mockReturnValue({ uuid: "invalid" }) },
     };
 
     await validationMiddleware({ querySchema: zod.object({ uuid: zod.uuid() }) })(

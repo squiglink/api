@@ -12,7 +12,7 @@ describe(".authorizationMiddleware", () => {
 
   it("sets the current user context variable", async () => {
     const context: any = {
-      req: { header: vi.fn().mockReturnValue("valid-token") },
+      req: { header: vi.fn().mockReturnValue("valid") },
       set: vi.fn(),
     };
     const currentUser = {
@@ -54,7 +54,7 @@ describe(".authorizationMiddleware", () => {
     const body = vi.fn();
     const context: any = {
       body,
-      req: { header: vi.fn().mockReturnValue("invalid-token") },
+      req: { header: vi.fn().mockReturnValue("invalid") },
     };
     vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(null);
 

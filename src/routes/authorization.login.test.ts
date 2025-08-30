@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
 import { insertUser } from "../test_helper.factories.js";
-import * as sendEmailModule from "../services/send_email.js";
+import { sendEmail } from "../services/send_email.js";
 import application from "../application.js";
 
 vi.mock("../services/send_email.js");
@@ -9,7 +9,7 @@ vi.mock("../services/send_email.js");
 describe("POST /authorization/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
+    vi.mocked(sendEmail).mockResolvedValue(true);
   });
 
   it("responds with unauthrorized if the user does not exist", async () => {
@@ -22,7 +22,7 @@ describe("POST /authorization/login", () => {
   });
 
   it("responds with unauthorized if sending the email has failed", async () => {
-    vi.mocked(sendEmailModule.sendEmail).mockRejectedValue(new Error("Test error"));
+    vi.mocked(sendEmail).mockRejectedValue(new Error("Whoops!"));
 
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
@@ -37,7 +37,7 @@ describe("POST /authorization/login", () => {
   });
 
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
-    vi.mocked(sendEmailModule.sendEmail).mockResolvedValue(true);
+    vi.mocked(sendEmail).mockResolvedValue(true);
 
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
@@ -54,7 +54,7 @@ describe("POST /authorization/login", () => {
       .where("user_id", "=", user.id)
       .executeTakeFirstOrThrow();
 
-    expect(sendEmailModule.sendEmail).toHaveBeenCalledWith(
+    expect(sendEmail).toHaveBeenCalledWith(
       expect.objectContaining({
         to: user.email,
         subject: "Log into Squiglink",

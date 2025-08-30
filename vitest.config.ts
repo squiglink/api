@@ -6,6 +6,7 @@ export default defineConfig({
     env: {
       SQUIGLINK_API_ENVIRONMENT: "test",
       SQUIGLINK_POSTGRES_DATABASE: configuration.postgresTestDatabase,
+      SQUIGLINK_RESEND_API_KEY: "placeholder",
     },
     fileParallelism: false,
     setupFiles: ["src/test_helper.ts"],
