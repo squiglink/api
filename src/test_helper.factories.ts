@@ -21,7 +21,7 @@ export async function insertBrand(
   return await databaseOrTransaction
     .insertInto("brands")
     .values({
-      name: values.name || faker.company.name(),
+      name: values.name || faker.string.uuid(),
       ...values,
     })
     .returningAll()
@@ -52,7 +52,7 @@ export async function insertDatabase(
       kind:
         (values.kind as DatabaseKind) ||
         faker.helpers.arrayElement(["earbuds", "headphones", "iems"]),
-      path: values.path || faker.system.directoryPath(),
+      path: values.path || `${faker.system.directoryPath()}/${faker.string.uuid()}`,
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -195,7 +195,7 @@ export async function insertModel(
     .insertInto("models")
     .values({
       brand_id: values.brand_id || (await insertBrand(databaseOrTransaction)).id,
-      name: values.name || faker.commerce.productName(),
+      name: values.name || faker.string.uuid(),
       ...values,
     })
     .returningAll()
@@ -226,7 +226,7 @@ export async function insertUser(
     .insertInto("users")
     .values({
       display_name: values.display_name || faker.internet.displayName(),
-      email: values.email || faker.internet.email(),
+      email: values.email || `${faker.string.uuid()}.${faker.internet.email()}`,
       scoring_system:
         (values.scoring_system as UserScoringSystem) ||
         faker.helpers.arrayElement([
@@ -235,7 +235,7 @@ export async function insertUser(
           "ten_point",
           "ten_point_decimal",
         ]),
-      username: values.username || faker.internet.username(),
+      username: values.username || faker.string.uuid(),
       ...values,
     })
     .returningAll()
