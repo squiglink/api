@@ -5,20 +5,20 @@ import authorizationLogin from "./routes/authorization.login.js";
 import authorizationRefresh from "./routes/authorization.refresh.js";
 import authorizationVerify from "./routes/authorization.verify.js";
 import brands from "./routes/brands.js";
-import brandsEdit from "./routes/brands.edit.js";
-import brandsNew from "./routes/brands.new.js";
+import brandsCreate from "./routes/brands.create.js";
+import brandsUpdate from "./routes/brands.update.js";
 import databases from "./routes/databases.js";
 import evaluations from "./routes/evaluations.js";
-import evaluationsEdit from "./routes/evaluations.edit.js";
-import evaluationsNew from "./routes/evaluations.new.js";
+import evaluationsCreate from "./routes/evaluations.create.js";
+import evaluationsUpdate from "./routes/evaluations.update.js";
 import legacyDataFiles from "./routes/legacy.data.files.js";
 import legacyDataPhoneBook from "./routes/legacy.data.phone_book.js";
 import measurements from "./routes/measurements.js";
-import measurementsEdit from "./routes/measurements.edit.js";
-import measurementsNew from "./routes/measurements.new.js";
+import measurementsCreate from "./routes/measurements.create.js";
 import measurementsShow from "./routes/measurements.show.js";
+import measurementsUpdate from "./routes/measurements.update.js";
 import models from "./routes/models.js";
-import modelsNew from "./routes/models.new.js";
+import modelsCreate from "./routes/models.create.js";
 
 const application = new Hono();
 
@@ -38,13 +38,13 @@ application.route("/", models);
 const authorizedApplication = new Hono();
 
 authorizedApplication.use("/*", authorizationMiddleware);
-authorizedApplication.route("/", brandsEdit);
-authorizedApplication.route("/", brandsNew);
-authorizedApplication.route("/", evaluationsEdit);
-authorizedApplication.route("/", evaluationsNew);
-authorizedApplication.route("/", measurementsEdit);
-authorizedApplication.route("/", measurementsNew);
-authorizedApplication.route("/", modelsNew);
+authorizedApplication.route("/", brandsCreate);
+authorizedApplication.route("/", brandsUpdate);
+authorizedApplication.route("/", evaluationsCreate);
+authorizedApplication.route("/", evaluationsUpdate);
+authorizedApplication.route("/", measurementsCreate);
+authorizedApplication.route("/", measurementsUpdate);
+authorizedApplication.route("/", modelsCreate);
 
 application.route("/", authorizedApplication);
 

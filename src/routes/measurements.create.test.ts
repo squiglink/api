@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { insertDatabase, insertModel, insertUser } from "../test_helper.factories.js";
 import application from "../application.js";
 
-describe("POST /measurements/new", () => {
+describe("POST /measurements", () => {
   it("responds with success and creates a measurement", async () => {
     const { databaseId, modelId, userId } = await database
       .transaction()
@@ -26,7 +26,7 @@ describe("POST /measurements/new", () => {
       right_channel: "123",
     };
 
-    const response = await application.request("/measurements/new", {
+    const response = await application.request("/measurements", {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
@@ -55,7 +55,7 @@ describe("POST /measurements/new", () => {
       right_channel: "123",
     };
 
-    const response = await application.request("/measurements/new", {
+    const response = await application.request("/measurements", {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",

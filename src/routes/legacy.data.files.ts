@@ -43,10 +43,10 @@ application.get(
 
     if (result === undefined) {
       return context.body(null, 404);
-    } else {
-      if (channel === "L") return context.text(result.left_channel);
-      if (channel === "R") return context.text(result.right_channel);
     }
+
+    if (channel === "L") return context.text(result.left_channel);
+    if (channel === "R") return context.text(result.right_channel);
   },
 );
 

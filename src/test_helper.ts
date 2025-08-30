@@ -6,30 +6,32 @@ import {
   insertUser,
 } from "./test_helper.factories.js";
 import { sql } from "kysely";
-import type { Database } from "./types.js";
-import type { TableExpression } from "kysely";
 
 beforeEach(async () => {
-  await truncateTableCascade("brands");
-  await truncateTableCascade("databases");
-  await truncateTableCascade("evaluations");
-  await truncateTableCascade("jwt_access_tokens");
-  await truncateTableCascade("jwt_magic_link_tokens");
-  await truncateTableCascade("jwt_refresh_tokens");
-  await truncateTableCascade("measurements");
-  await truncateTableCascade("models");
-  await truncateTableCascade("users");
+  await truncateAllTables();
 });
 
-async function truncateTableCascade(tableName: string) {
-  await sql`truncate table ${sql.table(tableName)} cascade`.execute(database);
+async function truncateAllTables() {
+  const tableNames = (
+    await database
+      .selectFrom("information_schema.tables" as any)
+      .select("table_name")
+      .where("table_schema", "=", "public")
+      .where("table_type", "=", "BASE TABLE")
+      .orderBy("table_name")
+      .execute()
+  ).map((row) => row.table_name);
+
+  tableNames.map((tableName) =>
+    sql`truncate table ${sql.table(tableName)} cascade`.execute(database),
+  );
 }
 
-export async function count(tableName: TableExpression<Database, never>): Promise<number> {
+export async function count(tableName: string): Promise<number> {
   return Number(
     (
       await database
-        .selectFrom(tableName)
+        .selectFrom(tableName as any)
         .select(database.fn.countAll().as("count"))
         .executeTakeFirstOrThrow()
     ).count,

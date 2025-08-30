@@ -7,6 +7,7 @@ import zod from "zod";
 const application = new Hono<{
   Variables: {
     bodyParameters: zod.infer<typeof bodySchema>;
+    currentUser: { id: string };
   };
 }>();
 
@@ -19,11 +20,11 @@ const bodySchema = zod.object({
   right_channel: zod.string(),
 });
 
-application.post("/measurements/new", validationMiddleware({ bodySchema }), async (context) => {
+application.post("/measurements", validationMiddleware({ bodySchema }), async (context) => {
   const bodyParameters = context.get("bodyParameters");
 
   if (
-    !(await verifyDatabaseUser(context.var.currentUser.id, database, bodyParameters.database_id))
+    !(await verifyDatabaseUser(context.get("currentUser").id, database, bodyParameters.database_id))
   ) {
     return context.body(null, 401);
   }

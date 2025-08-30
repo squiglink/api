@@ -6,6 +6,7 @@ import zod from "zod";
 const application = new Hono<{
   Variables: {
     bodyParameters: zod.infer<typeof bodySchema>;
+    currentUser: { id: string };
   };
 }>();
 
@@ -16,13 +17,13 @@ const bodySchema = zod.object({
   shop_url: zod.string().optional(),
 });
 
-application.post("/evaluations/new", validationMiddleware({ bodySchema }), async (context) => {
+application.post("/evaluations", validationMiddleware({ bodySchema }), async (context) => {
   const bodyParameters = context.get("bodyParameters");
 
   const evaluation = await database
     .selectFrom("evaluations")
     .where("model_id", "=", bodyParameters.model_id)
-    .where("user_id", "=", context.var.currentUser.id)
+    .where("user_id", "=", context.get("currentUser").id)
     .executeTakeFirst();
   if (evaluation) {
     return context.body(null, 409);
@@ -30,7 +31,7 @@ application.post("/evaluations/new", validationMiddleware({ bodySchema }), async
 
   const result = await database
     .insertInto("evaluations")
-    .values({ ...bodyParameters, user_id: context.var.currentUser.id })
+    .values({ ...bodyParameters, user_id: context.get("currentUser").id })
     .returningAll()
     .executeTakeFirstOrThrow();
 

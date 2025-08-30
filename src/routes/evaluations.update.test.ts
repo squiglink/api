@@ -6,7 +6,7 @@ import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("PATCH /evaluations/:id", () => {
-  it("responds with success and edits an evaluation", async () => {
+  it("responds with success and updates an evaluation", async () => {
     const { evaluationId, modelId, userId } = await database
       .transaction()
       .execute(async (transaction) => {

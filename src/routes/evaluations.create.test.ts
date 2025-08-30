@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker";
 import { insertEvaluation, insertModel, insertUser } from "../test_helper.factories.js";
 import application from "../application.js";
 
-describe("POST /evaluations/new", () => {
+describe("POST /evaluations", () => {
   it("responds with success and creates an evaluation", async () => {
     const { modelId, userId } = await database.transaction().execute(async (transaction) => {
       const modelId = (await insertModel(transaction)).id;
@@ -22,7 +22,7 @@ describe("POST /evaluations/new", () => {
       shop_url: faker.internet.url(),
     };
 
-    const response = await application.request("/evaluations/new", {
+    const response = await application.request("/evaluations", {
       body: JSON.stringify(body),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",
@@ -50,7 +50,7 @@ describe("POST /evaluations/new", () => {
       shop_url: "123",
     };
 
-    const response = await application.request(`/evaluations/new`, {
+    const response = await application.request(`/evaluations`, {
       body: JSON.stringify(requestBody),
       headers: { Authorization: `Bearer ${accessToken}` },
       method: "POST",

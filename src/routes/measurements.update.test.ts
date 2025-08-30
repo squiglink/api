@@ -10,7 +10,7 @@ import { signIn } from "../test_helper.js";
 import application from "../application.js";
 
 describe("PATCH /measurements/:id", () => {
-  it("responds with success and edits a measurement", async () => {
+  it("responds with success and updates a measurement", async () => {
     const { databaseId, measurementId, modelId, userId } = await database
       .transaction()
       .execute(async (transaction) => {
@@ -44,7 +44,7 @@ describe("PATCH /measurements/:id", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with unauthorized if trying to edit a measurement in another user's database", async () => {
+  it("responds with unauthorized if trying to update a measurement in another user's database", async () => {
     const { databaseId, measurementId, modelId } = await database
       .transaction()
       .execute(async (transaction) => {

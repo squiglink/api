@@ -3,8 +3,8 @@ import { database } from "../database.js";
 import { Hono } from "hono";
 import { sendEmail } from "../services/send_email.js";
 import { validationMiddleware } from "../middlewares/validation_middleware.js";
-import * as zod from "zod";
 import configuration from "../configuration.js";
+import zod from "zod";
 
 const bodySchema = zod.object({
   email: zod.email(),

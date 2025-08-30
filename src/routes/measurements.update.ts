@@ -7,6 +7,7 @@ import zod from "zod";
 const application = new Hono<{
   Variables: {
     bodyParameters: zod.infer<typeof bodySchema>;
+    currentUser: { id: string };
     pathParameters: zod.infer<typeof pathSchema>;
   };
 }>();
@@ -41,7 +42,7 @@ application.patch(
     if (!measurement) return context.body(null, 404);
     if (
       !(await verifyDatabaseUser(
-        context.var.currentUser.id,
+        context.get("currentUser").id,
         database,
         bodyParameters.database_id || measurement.database_id,
       ))

@@ -8,15 +8,14 @@ const application = new Hono<{
 }>();
 
 const bodySchema = zod.object({
-  brand_id: zod.string(),
   name: zod.string(),
 });
 
-application.post("/models/new", validationMiddleware({ bodySchema }), async (context) => {
+application.post("/brands", validationMiddleware({ bodySchema }), async (context) => {
   const bodyParameters = context.get("bodyParameters");
 
   const result = await database
-    .insertInto("models")
+    .insertInto("brands")
     .values(bodyParameters)
     .returningAll()
     .executeTakeFirstOrThrow();
