@@ -15,6 +15,7 @@ import legacyDataFiles from "./routes/legacy.data.files.js";
 import legacyDataPhoneBook from "./routes/legacy.data.phone_book.js";
 import measurements from "./routes/measurements.js";
 import measurementsCreate from "./routes/measurements.create.js";
+import measurementsDestroy from "./routes/measurements.destroy.js";
 import measurementsShow from "./routes/measurements.show.js";
 import measurementsUpdate from "./routes/measurements.update.js";
 import models from "./routes/models.js";
@@ -43,6 +44,7 @@ authorizedApplication.route("/", brandsUpdate);
 authorizedApplication.route("/", evaluationsCreate);
 authorizedApplication.route("/", evaluationsUpdate);
 authorizedApplication.route("/", measurementsCreate);
+authorizedApplication.route("/", measurementsDestroy);
 authorizedApplication.route("/", measurementsUpdate);
 authorizedApplication.route("/", modelsCreate);
 
