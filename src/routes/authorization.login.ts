@@ -35,11 +35,15 @@ application.post(
         .values({ token: authToken, user_id: user.id })
         .executeTakeFirstOrThrow();
 
-      await sendEmail({
-        to: bodyParameters.email,
-        subject: "Log into Squiglink",
-        body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
-      });
+      try {
+        await sendEmail({
+          body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
+          subject: "Log into Squiglink",
+          to: bodyParameters.email,
+        });
+      } catch {
+        return context.body(null, 401);
+      }
 
       return context.body(null, 200);
     });

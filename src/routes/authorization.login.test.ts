@@ -21,7 +21,7 @@ describe("POST /authorization/login", () => {
     expect(response.status).toBe(401);
   });
 
-  it("responds with internal server error if sending the email has failed", async () => {
+  it("responds with unauthorized if sending the email has failed", async () => {
     vi.mocked(sendEmailModule.sendEmail).mockRejectedValue(new Error("Test error"));
 
     const user = await database.transaction().execute(async (transaction) => {
@@ -33,7 +33,7 @@ describe("POST /authorization/login", () => {
       method: "POST",
     });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(401);
   });
 
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
