@@ -2,13 +2,15 @@ import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { Context, Next } from "hono";
 import zod from "zod";
 
-export const validationMiddleware = <TBody = any, TPath = any, TQuery = any>({
+export const validationMiddleware = <TBody = any, THeader = any, TPath = any, TQuery = any>({
   bodySchema,
+  headerSchema,
   pathSchema,
   querySchema,
   statusCode = 400,
 }: {
   bodySchema?: zod.ZodSchema<TBody>;
+  headerSchema?: zod.ZodSchema<THeader>;
   pathSchema?: zod.ZodSchema<TPath>;
   querySchema?: zod.ZodSchema<TQuery>;
   statusCode?: ContentfulStatusCode;
@@ -17,6 +19,7 @@ export const validationMiddleware = <TBody = any, TPath = any, TQuery = any>({
     context: Context<{
       Variables: {
         bodyParameters: TBody;
+        headerParameters: THeader;
         pathParameters: TPath;
         queryParameters: TQuery;
       };
@@ -33,6 +36,15 @@ export const validationMiddleware = <TBody = any, TPath = any, TQuery = any>({
         return context.json(bodyZodSafeParseResult.error, statusCode);
       }
       context.set("bodyParameters", bodyZodSafeParseResult.data);
+    }
+
+    if (headerSchema) {
+      const header = context.req.header();
+      const headerZodSafeParseResult = headerSchema.safeParse(header);
+      if (!headerZodSafeParseResult.success) {
+        return context.json(headerZodSafeParseResult.error, statusCode);
+      }
+      context.set("headerParameters", headerZodSafeParseResult.data);
     }
 
     if (pathSchema) {

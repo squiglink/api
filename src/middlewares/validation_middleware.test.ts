@@ -16,6 +16,19 @@ describe(".validationMiddleware", () => {
     expect(context.set).toHaveBeenCalledWith("bodyParameters", bodyParameters);
   });
 
+  it("sets the header parameters context variable", async () => {
+    const headerParameters = { authorization: "Bearer token123" };
+    const headerSchema = zod.object({ authorization: zod.string() });
+    const context: any = {
+      req: { header: vi.fn().mockReturnValue(headerParameters) },
+      set: vi.fn(),
+    };
+
+    await validationMiddleware({ headerSchema })(context, async () => {});
+
+    expect(context.set).toHaveBeenCalledWith("headerParameters", headerParameters);
+  });
+
   it("sets the path parameters context variable", async () => {
     const pathParameters = { foo: "bar" };
     const pathSchema = zod.object({ foo: zod.string() });
