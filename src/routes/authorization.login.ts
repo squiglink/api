@@ -46,8 +46,8 @@ application.post(
       if (!remoteIp) throw new Error("Reached unreachable");
 
       const cloudflareTurnstileResponse = await validateCloudflareTurnstileToken(
-        bodyParameters.cloudflareTurnstileToken,
         remoteIp,
+        bodyParameters.cloudflareTurnstileToken,
       );
 
       if (!cloudflareTurnstileResponse.success) return context.body(null, 401);

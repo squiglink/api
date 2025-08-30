@@ -90,13 +90,13 @@ describe("POST /authorization/login", () => {
       });
 
       const response = await application.request("/authorization/login", {
-        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "placeholder" }),
+        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "valid" }),
         method: "POST",
         headers: { "CF-Connecting-IP": "127.0.0.1" },
       });
 
       expect(response.status).toBe(200);
-      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("placeholder", "127.0.0.1");
+      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("127.0.0.1", "valid");
     });
 
     it("responds with unauthorized if the Cloudflare Turnstile token is invalid", async () => {
@@ -110,13 +110,13 @@ describe("POST /authorization/login", () => {
       });
 
       const response = await application.request("/authorization/login", {
-        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "invalid-token" }),
+        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "invalid" }),
         method: "POST",
         headers: { "CF-Connecting-IP": "127.0.0.1" },
       });
 
       expect(response.status).toBe(401);
-      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("invalid-token", "127.0.0.1");
+      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("127.0.0.1", "invalid");
     });
   });
 });

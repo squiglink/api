@@ -18,8 +18,8 @@ interface FailedResponse {
 type Response = SuccessfulResponse | FailedResponse;
 
 export async function validateCloudflareTurnstileToken(
-  token: string,
   remoteIp: string,
+  token: string,
 ): Promise<Response> {
   if (!configuration.cloudflareTurnstileEnabled) {
     return {
@@ -46,10 +46,6 @@ export async function validateCloudflareTurnstileToken(
   });
 
   console.log(`Sent a Cloudflare Turnstile validation request: \`${JSON.stringify(response)}\`.`);
-
-  if (!response.ok) {
-    return { success: false, "error-codes": ["http-error"] };
-  }
 
   const result = (await response.json()) as Response;
 
