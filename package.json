@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.0",
-    "hono": "^4.9.4",
+    "hono": "^4.9.5",
     "kysely": "^0.28.5",
     "pg": "^8.16.3",
-    "resend": "^6.0.1",
+    "resend": "^6.0.2",
     "zod": "^4.1.5"
   },
   "devDependencies": {
