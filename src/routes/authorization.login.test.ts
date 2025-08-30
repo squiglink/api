@@ -12,7 +12,7 @@ describe("POST /authorization/login", () => {
     vi.mocked(sendEmail).mockResolvedValue(true);
   });
 
-  it("responds with unauthrorized if the user does not exist", async () => {
+  it("responds with unauthorized if the user does not exist", async () => {
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: "test@test.com" }),
       method: "POST",
