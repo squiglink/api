@@ -128,6 +128,10 @@ export async function up(database: Kysely<any>): Promise<void> {
 
   await database.schema
     .createTable("measurements")
+    .addCheckConstraint(
+      "measurements_channel_constraint",
+      sql`left_channel IS NOT NULL OR right_channel IS NOT NULL`,
+    )
     .addColumn("id", "uuid", (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn("created_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),
@@ -137,11 +141,11 @@ export async function up(database: Kysely<any>): Promise<void> {
     )
     .addColumn("kind", sql`measurement_kind`, (column) => column.notNull())
     .addColumn("label", "text", (column) => column.notNull())
-    .addColumn("left_channel", "text", (column) => column.notNull())
+    .addColumn("left_channel", "text")
     .addColumn("model_id", "uuid", (column) =>
       column.references("models.id").notNull().onDelete("cascade"),
     )
-    .addColumn("right_channel", "text", (column) => column.notNull())
+    .addColumn("right_channel", "text")
     .addColumn("updated_at", "timestamp", (column) =>
       column.notNull().defaultTo(sql`clock_timestamp()`),
     )
