@@ -2,9 +2,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
 import { insertUser } from "../test_helper.factories.js";
 import { sendEmail } from "../services/send_email.js";
+import { validateCloudflareTurnstileToken } from "../services/validate_cloudflare_turnstile_token.js";
 import application from "../application.js";
+import configuration from "../configuration.js";
 
+vi.mock("../configuration.js");
 vi.mock("../services/send_email.js");
+vi.mock("../services/validate_cloudflare_turnstile_token.js");
 
 describe("POST /authorization/login", () => {
   beforeEach(() => {
@@ -62,5 +66,57 @@ describe("POST /authorization/login", () => {
       }),
     );
     expect(response.status).toBe(200);
+  });
+
+  describe("when Cloudflare Turnstile is enabled", () => {
+    beforeEach(() => {
+      vi.mocked(configuration).cloudflareTurnstileEnabled = true;
+    });
+
+    it("responds with success if the Cloudflare Turnstile token is valid", async () => {
+      vi.mocked(sendEmail).mockResolvedValue(true);
+      vi.mocked(validateCloudflareTurnstileToken).mockResolvedValue({
+        "error-codes": [],
+        action: "",
+        cdata: "",
+        challenge_ts: "",
+        hostname: "",
+        metadata: {},
+        success: true,
+      });
+
+      const user = await database.transaction().execute(async (transaction) => {
+        return await insertUser(transaction);
+      });
+
+      const response = await application.request("/authorization/login", {
+        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "valid" }),
+        method: "POST",
+        headers: { "CF-Connecting-IP": "127.0.0.1" },
+      });
+
+      expect(response.status).toBe(200);
+      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("127.0.0.1", "valid");
+    });
+
+    it("responds with unauthorized if the Cloudflare Turnstile token is invalid", async () => {
+      vi.mocked(validateCloudflareTurnstileToken).mockResolvedValue({
+        success: false,
+        "error-codes": ["invalid-input-response"],
+      });
+
+      const user = await database.transaction().execute(async (transaction) => {
+        return await insertUser(transaction);
+      });
+
+      const response = await application.request("/authorization/login", {
+        body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "invalid" }),
+        method: "POST",
+        headers: { "CF-Connecting-IP": "127.0.0.1" },
+      });
+
+      expect(response.status).toBe(401);
+      expect(validateCloudflareTurnstileToken).toHaveBeenCalledWith("127.0.0.1", "invalid");
+    });
   });
 });
