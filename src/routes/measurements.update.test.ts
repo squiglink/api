@@ -29,9 +29,9 @@ describe("PATCH /measurements/:id", () => {
       database_id: databaseId,
       kind: "frequency_response",
       label: "Label",
-      left_channel: "123",
+      left_channel: "1.2, 3.4\n5.6, 7.8\n",
       model_id: modelId,
-      right_channel: "123",
+      right_channel: "2.3, 4.5\n6.7, 8.9\n",
     };
 
     const response = await application.request(`/measurements/${measurementId}`, {
@@ -60,9 +60,9 @@ describe("PATCH /measurements/:id", () => {
       database_id: databaseId,
       kind: "frequency_response",
       label: "Label",
-      left_channel: "123",
+      left_channel: "1.2, 3.4\n5.6, 7.8\n",
       model_id: modelId,
-      right_channel: "123",
+      right_channel: "2.3, 4.5\n6.7, 8.9\n",
     };
 
     const response = await application.request(`/measurements/${measurementId}`, {
