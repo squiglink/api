@@ -41,9 +41,7 @@ application.get(
       .where("id", "=", id)
       .executeTakeFirst();
 
-    if (result === undefined) {
-      return context.body(null, 404);
-    }
+    if (!result) return context.body(null, 404);
 
     if (channel === "L") return context.text(result.left_channel);
     if (channel === "R") return context.text(result.right_channel);

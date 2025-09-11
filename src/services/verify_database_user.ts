@@ -6,14 +6,11 @@ export async function verifyDatabaseUser(
   database: Kysely<Database>,
   databaseId: string,
 ): Promise<boolean> {
-  const databaseUserId = (
-    await database
-      .selectFrom("databases")
-      .select("user_id")
-      .where("id", "=", databaseId)
-      .executeTakeFirst()
-  )?.user_id;
-  if (!databaseUserId) return false;
-  if (currentUserId !== databaseUserId) return false;
-  return true;
+  const result = await database
+    .selectFrom("databases")
+    .select("user_id")
+    .where("id", "=", databaseId)
+    .executeTakeFirst();
+
+  return result?.user_id === currentUserId;
 }

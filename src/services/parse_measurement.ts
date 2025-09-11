@@ -26,11 +26,10 @@ export function parseMeasurement(text: string): [string?, string?] {
     const trimmedLine = line.trim();
     if (!trimmedLine || trimmedLine.startsWith("*")) continue;
 
-    let values: string[] = [];
-
     const delimiter = DELIMITERS.find((d) => trimmedLine.includes(d));
     if (!delimiter) return [undefined, "The measurement has unsupported delimiters"];
-    values = trimmedLine
+
+    const values = trimmedLine
       .split(delimiter)
       .map((v) => v.trim())
       .filter((v) => v !== "");
@@ -40,10 +39,7 @@ export function parseMeasurement(text: string): [string?, string?] {
       const spl_db = values[1];
 
       if (!isNaN(Number(frequency_hz)) && !isNaN(Number(spl_db))) {
-        const point: Point = {
-          frequency_hz: frequency_hz,
-          spl_db: spl_db,
-        };
+        const point: Point = { frequency_hz, spl_db };
 
         if (values.length >= 3) {
           const phase_degrees = values[2];

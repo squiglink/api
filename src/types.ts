@@ -74,9 +74,9 @@ export interface Measurements {
   id: Generated<string>;
   kind: MeasurementKind;
   label: string;
-  left_channel: string;
+  left_channel: string | null;
   model_id: string;
-  right_channel: string;
+  right_channel: string | null;
   updated_at: Generated<Timestamp>;
 }
 
