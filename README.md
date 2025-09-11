@@ -35,7 +35,7 @@ Done? Send requests to <http://localhost:3000> or host instances of Lab and Stud
 # Generate type definitions from the database.
 docker compose run api pnpm kysely-codegen
 
-# Lint the code.
+# Check for linting errors in the code.
 docker compose run api pnpm oxlint --deny-warnings
 
 # Check for formatting errors in the code.
