@@ -1,5 +1,5 @@
 import { defineConfig } from "vitest/config";
-import configuration from "./src/configuration.js";
+import configuration from "./source/configuration.js";
 
 export default defineConfig({
   test: {
@@ -8,6 +8,6 @@ export default defineConfig({
       SQUIGLINK_POSTGRES_DATABASE: configuration.postgresTestDatabase,
     },
     fileParallelism: false,
-    setupFiles: ["src/test_helper.ts"],
+    setupFiles: ["source/test_helper.ts"],
   },
 });

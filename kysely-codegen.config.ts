@@ -11,6 +11,6 @@ function envString(key: string): string {
 }
 
 export default {
-  outFile: "src/types.ts",
+  outFile: "source/types.ts",
   url: `postgres://${user}:${password}@${host}/${database}`,
 };
