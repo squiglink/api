@@ -18,3 +18,4 @@ jobs:
       - run: docker compose run api pnpm oxlint --deny-warnings
       - run: docker compose run api pnpm prettier --check .
       - run: docker compose run api pnpm test run
+      - run: docker compose run api pnpm tsc --noEmit

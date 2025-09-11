@@ -46,4 +46,7 @@ docker compose run api pnpm prettier --write .
 
 # Run tests.
 docker compose run api pnpm test
+
+# Check for typing errors in the code.
+docker compose run api pnpm tsc --noEmit
 ```
