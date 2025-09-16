@@ -15,8 +15,8 @@ importers:
         specifier: ^4.9.7
         version: 4.9.7
       kysely:
-        specifier: ^0.28.5
-        version: 0.28.5
+        specifier: ^0.28.7
+        version: 0.28.7
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -38,10 +38,10 @@ importers:
         version: 8.15.5
       kysely-codegen:
         specifier: ^0.19.0
-        version: 0.19.0(kysely@0.28.5)(pg@8.16.3)(typescript@5.9.2)
+        version: 0.19.0(kysely@0.28.7)(pg@8.16.3)(typescript@5.9.2)
       kysely-ctl:
         specifier: ^0.19.0
-        version: 0.19.0(kysely@0.28.5)(typescript@5.9.2)
+        version: 0.19.0(kysely@0.28.7)(typescript@5.9.2)
       oxlint:
         specifier: ^1.15.0
         version: 1.15.0
@@ -780,8 +780,8 @@ packages:
       kysely-prisma-postgres:
         optional: true
 
-  kysely@0.28.5:
-    resolution: {integrity: sha512-rlB0I/c6FBDWPcQoDtkxi9zIvpmnV5xoIalfCMSMCa7nuA6VGA3F54TW9mEgX4DVf10sXAWCF5fDbamI/5ZpKA==}
+  kysely@0.28.7:
+    resolution: {integrity: sha512-u/cAuTL4DRIiO2/g4vNGRgklEKNIj5Q3CG7RoUB5DV5SfEC2hMvPxKi0GWPmnzwL2ryIeud2VTcEEmqzTzEPNw==}
     engines: {node: '>=20.0.0'}
 
   leac@0.6.0:
@@ -1764,14 +1764,14 @@ snapshots:
 
   json-parse-even-better-errors@2.3.1: {}
 
-  kysely-codegen@0.19.0(kysely@0.28.5)(pg@8.16.3)(typescript@5.9.2):
+  kysely-codegen@0.19.0(kysely@0.28.7)(pg@8.16.3)(typescript@5.9.2):
     dependencies:
       chalk: 4.1.2
       cosmiconfig: 9.0.0(typescript@5.9.2)
       dotenv: 17.2.2
       dotenv-expand: 12.0.3
       git-diff: 2.0.6
-      kysely: 0.28.5
+      kysely: 0.28.7
       micromatch: 4.0.8
       minimist: 1.2.8
       pluralize: 8.0.0
@@ -1781,14 +1781,14 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  kysely-ctl@0.19.0(kysely@0.28.5)(typescript@5.9.2):
+  kysely-ctl@0.19.0(kysely@0.28.7)(typescript@5.9.2):
     dependencies:
       c12: 3.2.0
       citty: 0.1.6
       confbox: 0.2.2
       consola: 3.4.2
       jiti: 2.5.1
-      kysely: 0.28.5
+      kysely: 0.28.7
       nypm: 0.6.1
       ofetch: 1.4.1
       pathe: 2.0.3
@@ -1799,7 +1799,7 @@ snapshots:
       - magicast
       - typescript
 
-  kysely@0.28.5: {}
+  kysely@0.28.7: {}
 
   leac@0.6.0:
     optional: true
