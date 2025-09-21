@@ -1,10 +1,10 @@
+import application from "../application.js";
+import configuration from "../configuration.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { database } from "../database.js";
 import { insertUser } from "../test_helper.factories.js";
 import { sendEmail } from "../services/send_email.js";
 import { validateCloudflareTurnstileToken } from "../services/validate_cloudflare_turnstile_token.js";
-import application from "../application.js";
-import configuration from "../configuration.js";
 
 vi.mock("../configuration.js");
 vi.mock("../services/send_email.js");
@@ -19,6 +19,7 @@ describe("POST /authorization/login", () => {
   it("responds with unauthorized if the user does not exist", async () => {
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: "test@test.com" }),
+      headers: { "content-type": "application/json" },
       method: "POST",
     });
 
@@ -34,6 +35,7 @@ describe("POST /authorization/login", () => {
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),
+      headers: { "content-type": "application/json" },
       method: "POST",
     });
 
@@ -49,6 +51,7 @@ describe("POST /authorization/login", () => {
 
     const response = await application.request("/authorization/login", {
       body: JSON.stringify({ email: user.email }),
+      headers: { "content-type": "application/json" },
       method: "POST",
     });
 
@@ -92,7 +95,10 @@ describe("POST /authorization/login", () => {
       const response = await application.request("/authorization/login", {
         body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "valid" }),
         method: "POST",
-        headers: { "CF-Connecting-IP": "127.0.0.1" },
+        headers: {
+          "cf-connecting-ip": "127.0.0.1",
+          "content-type": "application/json",
+        },
       });
 
       expect(response.status).toBe(200);
@@ -112,7 +118,10 @@ describe("POST /authorization/login", () => {
       const response = await application.request("/authorization/login", {
         body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "invalid" }),
         method: "POST",
-        headers: { "CF-Connecting-IP": "127.0.0.1" },
+        headers: {
+          "cf-connecting-ip": "127.0.0.1",
+          "content-type": "application/json",
+        },
       });
 
       expect(response.status).toBe(401);

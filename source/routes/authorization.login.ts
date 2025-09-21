@@ -1,16 +1,13 @@
-import { createJwtToken } from "../services/create_jwt_token.js";
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { sendEmail } from "../services/send_email.js";
-import { validateCloudflareTurnstileToken } from "../services/validate_cloudflare_turnstile_token.js";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import configuration from "../configuration.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { createJwtToken } from "../services/create_jwt_token.js";
+import { database } from "../database.js";
+import { describeRoute, validator } from "hono-openapi";
+import { sendEmail } from "../services/send_email.js";
+import { validateCloudflareTurnstileToken } from "../services/validate_cloudflare_turnstile_token.js";
 
-const bodySchema = zod.object({
-  cloudflareTurnstileToken: zod.string().optional(),
-  email: zod.email(),
-});
+const application = new Hono();
 
 const headerSchema = zod
   .object({
@@ -25,29 +22,36 @@ const headerSchema = zod
     return true;
   });
 
-const application = new Hono<{
-  Variables: {
-    headerParameters: zod.infer<typeof headerSchema>;
-    bodyParameters: zod.infer<typeof bodySchema>;
-  };
-}>();
+const jsonSchema = zod.object({
+  cloudflareTurnstileToken: zod.string().optional(),
+  email: zod.email(),
+});
+
+const routeDescription = describeRoute({
+  responses: {
+    200: { description: "OK" },
+    401: { description: "Unauthorized" },
+  },
+});
 
 application.post(
   "/authorization/login",
-  validationMiddleware({ headerSchema, bodySchema, statusCode: 401 }),
+  routeDescription,
+  validator("header", headerSchema),
+  validator("json", jsonSchema),
   async (context) => {
-    const headerParameters = context.get("headerParameters");
-    const bodyParameters = context.get("bodyParameters");
+    const headerParameters = context.req.valid("header");
+    const jsonParameters = context.req.valid("json");
 
     if (configuration.cloudflareTurnstileEnabled) {
-      if (!bodyParameters.cloudflareTurnstileToken) return context.body(null, 401);
+      if (!jsonParameters.cloudflareTurnstileToken) return context.body(null, 401);
 
       const remoteIp = headerParameters["cf-connecting-ip"] || headerParameters["x-forwarded-for"];
       if (!remoteIp) throw new Error("Reached unreachable");
 
       const cloudflareTurnstileResponse = await validateCloudflareTurnstileToken(
         remoteIp,
-        bodyParameters.cloudflareTurnstileToken,
+        jsonParameters.cloudflareTurnstileToken,
       );
 
       if (!cloudflareTurnstileResponse.success) return context.body(null, 401);
@@ -56,7 +60,7 @@ application.post(
     const user = await database
       .selectFrom("users")
       .selectAll()
-      .where("email", "=", bodyParameters.email)
+      .where("email", "=", jsonParameters.email)
       .executeTakeFirst();
     if (!user) return context.body(null, 401);
 
@@ -73,7 +77,7 @@ application.post(
         await sendEmail({
           body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
           subject: "Log into Squiglink",
-          to: bodyParameters.email,
+          to: jsonParameters.email,
         });
       } catch {
         return context.body(null, 401);

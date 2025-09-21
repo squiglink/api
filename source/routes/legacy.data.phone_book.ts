@@ -1,11 +1,9 @@
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { database } from "../database.js";
+import { validator } from "hono-openapi";
 
-const application = new Hono<{
-  Variables: { queryParameters: zod.infer<typeof querySchema> };
-}>();
+const application = new Hono();
 
 const querySchema = zod.object({
   database_id: zod.string(),
@@ -13,9 +11,9 @@ const querySchema = zod.object({
 
 application.get(
   "/legacy/data/phone_book.json",
-  validationMiddleware({ querySchema }),
+  validator("query", querySchema),
   async (context) => {
-    const queryParameters = context.get("queryParameters");
+    const queryParameters = context.req.valid("query");
 
     const { result } = await database.transaction().execute(async (transaction) => {
       const records = await transaction

@@ -3,12 +3,15 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch source/index.ts",
+    "generate-openapi": "tsx scripts/generate-openapi.ts",
     "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely",
     "test": "vitest"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.3",
+    "@hono/standard-validator": "^0.1.5",
     "hono": "^4.9.8",
+    "hono-openapi": "^1.0.8",
     "kysely": "^0.28.7",
     "pg": "^8.16.3",
     "resend": "^6.1.0",

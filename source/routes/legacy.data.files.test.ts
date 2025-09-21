@@ -1,7 +1,7 @@
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertMeasurement } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("GET /legacy/data/:file_name", () => {
   it("responds with success and returns the left channel measurement", async () => {

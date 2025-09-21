@@ -1,3 +1,4 @@
+import application from "../application.js";
 import { count, signIn } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
@@ -7,7 +8,6 @@ import {
   insertModel,
   insertUser,
 } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("DELETE /measurements/:id", () => {
   it("responds with success and destroys a measurement", async () => {
@@ -25,7 +25,7 @@ describe("DELETE /measurements/:id", () => {
     const { accessToken } = await signIn(userId);
 
     const response = await application.request(`/measurements/${measurementId}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { authorization: `Bearer ${accessToken}` },
       method: "DELETE",
     });
 
@@ -39,7 +39,7 @@ describe("DELETE /measurements/:id", () => {
     const response = await application.request(
       "/measurements/00000000-0000-0000-0000-000000000000",
       {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { authorization: `Bearer ${accessToken}` },
         method: "DELETE",
       },
     );
@@ -61,7 +61,7 @@ describe("DELETE /measurements/:id", () => {
     const { accessToken } = await signIn();
 
     const response = await application.request(`/measurements/${measurementId}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { authorization: `Bearer ${accessToken}` },
       method: "DELETE",
     });
 

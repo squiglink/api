@@ -1,9 +1,9 @@
+import application from "../application.js";
 import { count, signIn } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { faker } from "@faker-js/faker";
 import { insertEvaluation, insertModel, insertUser } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("POST /evaluations", () => {
   it("responds with success and creates an evaluation", async () => {
@@ -24,7 +24,10 @@ describe("POST /evaluations", () => {
 
     const response = await application.request("/evaluations", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "POST",
     });
 
@@ -52,7 +55,10 @@ describe("POST /evaluations", () => {
 
     const response = await application.request(`/evaluations`, {
       body: JSON.stringify(requestBody),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "POST",
     });
 

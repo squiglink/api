@@ -1,23 +1,21 @@
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { database } from "../database.js";
+import { validator } from "hono-openapi";
 
-const application = new Hono<{
-  Variables: { pathParameters: zod.infer<typeof pathSchema> };
-}>();
+const application = new Hono();
 
-const pathSchema = zod.object({
+const paramSchema = zod.object({
   file_name: zod.string().regex(/^.* (L|R)\.txt$/),
 });
 
 application.get(
   "/legacy/data/:file_name{.* (L|R).txt}",
-  validationMiddleware({ pathSchema: pathSchema }),
+  validator("param", paramSchema),
   async (context) => {
-    const pathParameters = context.get("pathParameters");
+    const paramParameters = context.req.valid("param");
 
-    const [id, channelAndExtension] = pathParameters.file_name.split(" ");
+    const [id, channelAndExtension] = paramParameters.file_name.split(" ");
     const [channel, extension] = channelAndExtension.split(".");
 
     const zodSafeParseResult = zod

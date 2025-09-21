@@ -1,20 +1,44 @@
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { sql } from "kysely";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { database } from "../database.js";
+import { describeRoute, resolver, validator } from "hono-openapi";
+import { sql } from "kysely";
 
-const application = new Hono<{
-  Variables: { queryParameters: zod.infer<typeof querySchema> };
-}>();
+const application = new Hono();
 
 const querySchema = zod.object({
   page: zod.coerce.number().optional().default(1),
   query: zod.string().optional(),
 });
 
-application.get("/brands", validationMiddleware({ querySchema }), async (context) => {
-  const queryParameters = context.get("queryParameters");
+const responseSchema = zod.object({
+  page: zod.array(
+    zod.object({
+      created_at: zod.string(),
+      id: zod.string(),
+      model_count: zod.string(),
+      name: zod.string(),
+      updated_at: zod.string(),
+    }),
+  ),
+  page_count: zod.number(),
+});
+
+const routeDescription = describeRoute({
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: resolver(responseSchema),
+        },
+      },
+      description: "OK",
+    },
+  },
+});
+
+application.get("/brands", routeDescription, validator("query", querySchema), async (context) => {
+  const queryParameters = context.req.valid("query");
 
   const pageSize = 10;
 

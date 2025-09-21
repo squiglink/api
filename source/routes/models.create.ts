@@ -1,23 +1,43 @@
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { database } from "../database.js";
+import { describeRoute, resolver, validator } from "hono-openapi";
 
-const application = new Hono<{
-  Variables: { bodyParameters: zod.infer<typeof bodySchema> };
-}>();
+const application = new Hono();
 
-const bodySchema = zod.object({
+const jsonSchema = zod.object({
   brand_id: zod.string(),
   name: zod.string(),
 });
 
-application.post("/models", validationMiddleware({ bodySchema }), async (context) => {
-  const bodyParameters = context.get("bodyParameters");
+const responseSchema = zod.object({
+  brand_id: zod.string(),
+  created_at: zod.string(),
+  id: zod.string(),
+  name: zod.string(),
+  updated_at: zod.string(),
+});
+
+const routeDescription = describeRoute({
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: resolver(responseSchema),
+        },
+      },
+      description: "OK",
+    },
+    409: { description: "Conflict" },
+  },
+});
+
+application.post("/models", routeDescription, validator("json", jsonSchema), async (context) => {
+  const jsonParameters = context.req.valid("json");
 
   const result = await database
     .insertInto("models")
-    .values(bodyParameters)
+    .values(jsonParameters)
     .returningAll()
     .executeTakeFirstOrThrow();
 

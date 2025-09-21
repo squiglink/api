@@ -1,6 +1,6 @@
+import application from "../application.js";
 import { count, signIn } from "../test_helper.js";
 import { describe, expect, it } from "vitest";
-import application from "../application.js";
 
 describe("POST /brands", () => {
   it("responds with success and creates a brand", async () => {
@@ -9,7 +9,10 @@ describe("POST /brands", () => {
 
     const response = await application.request("/brands", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "POST",
     });
 

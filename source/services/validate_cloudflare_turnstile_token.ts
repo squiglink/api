@@ -36,7 +36,7 @@ export async function validateCloudflareTurnstileToken(
   const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "content-type": "application/json",
     },
     body: JSON.stringify({
       remoteip: remoteIp,

@@ -1,32 +1,50 @@
-import { createJwtToken } from "../services/create_jwt_token.js";
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
-import { verifyJwtToken } from "../services/verify_jwt_token.js";
 import configuration from "../configuration.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { createJwtToken } from "../services/create_jwt_token.js";
+import { database } from "../database.js";
+import { describeRoute, resolver, validator } from "hono-openapi";
+import { verifyJwtToken } from "../services/verify_jwt_token.js";
 
-const schema = zod.object({
+const application = new Hono();
+
+const jsonSchema = zod.object({
   refresh_token: zod.string(),
 });
 
-const application = new Hono<{
-  Variables: { bodyParameters: zod.infer<typeof schema> };
-}>();
+const responseSchema = zod.object({
+  access_token: zod.string(),
+  refresh_token: zod.string(),
+});
+
+const routeDescription = describeRoute({
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: resolver(responseSchema),
+        },
+      },
+      description: "OK",
+    },
+    401: { description: "Unauthorized" },
+  },
+});
 
 application.post(
   "/authorization/refresh",
-  validationMiddleware({ bodySchema: schema, statusCode: 401 }),
+  routeDescription,
+  validator("json", jsonSchema),
   async (context) => {
-    const bodyParameters = context.get("bodyParameters");
+    const jsonParameters = context.req.valid("json");
 
-    const jwtPayload = await verifyJwtToken(bodyParameters.refresh_token);
+    const jwtPayload = await verifyJwtToken(jsonParameters.refresh_token);
     if (!jwtPayload) return context.body(null, 401);
 
     const refreshTokenUser = await database
       .selectFrom("users")
       .innerJoin("jwt_refresh_tokens", "users.id", "jwt_refresh_tokens.user_id")
-      .where("jwt_refresh_tokens.token", "=", bodyParameters.refresh_token)
+      .where("jwt_refresh_tokens.token", "=", jsonParameters.refresh_token)
       .selectAll("users")
       .executeTakeFirst();
     if (!refreshTokenUser) return context.body(null, 401);
@@ -40,7 +58,7 @@ application.post(
       await transaction
         .updateTable("jwt_refresh_tokens")
         .set({ token: newRefreshToken })
-        .where("token", "=", bodyParameters.refresh_token)
+        .where("token", "=", jsonParameters.refresh_token)
         .execute();
       await transaction
         .insertInto("jwt_access_tokens")

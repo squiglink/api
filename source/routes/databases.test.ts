@@ -1,7 +1,7 @@
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertDatabase, insertUser } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("GET /databases", () => {
   it("responds with success and returns databases", async () => {

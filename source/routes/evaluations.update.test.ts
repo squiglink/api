@@ -1,9 +1,9 @@
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { faker } from "@faker-js/faker";
 import { insertEvaluation, insertModel, insertUser } from "../test_helper.factories.js";
 import { signIn } from "../test_helper.js";
-import application from "../application.js";
 
 describe("PATCH /evaluations/:id", () => {
   it("responds with success and updates an evaluation", async () => {
@@ -27,7 +27,10 @@ describe("PATCH /evaluations/:id", () => {
 
     const response = await application.request(`/evaluations/${evaluationId}`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "PATCH",
     });
 

@@ -1,3 +1,4 @@
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import {
@@ -7,7 +8,6 @@ import {
   insertUser,
 } from "../test_helper.factories.js";
 import { signIn } from "../test_helper.js";
-import application from "../application.js";
 
 describe("PATCH /measurements/:id", () => {
   it("responds with success and updates a measurement", async () => {
@@ -36,7 +36,10 @@ describe("PATCH /measurements/:id", () => {
 
     const response = await application.request(`/measurements/${measurementId}`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "PATCH",
     });
 
@@ -67,7 +70,10 @@ describe("PATCH /measurements/:id", () => {
 
     const response = await application.request(`/measurements/${measurementId}`, {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "PATCH",
     });
 

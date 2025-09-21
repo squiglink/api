@@ -1,3 +1,4 @@
+import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import {
@@ -8,7 +9,6 @@ import {
   insertModel,
   insertUser,
 } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("GET /legacy/data/phone_book.json", () => {
   it("responds with success", async () => {

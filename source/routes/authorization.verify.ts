@@ -1,24 +1,42 @@
-import { createJwtToken } from "../services/create_jwt_token.js";
-import { database } from "../database.js";
-import { Hono } from "hono";
-import { validationMiddleware } from "../middlewares/validation_middleware.js";
-import { verifyJwtToken } from "../services/verify_jwt_token.js";
 import configuration from "../configuration.js";
 import zod from "zod";
+import { Hono } from "hono";
+import { createJwtToken } from "../services/create_jwt_token.js";
+import { database } from "../database.js";
+import { describeRoute, resolver, validator } from "hono-openapi";
+import { verifyJwtToken } from "../services/verify_jwt_token.js";
+
+const application = new Hono();
 
 const querySchema = zod.object({
   token: zod.string(),
 });
 
-const application = new Hono<{
-  Variables: { queryParameters: zod.infer<typeof querySchema> };
-}>();
+const responseSchema = zod.object({
+  access_token: zod.string(),
+  refresh_token: zod.string(),
+});
+
+const routeDescription = describeRoute({
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: resolver(responseSchema),
+        },
+      },
+      description: "OK",
+    },
+    401: { description: "Unauthorized" },
+  },
+});
 
 application.get(
   "/authorization/verify",
-  validationMiddleware({ querySchema, statusCode: 401 }),
+  routeDescription,
+  validator("query", querySchema),
   async (context) => {
-    const queryParameters = context.get("queryParameters");
+    const queryParameters = context.req.valid("query");
 
     const magicLinkToken = queryParameters.token;
 

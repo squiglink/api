@@ -1,8 +1,8 @@
+import application from "../application.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertJwtMagicLinkToken } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("GET /authorization/verify", () => {
   it("responds with unauthorized if the magic link token is invalid", async () => {

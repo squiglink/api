@@ -1,8 +1,8 @@
+import application from "../application.js";
 import { count, signIn } from "../test_helper.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertBrand, insertUser } from "../test_helper.factories.js";
-import application from "../application.js";
 
 describe("POST /models", () => {
   it("responds with success and creates a model", async () => {
@@ -21,7 +21,10 @@ describe("POST /models", () => {
 
     const response = await application.request("/models", {
       body: JSON.stringify(body),
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "POST",
     });
 
