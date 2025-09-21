@@ -53,14 +53,15 @@ application.post(
       if (!cloudflareTurnstileResponse.success) return context.body(null, 401);
     }
 
-    const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
-    const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
     const user = await database
       .selectFrom("users")
       .selectAll()
       .where("email", "=", bodyParameters.email)
       .executeTakeFirst();
     if (!user) return context.body(null, 401);
+
+    const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
+    const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
 
     return await database.transaction().execute(async (transaction) => {
       await transaction

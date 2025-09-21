@@ -115,7 +115,8 @@ export async function insertJwtAccessToken(
   return await databaseOrTransaction
     .insertInto("jwt_access_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000),
+      token:
+        values.token || (await createJwtToken(configuration.jwtExpirationTimeAccessToken * 1000)),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -140,7 +141,9 @@ export async function insertJwtMagicLinkToken(
   return await databaseOrTransaction
     .insertInto("jwt_magic_link_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000),
+      token:
+        values.token ||
+        (await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000)),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -167,7 +170,8 @@ export async function insertJwtRefreshToken(
   return await databaseOrTransaction
     .insertInto("jwt_refresh_tokens")
     .values({
-      token: await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000),
+      token:
+        values.token || (await createJwtToken(configuration.jwtExpirationTimeRefreshToken * 1000)),
       user_id: values.user_id || (await insertUser(databaseOrTransaction)).id,
       ...values,
     })
@@ -261,9 +265,9 @@ export async function insertMeasurement(
   id: string;
   kind: MeasurementKind;
   label: string;
-  left_channel: string;
+  left_channel: string | null;
   model_id: string;
-  right_channel: string;
+  right_channel: string | null;
   updated_at: Date;
 }> {
   return await databaseOrTransaction
@@ -279,9 +283,9 @@ export async function insertMeasurement(
           "sound_isolation",
         ]),
       label: values.label || faker.music.genre(),
-      left_channel: values.left_channel || "123",
+      left_channel: values.left_channel || "1.2, 3.4\n5.6, 7.8\n",
       model_id: values.model_id || (await insertModel(databaseOrTransaction)).id,
-      right_channel: values.right_channel || "123",
+      right_channel: values.right_channel || "2.3, 4.5\n6.7, 8.9\n",
       ...values,
     })
     .returningAll()

@@ -1,5 +1,6 @@
 import { database, touch } from "../database.js";
 import { Hono } from "hono";
+import { parseMeasurement } from "../services/parse_measurement.js";
 import { validationMiddleware } from "../middlewares/validation_middleware.js";
 import { verifyDatabaseUser } from "../services/verify_database_user.js";
 import zod from "zod";
@@ -50,9 +51,23 @@ application.patch(
       return context.body(null, 401);
     }
 
+    let channels: { left_channel?: string; right_channel?: string } = {};
+    if (bodyParameters.left_channel) {
+      const [leftChannelParsed, leftChannelError] = parseMeasurement(bodyParameters.left_channel);
+      if (leftChannelError) return context.json({ error: leftChannelError }, 400);
+      channels.left_channel = leftChannelParsed;
+    }
+    if (bodyParameters.right_channel) {
+      const [rightChannelParsed, rightChannelError] = parseMeasurement(
+        bodyParameters.right_channel,
+      );
+      if (rightChannelError) return context.json({ error: rightChannelError }, 400);
+      channels.right_channel = rightChannelParsed;
+    }
+
     const result = await database
       .updateTable("measurements")
-      .set(bodyParameters)
+      .set({ ...bodyParameters, ...channels })
       .set(touch)
       .where("id", "=", pathParameters.id)
       .returningAll()

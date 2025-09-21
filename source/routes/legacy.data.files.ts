@@ -12,7 +12,7 @@ const pathSchema = zod.object({
 });
 
 application.get(
-  "/legacy/data/:file_name{.* (L|R)\.txt}",
+  "/legacy/data/:file_name{.* (L|R).txt}",
   validationMiddleware({ pathSchema: pathSchema }),
   async (context) => {
     const pathParameters = context.get("pathParameters");
@@ -41,12 +41,16 @@ application.get(
       .where("id", "=", id)
       .executeTakeFirst();
 
-    if (result === undefined) {
-      return context.body(null, 404);
-    }
+    if (!result) return context.body(null, 404);
 
-    if (channel === "L") return context.text(result.left_channel);
-    if (channel === "R") return context.text(result.right_channel);
+    if (channel === "L") {
+      if (!result.left_channel) return context.body(null, 404);
+      return context.text(result.left_channel);
+    }
+    if (channel === "R") {
+      if (!result.right_channel) return context.body(null, 404);
+      return context.text(result.right_channel);
+    }
   },
 );
 
