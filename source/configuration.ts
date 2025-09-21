@@ -2,6 +2,7 @@ import { env } from "process";
 
 interface Configuration {
   apiEnvironment: string;
+  apiPort: number;
   apiUrl: string;
   cloudflareTurnstileEnabled: boolean;
   cloudflareTurnstileSecret: string;
@@ -21,6 +22,7 @@ interface Configuration {
 
 const configuration: Configuration = {
   apiEnvironment: envString("SQUIGLINK_API_ENVIRONMENT"),
+  apiPort: envNumber("SQUIGLINK_API_PORT"),
   apiUrl: envString("SQUIGLINK_API_URL"),
   cloudflareTurnstileEnabled: envBoolean("SQUIGLINK_CLOUDFLARE_TURNSTILE_ENABLED"),
   cloudflareTurnstileSecret: envString("SQUIGLINK_CLOUDFLARE_TURNSTILE_SECRET"),
