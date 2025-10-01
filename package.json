@@ -25,7 +25,7 @@
     "kysely-ctl": "^0.19.0",
     "oxlint": "^1.19.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }
 }
