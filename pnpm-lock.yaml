@@ -11,9 +11,6 @@ importers:
       '@hono/node-server':
         specifier: ^1.19.5
         version: 1.19.5(hono@4.9.10)
-      '@hono/standard-validator':
-        specifier: ^0.1.5
-        version: 0.1.5(@standard-schema/spec@1.0.0)(hono@4.9.10)
       hono:
         specifier: ^4.9.10
         version: 4.9.10
@@ -1542,6 +1539,7 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.0.0
       hono: 4.9.10
+    optional: true
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
