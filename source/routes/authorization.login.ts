@@ -53,7 +53,6 @@ application.post(
         remoteIp,
         jsonParameters.cloudflareTurnstileToken,
       );
-
       if (!cloudflareTurnstileResponse.success) return context.body(null, 401);
     }
 

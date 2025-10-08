@@ -1,5 +1,10 @@
 import configuration from "../configuration.js";
 
+interface FailedResponse {
+  "error-codes": string[];
+  success: false;
+}
+
 interface SuccessfulResponse {
   "error-codes": string[];
   action: string;
@@ -10,12 +15,7 @@ interface SuccessfulResponse {
   success: true;
 }
 
-interface FailedResponse {
-  "error-codes": string[];
-  success: false;
-}
-
-type Response = SuccessfulResponse | FailedResponse;
+type Response = FailedResponse | SuccessfulResponse;
 
 export async function validateCloudflareTurnstileToken(
   remoteIp: string,
