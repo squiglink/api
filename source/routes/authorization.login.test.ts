@@ -13,7 +13,7 @@ vi.mock("../services/validate_cloudflare_turnstile_token.js");
 describe("POST /authorization/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(sendEmail).mockResolvedValue(true);
+    vi.mocked(sendEmail).mockResolvedValue({ success: true, id: "placeholder" });
   });
 
   it("responds with unauthorized if the user does not exist", async () => {
@@ -27,7 +27,12 @@ describe("POST /authorization/login", () => {
   });
 
   it("responds with unauthorized if sending the email has failed", async () => {
-    vi.mocked(sendEmail).mockRejectedValue(new Error("Whoops!"));
+    vi.mocked(sendEmail).mockResolvedValue({
+      message: "placeholder",
+      name: "placeholder",
+      statusCode: 500,
+      success: false,
+    });
 
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
@@ -43,8 +48,6 @@ describe("POST /authorization/login", () => {
   });
 
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
-    vi.mocked(sendEmail).mockResolvedValue(true);
-
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
     });
@@ -77,7 +80,6 @@ describe("POST /authorization/login", () => {
     });
 
     it("responds with success if the Cloudflare Turnstile token is valid", async () => {
-      vi.mocked(sendEmail).mockResolvedValue(true);
       vi.mocked(validateCloudflareTurnstileToken).mockResolvedValue({
         "error-codes": [],
         action: "",

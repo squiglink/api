@@ -67,24 +67,21 @@ application.post(
     const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
     const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
 
-    return await database.transaction().execute(async (transaction) => {
+    const emailResponse = await sendEmail({
+      body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
+      subject: "Log into Squiglink",
+      to: jsonParameters.email,
+    });
+    if (emailResponse.success === false) return context.body(null, 401);
+
+    await database.transaction().execute(async (transaction) => {
       await transaction
         .insertInto("jwt_magic_link_tokens")
         .values({ token: authToken, user_id: user.id })
         .executeTakeFirstOrThrow();
-
-      try {
-        await sendEmail({
-          body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
-          subject: "Log into Squiglink",
-          to: jsonParameters.email,
-        });
-      } catch {
-        return context.body(null, 401);
-      }
-
-      return context.body(null, 200);
     });
+
+    return context.body(null, 200);
   },
 );
 
