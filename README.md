@@ -32,7 +32,7 @@ Done? Send requests to <http://localhost:3000> or host instances of Lab and Stud
 ## Tips
 
 ```sh
-# Generate the OpenAPI specification
+# Generate the OpenAPI specification.
 docker compose run api pnpm generate-openapi
 
 # Generate type definitions from the database.
