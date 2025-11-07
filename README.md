@@ -4,7 +4,7 @@ The API powering the next generation of Squiglink [Lab](https://github.com/squig
 
 ## Install
 
-1. Install [Docker](https://www.docker.com/) and [Task](https://taskfile.dev/docs/installation).
+1. Install [Docker](https://www.docker.com/) and [Task](https://taskfile.dev).
 
 2. Copy the configuration file:
 
