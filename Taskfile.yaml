@@ -1,0 +1,92 @@
+dotenv:
+  - .env
+
+tasks:
+  check-formatting:
+    desc: Check formatting.
+    cmds:
+      - docker compose run --rm api pnpm prettier --check .
+
+  check-linting:
+    desc: Check linting.
+    cmds:
+      - docker compose run --rm api pnpm oxlint --deny-warnings
+
+  check-tests:
+    desc: Check tests.
+    cmds:
+      - docker compose run --rm api pnpm vitest run
+
+  check-types:
+    desc: Check types.
+    cmds:
+      - docker compose run --rm api pnpm tsc --noEmit
+
+  check:
+    desc: Check everything.
+    cmds:
+      - task: check-formatting
+      - task: check-linting
+      - task: check-tests
+      - task: check-types
+
+  fix-formatting:
+    desc: Fix formatting.
+    cmds:
+      - docker compose run --rm api pnpm prettier --write .
+
+  generate-openapi:
+    desc: Generate the OpenAPI specification.
+    cmds:
+      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
+
+  generate-types:
+    desc: Generate Kysely types from the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely-codegen
+
+  install-dependencies:
+    desc: Install dependencies.
+    cmds:
+      - docker compose run --rm api pnpm install
+
+  list:
+    aliases:
+      - default
+    desc: List available tasks.
+    cmds:
+      - task --list
+
+  migrate-test:
+    desc: Migrate the test database.
+    cmds:
+      - docker compose run
+        --rm
+        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
+        api
+        pnpm kysely migrate:latest
+
+  migrate:
+    desc: Migrate the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely migrate:latest
+
+  seed:
+    desc: Seed the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely seed run
+
+  setup:
+    desc: Setup the application.
+    cmds:
+      - task: install-dependencies
+      - task: migrate
+      - task: migrate-test
+      - task: seed
+
+  start:
+    desc: Start the application.
+    cmds:
+      - docker compose up
+
+version: 3

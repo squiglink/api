@@ -4,4 +4,4 @@ RUN npm install --global pnpm@^10.15.0
 
 WORKDIR /api
 
-CMD ["pnpm", "dev"]
+CMD ["pnpm", "tsx", "watch", "source/index.ts"]

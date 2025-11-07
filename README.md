@@ -4,52 +4,34 @@ The API powering the next generation of Squiglink [Lab](https://github.com/squig
 
 ## Install
 
-```sh
-# Copy the configuration file.
-cp .env.example .env
+1. Install [Docker](https://www.docker.com/) and [Task](https://taskfile.dev/docs/installation).
 
-# Fill in the configuration file.
-edit .env
+2. Copy the configuration file:
 
-# Install dependencies.
-docker compose run api pnpm install
+   ```sh
+   cp .env.example .env
+   ```
 
-# Migrate the database.
-docker compose run api pnpm kysely migrate:latest
+3. Edit the configuration file:
 
-# Migrate the test database (development-only).
-docker compose run api pnpm kysely-test migrate:latest
+   ```sh
+   msedit .env
+   ```
 
-# Seed the database (development-only).
-docker compose run api pnpm kysely seed run
+4. Setup the application:
 
-# Start the containers.
-docker compose up
-```
+   ```sh
+   task setup
+   ```
+
+5. Start the application:
+
+   ```sh
+   task start
+   ```
 
 Done? Send requests to <http://localhost:3000> or host instances of Lab and Studio.
 
 ## Tips
 
-```sh
-# Generate the OpenAPI specification.
-docker compose run api pnpm generate-openapi
-
-# Generate type definitions from the database.
-docker compose run api pnpm kysely-codegen
-
-# Check for linting errors in the code.
-docker compose run api pnpm oxlint --deny-warnings
-
-# Check for formatting errors in the code.
-docker compose run api pnpm prettier --check .
-
-# Fix formatting errors in the code.
-docker compose run api pnpm prettier --write .
-
-# Run tests.
-docker compose run api pnpm test
-
-# Check for typing errors in the code.
-docker compose run api pnpm tsc --noEmit
-```
+Execute `task` in the project folder to list available tasks.

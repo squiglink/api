@@ -1,12 +1,6 @@
 {
   "name": "squiglink-api",
   "type": "module",
-  "scripts": {
-    "dev": "tsx watch source/index.ts",
-    "generate-openapi": "tsx scripts/generate-openapi.ts",
-    "kysely-test": "SQUIGLINK_POSTGRES_DATABASE=\"$SQUIGLINK_POSTGRES_TEST_DATABASE\" kysely",
-    "test": "vitest"
-  },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
     "hono": "^4.10.4",

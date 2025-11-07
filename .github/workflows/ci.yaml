@@ -8,14 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: go-task/setup-task@v1
 
       - run: cp .env.example .env
       - run: export $(sed 's/#.*//' .env)
 
-      - run: docker compose run api pnpm install
-      - run: docker compose run api pnpm kysely-test migrate:latest
+      - run: task install-dependencies
+      - run: task migrate-test
 
-      - run: docker compose run api pnpm oxlint --deny-warnings
-      - run: docker compose run api pnpm prettier --check .
-      - run: docker compose run api pnpm test run
-      - run: docker compose run api pnpm tsc --noEmit
+      - run: task check
