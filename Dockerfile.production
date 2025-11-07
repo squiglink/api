@@ -1,0 +1,29 @@
+# Build
+
+FROM node:24.6-alpine3.22 AS build
+
+RUN npm install --global pnpm@^10.15.0
+
+WORKDIR /api
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY source ./source
+COPY tsconfig.json ./
+RUN pnpm exec tsc
+
+# Run
+
+FROM node:24.6-alpine3.22
+
+RUN npm install --global pnpm@^10.15.0
+
+WORKDIR /api
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
+
+COPY --from=build /api/output ./output
+
+CMD ["node", "output/index.js"]

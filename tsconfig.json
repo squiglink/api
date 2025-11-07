@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
+    "outDir": "output",
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
