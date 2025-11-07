@@ -2,6 +2,14 @@ dotenv:
   - .env
 
 tasks:
+  check:
+    desc: Check everything.
+    cmds:
+      - task: check-formatting
+      - task: check-linting
+      - task: check-tests
+      - task: check-types
+
   check-formatting:
     desc: Check formatting.
     cmds:
@@ -21,14 +29,6 @@ tasks:
     desc: Check types.
     cmds:
       - docker compose run --rm api pnpm tsc --noEmit
-
-  check:
-    desc: Check everything.
-    cmds:
-      - task: check-formatting
-      - task: check-linting
-      - task: check-tests
-      - task: check-types
 
   fix-formatting:
     desc: Fix formatting.
@@ -57,19 +57,19 @@ tasks:
     cmds:
       - task --list
 
-  migrate-test:
-    desc: Migrate the test database.
-    cmds:
-      - docker compose run
-        --rm
-        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
-        api
-        pnpm kysely migrate:latest
-
   migrate:
     desc: Migrate the database.
     cmds:
       - docker compose run --rm api pnpm kysely migrate:latest
+
+  migrate-test:
+    desc: Migrate the test database.
+    cmds:
+      - docker compose run
+        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
+        --rm
+        api
+        pnpm kysely migrate:latest
 
   seed:
     desc: Seed the database.
