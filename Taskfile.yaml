@@ -35,15 +35,15 @@ tasks:
     cmds:
       - docker compose run --rm api pnpm prettier --write .
 
-  generate-openapi:
-    desc: Generate the OpenAPI specification.
-    cmds:
-      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
-
-  generate-types:
+  generate-kysely-types:
     desc: Generate Kysely types from the database.
     cmds:
       - docker compose run --rm api pnpm kysely-codegen
+
+  generate-openapi-specification:
+    desc: Generate the OpenAPI specification.
+    cmds:
+      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
 
   install-dependencies:
     desc: Install dependencies.
