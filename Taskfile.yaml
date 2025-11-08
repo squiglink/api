@@ -30,6 +30,51 @@ tasks:
     cmds:
       - docker compose run --rm api pnpm tsc --noEmit
 
+  database-create:
+    desc: Create the database.
+    cmds:
+      - docker compose run
+        --env PGPASSWORD={{.SQUIGLINK_POSTGRES_PASSWORD}}
+        --rm
+        postgres
+        psql
+        --command="CREATE DATABASE {{.SQUIGLINK_POSTGRES_DATABASE}};"
+        --dbname=postgres
+        --host=postgres
+        --username={{.SQUIGLINK_POSTGRES_USER}}
+
+  database-create-test:
+    desc: Create the test database.
+    cmds:
+      - docker compose run
+        --env PGPASSWORD={{.SQUIGLINK_POSTGRES_PASSWORD}}
+        --rm
+        postgres
+        psql
+        --command="CREATE DATABASE {{.SQUIGLINK_POSTGRES_TEST_DATABASE}};"
+        --dbname=postgres
+        --host=postgres
+        --username={{.SQUIGLINK_POSTGRES_USER}}
+
+  database-migrate:
+    desc: Migrate the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely migrate:latest
+
+  database-migrate-test:
+    desc: Migrate the test database.
+    cmds:
+      - docker compose run
+        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
+        --rm
+        api
+        pnpm kysely migrate:latest
+
+  database-seed:
+    desc: Seed the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely seed run
+
   fix-formatting:
     desc: Fix formatting.
     cmds:
@@ -57,32 +102,15 @@ tasks:
     cmds:
       - task --list
 
-  migrate:
-    desc: Migrate the database.
-    cmds:
-      - docker compose run --rm api pnpm kysely migrate:latest
-
-  migrate-test:
-    desc: Migrate the test database.
-    cmds:
-      - docker compose run
-        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
-        --rm
-        api
-        pnpm kysely migrate:latest
-
-  seed:
-    desc: Seed the database.
-    cmds:
-      - docker compose run --rm api pnpm kysely seed run
-
   setup:
     desc: Setup the application.
     cmds:
       - task: install-dependencies
-      - task: migrate
-      - task: migrate-test
-      - task: seed
+      - task: database-create
+      - task: database-create-test
+      - task: database-migrate
+      - task: database-migrate-test
+      - task: database-seed
 
   start:
     desc: Start the application.
