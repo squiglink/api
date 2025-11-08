@@ -84,6 +84,12 @@ tasks:
     desc: Generate Kysely types from the database.
     cmds:
       - docker compose run --rm api pnpm kysely-codegen
+      - docker compose run --rm
+        api
+        sed
+        --in-place 's/export interface DB/export interface Database/'
+        source/types.ts
+      - docker compose run --rm api pnpm prettier --write source/types.ts
 
   generate-openapi-specification:
     desc: Generate the OpenAPI specification.
