@@ -1,7 +1,7 @@
 import zod from "zod";
 import { Hono } from "hono";
 import { database } from "../database.js";
-import { validator } from "hono-openapi";
+import { describeRoute, validator } from "hono-openapi";
 
 const application = new Hono();
 
@@ -9,8 +9,17 @@ const paramSchema = zod.object({
   file_name: zod.string().regex(/^.* (L|R)\.txt$/),
 });
 
+const routeDescription = describeRoute({
+  responses: {
+    200: { description: "OK" },
+    400: { description: "Bad Request" },
+    404: { description: "Not Found" },
+  },
+});
+
 application.get(
   "/legacy/data/:file_name{.* (L|R).txt}",
+  routeDescription,
   validator("param", paramSchema),
   async (context) => {
     const paramParameters = context.req.valid("param");

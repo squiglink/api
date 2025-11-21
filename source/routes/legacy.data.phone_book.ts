@@ -1,7 +1,7 @@
 import zod from "zod";
 import { Hono } from "hono";
 import { database } from "../database.js";
-import { validator } from "hono-openapi";
+import { describeRoute, resolver, validator } from "hono-openapi";
 
 const application = new Hono();
 
@@ -9,8 +9,38 @@ const querySchema = zod.object({
   database_id: zod.string(),
 });
 
+const responseSchema = zod.array(
+  zod.object({
+    name: zod.string(),
+    phones: zod.array(
+      zod.object({
+        name: zod.string(),
+        file: zod.array(zod.string()),
+        suffix: zod.array(zod.string()),
+        reviewScore: zod.string().optional(),
+        reviewLink: zod.string().optional(),
+        shopLink: zod.string().optional(),
+      }),
+    ),
+  }),
+);
+
+const routeDescription = describeRoute({
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: resolver(responseSchema),
+        },
+      },
+      description: "OK",
+    },
+  },
+});
+
 application.get(
   "/legacy/data/phone_book.json",
+  routeDescription,
   validator("query", querySchema),
   async (context) => {
     const queryParameters = context.req.valid("query");
