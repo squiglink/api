@@ -1,4 +1,4 @@
-export interface Point {
+interface Point {
   frequency_hz: string;
   phase_degrees?: string;
   spl_db: string;
