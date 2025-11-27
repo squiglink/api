@@ -1,5 +1,10 @@
 import { defineConfig } from "kysely-ctl";
-import { database } from "./source/database.js";
+
+const { database } = await import(
+  process.env.SQUIGLINK_API_ENVIRONMENT === "production"
+    ? "./output/database.js"
+    : "./source/database.js"
+);
 
 export default defineConfig({
   kysely: database,
