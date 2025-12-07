@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { database, touch } from "../database.js";
 import { describeRoute, resolver, validator } from "hono-openapi";
 import { parseMeasurement } from "../services/parse_measurement.js";
-import { verifyDatabaseUser } from "../services/verify_database_user.js";
+import { validateOwner } from "../services/validate_owner.js";
 
 const application = new Hono<{
   Variables: {
@@ -69,13 +69,9 @@ application.patch(
       .where("id", "=", paramParameters.id)
       .executeTakeFirst();
     if (!measurement) return context.body(null, 404);
-    if (
-      !(await verifyDatabaseUser(
-        context.get("currentUser").id,
-        database,
-        jsonParameters.database_id || measurement.database_id,
-      ))
-    ) {
+
+    const databaseId = jsonParameters.database_id || measurement.database_id;
+    if (!(await validateOwner(context.get("currentUser").id, database, databaseId, "databases"))) {
       return context.body(null, 401);
     }
 

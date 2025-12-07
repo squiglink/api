@@ -28,7 +28,7 @@ describe("PATCH /measurements/:id", () => {
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
-      label: "Label",
+      label: "placeholder",
       left_channel: "1.2, 3.4\n5.6, 7.8\n",
       model_id: modelId,
       right_channel: "2.3, 4.5\n6.7, 8.9\n",
@@ -62,7 +62,7 @@ describe("PATCH /measurements/:id", () => {
     const body = {
       database_id: databaseId,
       kind: "frequency_response",
-      label: "Label",
+      label: "placeholder",
       left_channel: "1.2, 3.4\n5.6, 7.8\n",
       model_id: modelId,
       right_channel: "2.3, 4.5\n6.7, 8.9\n",

@@ -2,8 +2,13 @@ import zod from "zod";
 import { Hono } from "hono";
 import { database, touch } from "../database.js";
 import { describeRoute, resolver, validator } from "hono-openapi";
+import { validateOwner } from "../services/validate_owner.js";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: {
+    currentUser: { id: string };
+  };
+}>();
 
 const jsonSchema = zod.object({
   model_id: zod.string().optional(),
@@ -37,6 +42,8 @@ const routeDescription = describeRoute({
       },
       description: "OK",
     },
+    401: { description: "Unauthorized" },
+    404: { description: "Not Found" },
   },
 });
 
@@ -48,6 +55,24 @@ application.patch(
   async (context) => {
     const jsonParameters = context.req.valid("json");
     const paramParameters = context.req.valid("param");
+
+    const evaluation = await database
+      .selectFrom("evaluations")
+      .select("user_id")
+      .where("id", "=", paramParameters.id)
+      .executeTakeFirst();
+    if (!evaluation) return context.body(null, 404);
+
+    if (
+      !(await validateOwner(
+        context.get("currentUser").id,
+        database,
+        paramParameters.id,
+        "evaluations",
+      ))
+    ) {
+      return context.body(null, 401);
+    }
 
     const result = await database
       .updateTable("evaluations")

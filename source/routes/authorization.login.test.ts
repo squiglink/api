@@ -82,10 +82,10 @@ describe("POST /authorization/login", () => {
     it("responds with success if the Cloudflare Turnstile token is valid", async () => {
       vi.mocked(validateCloudflareTurnstileToken).mockResolvedValue({
         "error-codes": [],
-        action: "",
-        cdata: "",
-        challenge_ts: "",
-        hostname: "",
+        action: "placeholder",
+        cdata: "placeholder",
+        challenge_ts: "placeholder",
+        hostname: "placeholder",
         metadata: {},
         success: true,
       });

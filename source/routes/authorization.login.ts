@@ -47,7 +47,7 @@ application.post(
       if (!jsonParameters.cloudflareTurnstileToken) return context.body(null, 401);
 
       const remoteIp = headerParameters["cf-connecting-ip"] || headerParameters["x-forwarded-for"];
-      if (!remoteIp) throw new Error("Reached unreachable");
+      if (!remoteIp) throw new Error("Reached unreachable.");
 
       const cloudflareTurnstileResponse = await validateCloudflareTurnstileToken(
         remoteIp,

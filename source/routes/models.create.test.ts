@@ -16,7 +16,7 @@ describe("POST /models", () => {
     const { accessToken } = await signIn(userId);
     const body = {
       brand_id: brandId,
-      name: "Model",
+      name: "placeholder",
     };
 
     const response = await application.request("/models", {

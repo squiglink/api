@@ -6,7 +6,7 @@ export async function createJwtToken(expiresIn: number): Promise<string> {
   const expirationDate = new Date(currentDate.getTime() + expiresIn);
 
   if (expirationDate < currentDate) {
-    throw new Error("Expiration date must be in the future");
+    throw new Error("The expiration date must be in the future.");
   }
 
   const token = await sign(

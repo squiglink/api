@@ -1,6 +1,5 @@
 import { authorizationMiddleware } from "./authorization_middleware.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { faker } from "@faker-js/faker";
 import * as findUserModule from "../services/find_user_by_jwt_token.js";
 
 vi.mock("../services/find_user_by_jwt_token.js");
@@ -16,18 +15,13 @@ describe(".authorizationMiddleware", () => {
       set: vi.fn(),
     };
     const currentUser = {
-      created_at: faker.date.anytime(),
-      display_name: faker.internet.displayName(),
-      email: faker.internet.email(),
-      id: faker.string.uuid(),
-      scoring_system: faker.helpers.arrayElement([
-        "five_star",
-        "hundred_point",
-        "ten_point",
-        "ten_point_decimal",
-      ]),
-      updated_at: faker.date.anytime(),
-      username: faker.internet.username(),
+      created_at: new Date(),
+      display_name: "placeholder",
+      email: "placeholder",
+      id: "placeholder",
+      scoring_system: "five_star" as const,
+      updated_at: new Date(),
+      username: "placeholder",
     };
     vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(currentUser);
 
@@ -44,7 +38,7 @@ describe(".authorizationMiddleware", () => {
     };
 
     await authorizationMiddleware(context, async () => {
-      throw new Error("Reached unreachable");
+      throw new Error("Reached unreachable.");
     });
 
     expect(body).toHaveBeenCalledWith(null, 401);
@@ -59,7 +53,7 @@ describe(".authorizationMiddleware", () => {
     vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(null);
 
     await authorizationMiddleware(context, async () => {
-      throw new Error("Reached unreachable");
+      throw new Error("Reached unreachable.");
     });
 
     expect(body).toHaveBeenCalledWith(null, 401);

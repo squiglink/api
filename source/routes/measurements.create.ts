@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { database } from "../database.js";
 import { describeRoute, resolver, validator } from "hono-openapi";
 import { parseMeasurement } from "../services/parse_measurement.js";
-import { verifyDatabaseUser } from "../services/verify_database_user.js";
+import { validateOwner } from "../services/validate_owner.js";
 
 const application = new Hono<{
   Variables: {
@@ -61,10 +61,11 @@ application.post(
     const jsonParameters = context.req.valid("json");
 
     if (
-      !(await verifyDatabaseUser(
+      !(await validateOwner(
         context.get("currentUser").id,
         database,
         jsonParameters.database_id,
+        "databases",
       ))
     ) {
       return context.body(null, 401);

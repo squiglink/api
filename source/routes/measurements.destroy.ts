@@ -2,7 +2,7 @@ import zod from "zod";
 import { Hono } from "hono";
 import { database } from "../database.js";
 import { describeRoute, validator } from "hono-openapi";
-import { verifyDatabaseUser } from "../services/verify_database_user.js";
+import { validateOwner } from "../services/validate_owner.js";
 
 const application = new Hono<{
   Variables: {
@@ -37,7 +37,12 @@ application.delete(
     if (!measurement) return context.body(null, 404);
 
     if (
-      !(await verifyDatabaseUser(context.get("currentUser").id, database, measurement.database_id))
+      !(await validateOwner(
+        context.get("currentUser").id,
+        database,
+        measurement.database_id,
+        "databases",
+      ))
     ) {
       return context.body(null, 401);
     }

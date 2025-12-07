@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("POST /brands", () => {
   it("responds with success and creates a brand", async () => {
     const { accessToken } = await signIn();
-    const body = { name: "Brand" };
+    const body = { name: "placeholder" };
 
     const response = await application.request("/brands", {
       body: JSON.stringify(body),
