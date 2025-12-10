@@ -3,7 +3,7 @@
   "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.19.7",
-    "hono": "^4.10.7",
+    "hono": "^4.10.8",
     "hono-openapi": "^1.0.8",
     "kysely": "^0.28.8",
     "kysely-ctl": "^0.19.0",
