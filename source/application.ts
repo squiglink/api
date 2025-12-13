@@ -1,6 +1,7 @@
+import { Hono } from "hono";
 import { authorizationMiddleware } from "./middlewares/authorization_middleware.js";
 import { cors } from "hono/cors";
-import { Hono } from "hono";
+import { loggingMiddleware } from "./middlewares/logging_middleware.js";
 import authorizationLogin from "./routes/authorization.login.js";
 import authorizationRefresh from "./routes/authorization.refresh.js";
 import authorizationVerify from "./routes/authorization.verify.js";
@@ -24,6 +25,7 @@ import modelsCreate from "./routes/models.create.js";
 const application = new Hono();
 
 application.use("/*", cors());
+application.use("/*", loggingMiddleware);
 application.route("/", authorizationLogin);
 application.route("/", authorizationRefresh);
 application.route("/", authorizationVerify);
