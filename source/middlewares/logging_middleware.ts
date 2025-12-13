@@ -16,33 +16,20 @@ export const loggingMiddleware = createMiddleware(async (context, next) => {
   const timestamp = new Date().toISOString();
   const uuid = randomUUID();
 
-  const log = (message: string, ...args: unknown[]) => {
-    console.log(`[${uuid}] [${timestamp}] ${message}`, ...args);
+  const log = (message: string) => {
+    console.log(`[${uuid}] [${timestamp}] ${message}`);
   };
 
-  log(`${context.req.method} ${context.req.url}`);
-  log("Request headers:", JSON.stringify(context.req.header()));
-
-  const requestBody = await context.req.text();
-  if (requestBody) {
-    try {
-      log("Request body:", JSON.stringify(JSON.parse(requestBody)));
-    } catch {
-      log("Request body:", requestBody);
-    }
-  }
+  log(`Request body: \`${(await context.req.text()) || null}\`.`);
+  log(`Request headers: \`${JSON.stringify(context.req.header())}\`.`);
+  log(`Request method: \`${context.req.method}\`.`);
+  log(`Request URL: \`${context.req.url}\`.`);
 
   await next();
 
-  log(`${context.req.method} ${context.req.url} ${context.res.status}`);
-  log("Response headers:", JSON.stringify(Object.fromEntries(context.res.headers.entries())));
-
-  const responseBody = await context.res.clone().text();
-  if (responseBody) {
-    try {
-      log("Response body:", JSON.stringify(JSON.parse(responseBody)));
-    } catch {
-      log("Response body:", responseBody);
-    }
-  }
+  log(`Response body: \`${(await context.res.clone().text()) || null}\`.`);
+  log(
+    `Response headers: \`${JSON.stringify(Object.fromEntries(context.res.headers.entries()))}\`.`,
+  );
+  log(`Response status: \`${context.res.status}\`.`);
 });

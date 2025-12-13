@@ -30,18 +30,15 @@ describe("loggingMiddleware", () => {
     });
 
     expect(consoleLogSpy.mock.calls[0][0]).toMatch(
-      /\[.*\] \[.*\] POST http:\/\/localhost\/placeholder/,
+      /\[.*\] \[.*\] Request body: `{"key":"value"}`\./,
     );
-    expect(consoleLogSpy.mock.calls[1][0]).toMatch(/\[.*\] \[.*\] Request headers:/);
-    expect(consoleLogSpy.mock.calls[1][1]).toMatch(/\{.*\}/);
-    expect(consoleLogSpy.mock.calls[2][0]).toMatch(/\[.*\] \[.*\] Request body:/);
-    expect(consoleLogSpy.mock.calls[2][1]).toBe('{"key":"value"}');
+    expect(consoleLogSpy.mock.calls[1][0]).toMatch(/\[.*\] \[.*\] Request headers: `\{.*\}`\./);
+    expect(consoleLogSpy.mock.calls[2][0]).toMatch(/\[.*\] \[.*\] Request method: `POST`\./);
     expect(consoleLogSpy.mock.calls[3][0]).toMatch(
-      /\[.*\] \[.*\] POST http:\/\/localhost\/placeholder 200/,
+      /\[.*\] \[.*\] Request URL: `http:\/\/localhost\/placeholder`\./,
     );
-    expect(consoleLogSpy.mock.calls[4][0]).toMatch(/\[.*\] \[.*\] Response headers:/);
-    expect(consoleLogSpy.mock.calls[4][1]).toMatch(/\{.*\}/);
-    expect(consoleLogSpy.mock.calls[5][0]).toMatch(/\[.*\] \[.*\] Response body:/);
-    expect(consoleLogSpy.mock.calls[5][1]).toBe("placeholder");
+    expect(consoleLogSpy.mock.calls[4][0]).toMatch(/\[.*\] \[.*\] Response body: `placeholder`\./);
+    expect(consoleLogSpy.mock.calls[5][0]).toMatch(/\[.*\] \[.*\] Response headers: `\{.*\}`\./);
+    expect(consoleLogSpy.mock.calls[6][0]).toMatch(/\[.*\] \[.*\] Response status: `200`\./);
   });
 });
