@@ -13,22 +13,22 @@ tasks:
   check-formatting:
     desc: Check formatting.
     cmds:
-      - docker compose run --rm api pnpm prettier --check .
+      - docker compose run --rm api pnpm prettier --check . {{.CLI_ARGS}}
 
   check-linting:
     desc: Check linting.
     cmds:
-      - docker compose run --rm api pnpm oxlint --deny-warnings
+      - docker compose run --rm api pnpm oxlint --deny-warnings {{.CLI_ARGS}}
 
   check-tests:
     desc: Check tests.
     cmds:
-      - docker compose run --rm api pnpm vitest run
+      - docker compose run --rm api pnpm vitest run {{.CLI_ARGS}}
 
   check-types:
     desc: Check types.
     cmds:
-      - docker compose run --rm api pnpm tsc --noEmit
+      - docker compose run --rm api pnpm tsc --noEmit {{.CLI_ARGS}}
 
   database-create:
     desc: Create the database.
@@ -78,7 +78,7 @@ tasks:
   fix-formatting:
     desc: Fix formatting.
     cmds:
-      - docker compose run --rm api pnpm prettier --write .
+      - docker compose run --rm api pnpm prettier --write . {{.CLI_ARGS}}
 
   generate-kysely-types:
     desc: Generate Kysely types from the database.
