@@ -33,7 +33,7 @@ export async function validateCloudflareTurnstileToken(
     };
   }
 
-  const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+  const request = {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -43,11 +43,16 @@ export async function validateCloudflareTurnstileToken(
       response: token,
       secret: configuration.cloudflareTurnstileSecret,
     }),
-  });
+  };
 
-  console.log(`Sent a Cloudflare Turnstile validation request: \`${JSON.stringify(response)}\`.`);
+  const response = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    request,
+  );
 
-  const result = (await response.json()) as Response;
+  console.log(
+    `Validated Cloudflare Turnstile, request: \`${JSON.stringify(request)}\`, response: \`${JSON.stringify(response)}\`.`,
+  );
 
-  return result;
+  return (await response.json()) as Response;
 }

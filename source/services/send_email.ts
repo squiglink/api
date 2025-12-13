@@ -26,25 +26,29 @@ export async function sendEmail(keywordArguments: {
     };
   }
 
-  const options = {
-    from: configuration.emailFrom,
-    html: keywordArguments.body,
-    subject: keywordArguments.subject,
-    to: [keywordArguments.to],
-  };
-
-  const response = await fetch("https://api.resend.com/emails", {
+  const request = {
     method: "POST",
     headers: {
       Authorization: `Bearer ${configuration.resendApiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(options),
-  });
+    body: JSON.stringify({
+      from: configuration.emailFrom,
+      html: keywordArguments.body,
+      subject: keywordArguments.subject,
+      to: [keywordArguments.to],
+    }),
+  };
+
+  const response = await fetch("https://api.resend.com/emails", request);
+
+  console.log(
+    `Sent an email, request: \`${JSON.stringify(request)}\`, response: \`${JSON.stringify(response)}\`.`,
+  );
+
   const json = await response.json();
 
   if (!response.ok) {
-    console.log(`Failed to send an email: \`${JSON.stringify(options)}\`.`);
     return {
       message: json.message,
       name: json.name,
@@ -53,7 +57,6 @@ export async function sendEmail(keywordArguments: {
     };
   }
 
-  console.log(`Sent an email: \`${JSON.stringify(options)}\`.`);
   return {
     id: json.id,
     success: true,
