@@ -25,7 +25,7 @@ services:
       retries: 5
       test: ["CMD", "pg_isready", "-U", "${SQUIGLINK_POSTGRES_USER}"]
       timeout: 5s
-    image: postgres:17.6-alpine3.22
+    image: postgres:18.1-alpine3.23
     networks:
       - squiglink
     ports:
