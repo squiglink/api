@@ -13,7 +13,7 @@ tasks:
   check-formatting:
     desc: Check formatting.
     cmds:
-      - docker compose run --rm api pnpm prettier --check . {{.CLI_ARGS}}
+      - docker compose run --rm api pnpm oxfmt --check {{.CLI_ARGS}}
 
   check-linting:
     desc: Check linting.
@@ -78,7 +78,7 @@ tasks:
   fix-formatting:
     desc: Fix formatting.
     cmds:
-      - docker compose run --rm api pnpm prettier --write . {{.CLI_ARGS}}
+      - docker compose run --rm api pnpm oxfmt --write {{.CLI_ARGS}}
 
   generate-kysely-types:
     desc: Generate Kysely types from the database.
@@ -89,7 +89,9 @@ tasks:
         sed
         --in-place 's/export interface DB/export interface Database/'
         source/types.ts
-      - docker compose run --rm api pnpm prettier --write source/types.ts
+      - task: fix-formatting
+        vars:
+          CLI_ARGS: source/types.ts
 
   generate-openapi-specification:
     desc: Generate the OpenAPI specification.
