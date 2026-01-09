@@ -2,7 +2,7 @@
   "name": "squiglink-api",
   "type": "module",
   "dependencies": {
-    "@hono/node-server": "^1.19.7",
+    "@hono/node-server": "^1.19.8",
     "@hono/standard-validator": "^0.2.1",
     "hono": "^4.11.3",
     "hono-openapi": "^1.1.2",
