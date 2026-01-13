@@ -15,6 +15,7 @@ export async function createJwtToken(expiresIn: number): Promise<string> {
       exp: Math.floor(expirationDate.getTime() / 1000),
     },
     configuration.jwtSecret,
+    "HS256",
   );
 
   return token;
