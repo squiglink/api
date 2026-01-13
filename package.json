@@ -3,7 +3,7 @@
   "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.19.8",
-    "@hono/standard-validator": "^0.2.1",
+    "@hono/standard-validator": "^0.2.2",
     "hono": "^4.11.4",
     "hono-openapi": "^1.1.2",
     "kysely": "^0.28.9",
