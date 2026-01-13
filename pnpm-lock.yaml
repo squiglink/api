@@ -24,8 +24,8 @@ importers:
         specifier: ^0.28.9
         version: 0.28.9
       kysely-ctl:
-        specifier: ^0.19.0
-        version: 0.19.0(kysely@0.28.9)(typescript@5.9.3)
+        specifier: ^0.20.0
+        version: 0.20.0(kysely@0.28.9)(typescript@5.9.3)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -846,8 +846,8 @@ packages:
       tedious:
         optional: true
 
-  kysely-ctl@0.19.0:
-    resolution: {integrity: sha512-89hzOd1cy/H063jB2E9wYHq+uKYpaHv6Mb5RiNFpRZL6BYCah9ncsdl3x5b52eirxry4UyWSmGNN3sFv+gK+ig==}
+  kysely-ctl@0.20.0:
+    resolution: {integrity: sha512-JoUBvW0uaEvM7BbR/JKaePvjQqZ8sHGOgy1VSESCjCIh5tIjP6pCuSz/u35hWpZnWrqeonqTjndW7xC7UNzqPA==}
     engines: {node: '>=20'}
     hasBin: true
     peerDependencies:
@@ -1795,7 +1795,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  kysely-ctl@0.19.0(kysely@0.28.9)(typescript@5.9.3):
+  kysely-ctl@0.20.0(kysely@0.28.9)(typescript@5.9.3):
     dependencies:
       c12: 3.3.3
       citty: 0.1.6
