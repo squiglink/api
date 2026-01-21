@@ -8,7 +8,7 @@
     "hono-openapi": "^1.1.2",
     "kysely": "^0.28.10",
     "kysely-ctl": "^0.20.0",
-    "pg": "^8.17.1",
+    "pg": "^8.17.2",
     "zod": "^4.3.5"
   },
   "devDependencies": {
