@@ -4,7 +4,7 @@
   "dependencies": {
     "@hono/node-server": "^1.19.9",
     "@hono/standard-validator": "^0.2.2",
-    "hono": "^4.11.5",
+    "hono": "^4.11.6",
     "hono-openapi": "^1.1.2",
     "kysely": "^0.28.10",
     "kysely-ctl": "^0.20.0",
