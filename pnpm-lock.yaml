@@ -656,8 +656,8 @@ packages:
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
 
-  diff@3.5.0:
-    resolution: {integrity: sha512-A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==}
+  diff@3.5.1:
+    resolution: {integrity: sha512-Z3u54A8qGyqFOSr2pk0ijYs8mOE9Qz8kTvtKeBI+upoG9j04Sq+oI7W8zAJiQybDcESET8/uIdHzs0p3k4fZlw==}
     engines: {node: '>=0.3.1'}
 
   dotenv-expand@12.0.3:
@@ -1627,7 +1627,7 @@ snapshots:
 
   destr@2.0.5: {}
 
-  diff@3.5.0: {}
+  diff@3.5.1: {}
 
   dotenv-expand@12.0.3:
     dependencies:
@@ -1715,7 +1715,7 @@ snapshots:
   git-diff@2.0.6:
     dependencies:
       chalk: 2.4.2
-      diff: 3.5.0
+      diff: 3.5.1
       loglevel: 1.9.2
       shelljs: 0.8.5
       shelljs.exec: 1.1.8
