@@ -9,7 +9,7 @@ interface FailedResponse {
 
 interface SuccessfulResponse {
   id: string;
-  success: true;
+  success: boolean;
 }
 
 type Response = FailedResponse | SuccessfulResponse;
@@ -19,13 +19,6 @@ export async function sendEmail(keywordArguments: {
   subject: string;
   body: string;
 }): Promise<Response> {
-  if (configuration.apiEnvironment !== "production") {
-    return {
-      id: "placeholder",
-      success: true,
-    };
-  }
-
   const request = {
     method: "POST",
     headers: {
@@ -40,25 +33,35 @@ export async function sendEmail(keywordArguments: {
     }),
   };
 
-  const response = await fetch("https://api.resend.com/emails", request);
+  let response: Response;
+
+  if (configuration.apiEnvironment !== "production") {
+    response = {
+      id: "placeholder",
+      success: true,
+    };
+  } else {
+    const fetchResponse = await fetch("https://api.resend.com/emails", request);
+    const json = await fetchResponse.json();
+
+    if (!fetchResponse.ok) {
+      response = {
+        message: json.message,
+        name: json.name,
+        statusCode: fetchResponse.status,
+        success: false,
+      };
+    } else {
+      response = {
+        id: json.id,
+        success: true,
+      };
+    }
+  }
 
   console.log(
     `Sent an email, request: \`${JSON.stringify(request)}\`, response: \`${JSON.stringify(response)}\`.`,
   );
 
-  const json = await response.json();
-
-  if (!response.ok) {
-    return {
-      message: json.message,
-      name: json.name,
-      statusCode: response.status,
-      success: false,
-    };
-  }
-
-  return {
-    id: json.id,
-    success: true,
-  };
+  return response;
 }
