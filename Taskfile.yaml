@@ -56,31 +56,27 @@ tasks:
         --host=postgres
         --username={{.SQUIGLINK_POSTGRES_USER}}
 
-  database-migrate:
-    desc: Migrate the database.
-    cmds:
-      - docker compose run --rm api pnpm kysely migrate:latest
-
-  database-migrate-test:
-    desc: Migrate the test database.
-    cmds:
-      - docker compose run
-        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
-        --rm
-        api
-        pnpm kysely migrate:latest
-
-  database-seed:
-    desc: Seed the database.
-    cmds:
-      - docker compose run --rm api pnpm kysely seed run
-
   fix-formatting:
     desc: Fix formatting.
     cmds:
       - docker compose run --rm api pnpm oxfmt --write {{.CLI_ARGS}}
 
-  generate-kysely-types:
+  generate-openapi-specification:
+    desc: Generate the OpenAPI specification.
+    cmds:
+      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
+
+  install-dependencies:
+    desc: Install dependencies.
+    cmds:
+      - docker compose run --rm api pnpm install
+
+  kysely:
+    desc: Execute a Kysely command against the database.
+    cmds:
+      - docker compose run --rm api pnpm kysely {{.CLI_ARGS}}
+
+  kysely-generate-types:
     desc: Generate Kysely types from the database.
     cmds:
       - docker compose run --rm api pnpm kysely-codegen
@@ -93,15 +89,14 @@ tasks:
         vars:
           CLI_ARGS: source/types.ts
 
-  generate-openapi-specification:
-    desc: Generate the OpenAPI specification.
+  kysely-test:
+    desc: Execute a Kysely command against the test database.
     cmds:
-      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
-
-  install-dependencies:
-    desc: Install dependencies.
-    cmds:
-      - docker compose run --rm api pnpm install
+      - docker compose run
+        --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
+        --rm
+        api
+        pnpm kysely {{.CLI_ARGS}}
 
   list:
     aliases:
@@ -116,9 +111,15 @@ tasks:
       - task: install-dependencies
       - task: database-create
       - task: database-create-test
-      - task: database-migrate
-      - task: database-migrate-test
-      - task: database-seed
+      - task: kysely
+        vars:
+          CLI_ARGS: migrate:latest
+      - task: kysely-test
+        vars:
+          CLI_ARGS: migrate:latest
+      - task: kysely
+        vars:
+          CLI_ARGS: seed run
 
   start:
     desc: Start the application.

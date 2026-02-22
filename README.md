@@ -4,6 +4,8 @@ The API powering the next generation of Squiglink [Lab](https://github.com/squig
 
 ## Install
 
+### Development
+
 1. Install [Docker](https://www.docker.com/) and [Task](https://taskfile.dev).
 
 2. Copy the configuration file:
@@ -30,8 +32,42 @@ The API powering the next generation of Squiglink [Lab](https://github.com/squig
    task start
    ```
 
-Done? Send requests to <http://localhost:3000> or host instances of Lab and Studio.
+Done?:
 
-## Tips
+- Execute `task` to list available tasks.
+- Send requests to <http://localhost:3000> or host instances of Lab and Studio.
 
-Execute `task` in the project folder to list available tasks.
+### Production
+
+1. Install [Docker](https://www.docker.com/).
+
+2. Fetch the required files:
+
+   ```sh
+   curl -o .env https://raw.githubusercontent.com/squiglink/api/main/.env.example
+   curl -o compose.yaml https://raw.githubusercontent.com/squiglink/api/main/compose.production.yaml
+   ```
+
+3. Edit the configuration file:
+
+   ```sh
+   msedit .env
+   ```
+
+4. Create and migrate the database:
+
+   ```sh
+   docker compose run --rm api task database-create
+   docker compose run --rm api task kysely -- migrate:latest
+   ```
+
+5. Start the application:
+
+   ```sh
+   docker compose up --detach
+   ```
+
+Done?:
+
+- Execute `docker compose run --rm api task` to list available tasks.
+- Send requests to <http://localhost:3000> or host instances of Lab and Studio.

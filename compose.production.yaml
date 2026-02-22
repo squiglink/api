@@ -1,24 +1,21 @@
-networks:
-  squiglink:
-    name: squiglink
-
 services:
   api:
-    build:
-      context: .
-      target: development
     depends_on:
       postgres:
         condition: service_healthy
     env_file:
       - .env
-    networks:
-      - squiglink
+    environment:
+      SQUIGLINK_API_ENVIRONMENT: production
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ["CMD-SHELL", "wget --quiet --spider http://127.0.0.1:3000/health"]
+      timeout: 5s
+    image: ghcr.io/squiglink/api:latest
     ports:
       - 3000:3000
-    volumes:
-      - ./node_modules:/api/node_modules
-      - .:/api
+    restart: always
 
   postgres:
     env_file:
@@ -31,8 +28,9 @@ services:
       retries: 5
       test: ["CMD-SHELL", "pg_isready -U ${SQUIGLINK_POSTGRES_USER}"]
       timeout: 5s
-    image: postgres:18.1-alpine3.23
-    networks:
-      - squiglink
+    image: postgres:18.1-alpine
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
+    restart: always
+    volumes:
+      - ./data/postgres:/var/lib/postgresql
