@@ -4,7 +4,7 @@ FROM node:25-alpine3.23 AS base
 
 RUN npm install --global pnpm@^10.27.0
 
-WORKDIR /api
+WORKDIR /server
 
 # Build
 
@@ -33,7 +33,7 @@ RUN apk add --no-cache go-task-task postgresql-client
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
-COPY --from=build /api/output ./output
+COPY --from=build /server/output ./output
 COPY kysely.config.ts ./
 COPY Taskfile.production.yaml ./Taskfile.yaml
 

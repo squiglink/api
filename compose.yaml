@@ -3,23 +3,6 @@ networks:
     name: squiglink
 
 services:
-  api:
-    build:
-      context: .
-      target: development
-    depends_on:
-      postgres:
-        condition: service_healthy
-    env_file:
-      - .env
-    networks:
-      - squiglink
-    ports:
-      - 3000:3000
-    volumes:
-      - ./node_modules:/api/node_modules
-      - .:/api
-
   postgres:
     env_file:
       - .env
@@ -36,3 +19,20 @@ services:
       - squiglink
     ports:
       - 5432:5432
+
+  server:
+    build:
+      context: .
+      target: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    networks:
+      - squiglink
+    ports:
+      - 3000:3000
+    volumes:
+      - ./node_modules:/server/node_modules
+      - .:/server

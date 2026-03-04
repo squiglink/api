@@ -5,16 +5,16 @@ import configuration from "../configuration.js";
 
 describe("loggingMiddleware", () => {
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;
-  let originalApiEnvironment: string;
+  let originalServerEnvironment: string;
 
   beforeEach(() => {
-    originalApiEnvironment = configuration.apiEnvironment;
-    configuration.apiEnvironment = "development";
+    originalServerEnvironment = configuration.serverEnvironment;
+    configuration.serverEnvironment = "development";
     consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    configuration.apiEnvironment = originalApiEnvironment;
+    configuration.serverEnvironment = originalServerEnvironment;
     consoleLogSpy.mockRestore();
   });
 

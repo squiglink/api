@@ -13,22 +13,22 @@ tasks:
   check-formatting:
     desc: Check formatting.
     cmds:
-      - docker compose run --rm api pnpm oxfmt --check {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm oxfmt --check {{.CLI_ARGS}}
 
   check-linting:
     desc: Check linting.
     cmds:
-      - docker compose run --rm api pnpm oxlint --deny-warnings {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm oxlint --deny-warnings {{.CLI_ARGS}}
 
   check-tests:
     desc: Check tests.
     cmds:
-      - docker compose run --rm api pnpm vitest run {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm vitest run {{.CLI_ARGS}}
 
   check-types:
     desc: Check types.
     cmds:
-      - docker compose run --rm api pnpm tsc --noEmit {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm tsc --noEmit {{.CLI_ARGS}}
 
   database-create:
     desc: Create the database.
@@ -59,29 +59,29 @@ tasks:
   fix-formatting:
     desc: Fix formatting.
     cmds:
-      - docker compose run --rm api pnpm oxfmt --write {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm oxfmt --write {{.CLI_ARGS}}
 
   generate-openapi-specification:
     desc: Generate the OpenAPI specification.
     cmds:
-      - docker compose run --rm api pnpm tsx scripts/generate-openapi.ts
+      - docker compose run --rm server pnpm tsx scripts/generate-openapi.ts
 
   install-dependencies:
     desc: Install dependencies.
     cmds:
-      - docker compose run --rm api pnpm install
+      - docker compose run --rm server pnpm install
 
   kysely:
     desc: Execute a Kysely command against the database.
     cmds:
-      - docker compose run --rm api pnpm kysely {{.CLI_ARGS}}
+      - docker compose run --rm server pnpm kysely {{.CLI_ARGS}}
 
   kysely-generate-types:
     desc: Generate Kysely types from the database.
     cmds:
-      - docker compose run --rm api pnpm kysely-codegen
+      - docker compose run --rm server pnpm kysely-codegen
       - docker compose run --rm
-        api
+        server
         sed
         --in-place 's/export interface DB/export interface Database/'
         source/types.ts
@@ -95,7 +95,7 @@ tasks:
       - docker compose run
         --env SQUIGLINK_POSTGRES_DATABASE="{{.SQUIGLINK_POSTGRES_TEST_DATABASE}}"
         --rm
-        api
+        server
         pnpm kysely {{.CLI_ARGS}}
 
   list:

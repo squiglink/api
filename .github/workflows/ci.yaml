@@ -11,8 +11,8 @@ jobs:
       - run: cp .env.example .env
       - run: docker build --tag ghcr.io/${{ github.repository }}:latest --target production .
       - run: docker compose --file compose.production.yaml up postgres --wait
-      - run: docker compose --file compose.production.yaml run --rm api task database-create
-      - run: docker compose --file compose.production.yaml run --rm api task kysely -- migrate:latest
+      - run: docker compose --file compose.production.yaml run --rm server task database-create
+      - run: docker compose --file compose.production.yaml run --rm server task kysely -- migrate:latest
       - run: docker compose --file compose.production.yaml up --wait
       - run: curl --silent http://127.0.0.1:3000/health
       - run: docker compose --file compose.production.yaml down

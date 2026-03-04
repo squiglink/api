@@ -35,7 +35,7 @@ export async function sendEmail(keywordArguments: {
 
   let response: Response;
 
-  if (configuration.apiEnvironment !== "production") {
+  if (configuration.serverEnvironment !== "production") {
     response = {
       id: "placeholder",
       success: true,

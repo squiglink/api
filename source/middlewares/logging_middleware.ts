@@ -8,7 +8,7 @@ export const loggingMiddleware = createMiddleware(async (context, next) => {
     return;
   }
 
-  if (configuration.apiEnvironment === "test") {
+  if (configuration.serverEnvironment === "test") {
     await next();
     return;
   }

@@ -1,5 +1,5 @@
 {
-  "name": "squiglink-api",
+  "name": "squiglink-server",
   "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.19.10",

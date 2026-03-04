@@ -1,8 +1,6 @@
 import { env } from "process";
 
 interface Configuration {
-  apiEnvironment: string;
-  apiPort: number;
   cloudflareTurnstileEnabled: boolean;
   cloudflareTurnstileSecret: string;
   emailFrom: string;
@@ -16,12 +14,12 @@ interface Configuration {
   postgresTestDatabase: string;
   postgresUser: string;
   resendApiKey: string;
+  serverEnvironment: string;
+  serverPort: number;
   studioUrl: string;
 }
 
 const configuration: Configuration = {
-  apiEnvironment: envString("SQUIGLINK_API_ENVIRONMENT"),
-  apiPort: envNumber("SQUIGLINK_API_PORT"),
   cloudflareTurnstileEnabled: envBoolean("SQUIGLINK_CLOUDFLARE_TURNSTILE_ENABLED"),
   cloudflareTurnstileSecret: envString("SQUIGLINK_CLOUDFLARE_TURNSTILE_SECRET"),
   emailFrom: envString("SQUIGLINK_EMAIL_FROM"),
@@ -35,6 +33,8 @@ const configuration: Configuration = {
   postgresTestDatabase: envString("SQUIGLINK_POSTGRES_TEST_DATABASE"),
   postgresUser: envString("SQUIGLINK_POSTGRES_USER"),
   resendApiKey: envString("SQUIGLINK_RESEND_API_KEY"),
+  serverEnvironment: envString("SQUIGLINK_SERVER_ENVIRONMENT"),
+  serverPort: envNumber("SQUIGLINK_SERVER_PORT"),
   studioUrl: envString("SQUIGLINK_STUDIO_URL"),
 };
 

@@ -1,6 +1,6 @@
-# Squiglink API
+# Squiglink Server
 
-The API powering the next generation of Squiglink [Lab](https://github.com/squiglink/lab) and [Studio](http://github.com/squiglink/studio) while preserving backwards compatibility with CrinGraph and forks.
+The server powering the next generation of Squiglink [Lab](https://github.com/squiglink/lab) and [Studio](http://github.com/squiglink/studio) while preserving backwards compatibility with CrinGraph and forks.
 
 ## Install
 
@@ -44,8 +44,8 @@ Done?:
 2. Fetch the required files:
 
    ```sh
-   curl -o .env https://raw.githubusercontent.com/squiglink/api/main/.env.example
-   curl -o compose.yaml https://raw.githubusercontent.com/squiglink/api/main/compose.production.yaml
+   curl -o .env https://raw.githubusercontent.com/squiglink/server/main/.env.example
+   curl -o compose.yaml https://raw.githubusercontent.com/squiglink/server/main/compose.production.yaml
    ```
 
 3. Edit the configuration file:
@@ -57,8 +57,8 @@ Done?:
 4. Create and migrate the database:
 
    ```sh
-   docker compose run --rm api task database-create
-   docker compose run --rm api task kysely -- migrate:latest
+   docker compose run --rm server task database-create
+   docker compose run --rm server task kysely -- migrate:latest
    ```
 
 5. Start the application:
@@ -69,5 +69,5 @@ Done?:
 
 Done?:
 
-- Execute `docker compose run --rm api task` to list available tasks.
+- Execute `docker compose run --rm server task` to list available tasks.
 - Send requests to <http://localhost:3000> or host instances of Lab and Studio.

@@ -1,7 +1,7 @@
 import { defineConfig } from "kysely-ctl";
 import { join } from "path";
 
-const environment = process.env.SQUIGLINK_API_ENVIRONMENT;
+const environment = process.env.SQUIGLINK_SERVER_ENVIRONMENT;
 
 const { database } = await import(
   environment === "production" ? "./output/source/database.js" : "./source/database.js"

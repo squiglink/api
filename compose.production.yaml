@@ -1,22 +1,4 @@
 services:
-  api:
-    depends_on:
-      postgres:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      SQUIGLINK_API_ENVIRONMENT: production
-    healthcheck:
-      interval: 10s
-      retries: 5
-      test: ["CMD-SHELL", "wget --quiet --spider http://127.0.0.1:3000/health"]
-      timeout: 5s
-    image: ghcr.io/squiglink/api:latest
-    ports:
-      - 3000:3000
-    restart: always
-
   postgres:
     env_file:
       - .env
@@ -34,3 +16,21 @@ services:
     restart: always
     volumes:
       - ./data/postgres:/var/lib/postgresql
+
+  server:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      SQUIGLINK_SERVER_ENVIRONMENT: production
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ["CMD-SHELL", "wget --quiet --spider http://127.0.0.1:3000/health"]
+      timeout: 5s
+    image: ghcr.io/squiglink/server:latest
+    ports:
+      - 3000:3000
+    restart: always
