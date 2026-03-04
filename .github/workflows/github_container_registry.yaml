@@ -1,4 +1,4 @@
-name: CD
+name: GitHub Container Registry
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - v*
 
 jobs:
-  build:
+  publish:
     permissions:
       contents: read
       packages: write
@@ -21,7 +21,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           username: ${{ github.actor }}
-      - uses: docker/build-push-action@v6
+      - env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
