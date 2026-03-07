@@ -1,10 +1,10 @@
-import { authorizationMiddleware } from "./authorization_middleware.js";
+import { authenticationMiddleware } from "./authentication_middleware.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as findUserModule from "../services/find_user_by_jwt_token.js";
 
 vi.mock("../services/find_user_by_jwt_token.js");
 
-describe(".authorizationMiddleware", () => {
+describe(".authenticationMiddleware", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -25,7 +25,7 @@ describe(".authorizationMiddleware", () => {
     };
     vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(currentUser);
 
-    await authorizationMiddleware(context, async () => {});
+    await authenticationMiddleware(context, async () => {});
 
     expect(context.set).toHaveBeenCalledWith("currentUser", currentUser);
   });
@@ -37,7 +37,7 @@ describe(".authorizationMiddleware", () => {
       req: { header: vi.fn().mockReturnValue(undefined) },
     };
 
-    await authorizationMiddleware(context, async () => {
+    await authenticationMiddleware(context, async () => {
       throw new Error("Reached unreachable.");
     });
 
@@ -52,7 +52,7 @@ describe(".authorizationMiddleware", () => {
     };
     vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(null);
 
-    await authorizationMiddleware(context, async () => {
+    await authenticationMiddleware(context, async () => {
       throw new Error("Reached unreachable.");
     });
 

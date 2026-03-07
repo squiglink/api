@@ -35,7 +35,7 @@ const routeDescription = describeRoute({
 });
 
 application.post(
-  "/authorization/login",
+  "/authentication/login",
   routeDescription,
   validator("header", headerSchema),
   validator("json", jsonSchema),

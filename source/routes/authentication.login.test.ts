@@ -10,14 +10,14 @@ vi.mock("../configuration.js");
 vi.mock("../services/send_email.js");
 vi.mock("../services/validate_cloudflare_turnstile_token.js");
 
-describe("POST /authorization/login", () => {
+describe("POST /authentication/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(sendEmail).mockResolvedValue({ success: true, id: "placeholder" });
   });
 
   it("responds with unauthorized if the user does not exist", async () => {
-    const response = await application.request("/authorization/login", {
+    const response = await application.request("/authentication/login", {
       body: JSON.stringify({ email: "test@test.com" }),
       headers: { "content-type": "application/json" },
       method: "POST",
@@ -38,7 +38,7 @@ describe("POST /authorization/login", () => {
       return await insertUser(transaction);
     });
 
-    const response = await application.request("/authorization/login", {
+    const response = await application.request("/authentication/login", {
       body: JSON.stringify({ email: user.email }),
       headers: { "content-type": "application/json" },
       method: "POST",
@@ -52,7 +52,7 @@ describe("POST /authorization/login", () => {
       return await insertUser(transaction);
     });
 
-    const response = await application.request("/authorization/login", {
+    const response = await application.request("/authentication/login", {
       body: JSON.stringify({ email: user.email }),
       headers: { "content-type": "application/json" },
       method: "POST",
@@ -94,7 +94,7 @@ describe("POST /authorization/login", () => {
         return await insertUser(transaction);
       });
 
-      const response = await application.request("/authorization/login", {
+      const response = await application.request("/authentication/login", {
         body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "valid" }),
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ describe("POST /authorization/login", () => {
         return await insertUser(transaction);
       });
 
-      const response = await application.request("/authorization/login", {
+      const response = await application.request("/authentication/login", {
         body: JSON.stringify({ email: user.email, cloudflareTurnstileToken: "invalid" }),
         method: "POST",
         headers: {

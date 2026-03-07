@@ -4,9 +4,9 @@ import { database } from "../database.js";
 import { describe, expect, it } from "vitest";
 import { insertJwtMagicLinkToken } from "../test_helper.factories.js";
 
-describe("GET /authorization/verify", () => {
+describe("GET /authentication/verify", () => {
   it("responds with unauthorized if the magic link token is invalid", async () => {
-    const response = await application.request("/authorization/verify?token=invalid-token");
+    const response = await application.request("/authentication/verify?token=invalid-token");
 
     expect(response.status).toBe(401);
   });
@@ -14,7 +14,7 @@ describe("GET /authorization/verify", () => {
   it("responds with unauthorized if the magic link token is expired", async () => {
     const expiredToken = await createJwtToken(0);
 
-    const response = await application.request(`/authorization/verify?token=${expiredToken}`);
+    const response = await application.request(`/authentication/verify?token=${expiredToken}`);
 
     expect(response.status).toBe(401);
   });
@@ -26,7 +26,7 @@ describe("GET /authorization/verify", () => {
       })
     ).token;
 
-    const response = await application.request(`/authorization/verify?token=${magicLinkToken}`);
+    const response = await application.request(`/authentication/verify?token=${magicLinkToken}`);
 
     expect(await response.json()).toEqual({
       access_token: expect.any(String),

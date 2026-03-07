@@ -32,7 +32,7 @@ const routeDescription = describeRoute({
 });
 
 application.post(
-  "/authorization/refresh",
+  "/authentication/refresh",
   routeDescription,
   validator("json", jsonSchema),
   async (context) => {

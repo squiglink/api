@@ -32,7 +32,7 @@ const routeDescription = describeRoute({
 });
 
 application.get(
-  "/authorization/verify",
+  "/authentication/verify",
   routeDescription,
   validator("query", querySchema),
   async (context) => {

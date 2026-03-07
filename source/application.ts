@@ -1,10 +1,10 @@
 import { Hono } from "hono";
-import { authorizationMiddleware } from "./middlewares/authorization_middleware.js";
+import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
 import { cors } from "hono/cors";
 import { loggingMiddleware } from "./middlewares/logging_middleware.js";
-import authorizationLogin from "./routes/authorization.login.js";
-import authorizationRefresh from "./routes/authorization.refresh.js";
-import authorizationVerify from "./routes/authorization.verify.js";
+import authenticationLogin from "./routes/authentication.login.js";
+import authenticationRefresh from "./routes/authentication.refresh.js";
+import authenticationVerify from "./routes/authentication.verify.js";
 import brands from "./routes/brands.js";
 import brandsCreate from "./routes/brands.create.js";
 import brandsUpdate from "./routes/brands.update.js";
@@ -27,9 +27,9 @@ const application = new Hono();
 
 application.use("/*", cors());
 application.use("/*", loggingMiddleware);
-application.route("/", authorizationLogin);
-application.route("/", authorizationRefresh);
-application.route("/", authorizationVerify);
+application.route("/", authenticationLogin);
+application.route("/", authenticationRefresh);
+application.route("/", authenticationVerify);
 application.route("/", brands);
 application.route("/", databases);
 application.route("/", evaluations);
@@ -42,7 +42,7 @@ application.route("/", models);
 
 const authorizedApplication = new Hono();
 
-authorizedApplication.use("/*", authorizationMiddleware);
+authorizedApplication.use("/*", authenticationMiddleware);
 authorizedApplication.route("/", brandsCreate);
 authorizedApplication.route("/", brandsUpdate);
 authorizedApplication.route("/", evaluationsCreate);
