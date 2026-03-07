@@ -15,6 +15,7 @@ const querySchema = zod.object({
 const responseSchema = zod.object({
   access_token: zod.string(),
   refresh_token: zod.string(),
+  user_id: zod.number(),
 });
 
 const routeDescription = describeRoute({
@@ -71,6 +72,7 @@ application.get(
       return context.json({
         access_token: accessToken,
         refresh_token: refreshToken,
+        user_id: user.id,
       });
     });
   },

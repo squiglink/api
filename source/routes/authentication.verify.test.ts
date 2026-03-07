@@ -31,6 +31,7 @@ describe("GET /authentication/verify", () => {
     expect(await response.json()).toEqual({
       access_token: expect.any(String),
       refresh_token: expect.any(String),
+      user_id: expect.any(String),
     });
     expect(response.status).toBe(200);
   });
