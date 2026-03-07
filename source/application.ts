@@ -3,7 +3,6 @@ import authenticationRefresh from "./routes/authentication.refresh.js";
 import authenticationVerify from "./routes/authentication.verify.js";
 import brands from "./routes/brands.js";
 import brandsCreate from "./routes/brands.create.js";
-import brandsUpdate from "./routes/brands.update.js";
 import databases from "./routes/databases.js";
 import evaluations from "./routes/evaluations.js";
 import evaluationsCreate from "./routes/evaluations.create.js";
@@ -44,7 +43,6 @@ const authorizedApplication = new Hono();
 
 authorizedApplication.use("/*", authenticationMiddleware);
 authorizedApplication.route("/", brandsCreate);
-authorizedApplication.route("/", brandsUpdate);
 authorizedApplication.route("/", evaluationsCreate);
 authorizedApplication.route("/", evaluationsUpdate);
 authorizedApplication.route("/", measurementsCreate);
