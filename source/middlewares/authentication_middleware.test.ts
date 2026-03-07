@@ -1,6 +1,6 @@
+import * as findUserModule from "../services/find_user_by_jwt_token.js";
 import { authenticationMiddleware } from "./authentication_middleware.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import * as findUserModule from "../services/find_user_by_jwt_token.js";
 
 vi.mock("../services/find_user_by_jwt_token.js");
 

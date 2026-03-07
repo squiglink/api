@@ -1,7 +1,7 @@
+import configuration from "../configuration.js";
 import { Hono } from "hono";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { loggingMiddleware } from "./logging_middleware.js";
-import configuration from "../configuration.js";
 
 describe("loggingMiddleware", () => {
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;

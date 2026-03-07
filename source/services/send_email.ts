@@ -22,8 +22,8 @@ export async function sendEmail(keywordArguments: {
   const request = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${configuration.resendApiKey}`,
-      "Content-Type": "application/json",
+      "content-type": "application/json",
+      authorization: `Bearer ${configuration.resendApiKey}`,
     },
     body: JSON.stringify({
       from: configuration.emailFrom,

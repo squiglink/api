@@ -1,7 +1,3 @@
-import { Hono } from "hono";
-import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
-import { cors } from "hono/cors";
-import { loggingMiddleware } from "./middlewares/logging_middleware.js";
 import authenticationLogin from "./routes/authentication.login.js";
 import authenticationRefresh from "./routes/authentication.refresh.js";
 import authenticationVerify from "./routes/authentication.verify.js";
@@ -22,6 +18,10 @@ import measurementsShow from "./routes/measurements.show.js";
 import measurementsUpdate from "./routes/measurements.update.js";
 import models from "./routes/models.js";
 import modelsCreate from "./routes/models.create.js";
+import { Hono } from "hono";
+import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
+import { cors } from "hono/cors";
+import { loggingMiddleware } from "./middlewares/logging_middleware.js";
 
 const application = new Hono();
 

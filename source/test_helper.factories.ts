@@ -1,8 +1,8 @@
-import { createJwtToken } from "./services/create_jwt_token.js";
-import { faker } from "@faker-js/faker";
 import configuration from "./configuration.js";
 import type { Database, DatabaseKind, MeasurementKind, UserScoringSystem } from "./types.js";
 import type { Kysely, Transaction } from "kysely";
+import { createJwtToken } from "./services/create_jwt_token.js";
+import { faker } from "@faker-js/faker";
 
 export async function insertBrand(
   databaseOrTransaction: Kysely<Database> | Transaction<Database>,

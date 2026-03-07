@@ -1,6 +1,6 @@
+import configuration from "../configuration.js";
 import { createMiddleware } from "hono/factory";
 import { randomUUID } from "node:crypto";
-import configuration from "../configuration.js";
 
 export const loggingMiddleware = createMiddleware(async (context, next) => {
   if (context.req.method === "OPTIONS") {

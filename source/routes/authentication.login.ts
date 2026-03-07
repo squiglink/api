@@ -63,8 +63,8 @@ application.post(
       .executeTakeFirst();
     if (!user) return context.body(null, 401);
 
-    const authToken = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
-    const magicLink = `${configuration.studioUrl}/auth/verify?token=${authToken}`;
+    const token = await createJwtToken(configuration.jwtExpirationTimeMagicLinkToken * 1000);
+    const magicLink = `${configuration.studioUrl}/auth/verify?token=${token}`;
 
     const emailResponse = await sendEmail({
       body: `Follow the link to login: <a href="${magicLink}">${magicLink}</a>.`,
@@ -76,7 +76,7 @@ application.post(
     await database.transaction().execute(async (transaction) => {
       await transaction
         .insertInto("jwt_magic_link_tokens")
-        .values({ token: authToken, user_id: user.id })
+        .values({ token: token, user_id: user.id })
         .executeTakeFirstOrThrow();
     });
 
