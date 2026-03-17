@@ -16,7 +16,7 @@
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
     "kysely-codegen": "^0.20.0",
-    "oxfmt": "^0.40.0",
+    "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
