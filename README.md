@@ -45,6 +45,7 @@ Done?:
 
    ```sh
    curl -o .env https://raw.githubusercontent.com/squiglink/server/main/.env.example
+   curl -o Dockerfile https://raw.githubusercontent.com/squiglink/server/main/Dockerfile
    curl -o compose.yaml https://raw.githubusercontent.com/squiglink/server/main/compose.production.yaml
    ```
 

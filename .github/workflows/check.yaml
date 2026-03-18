@@ -7,15 +7,14 @@ jobs:
   check-production:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - run: cp .env.example .env
-      - run: docker build --tag ghcr.io/${{ github.repository }}:latest --target production .
-      - run: docker compose --file compose.production.yaml up postgres --wait
-      - run: docker compose --file compose.production.yaml run --rm server task database-create
-      - run: docker compose --file compose.production.yaml run --rm server task kysely -- migrate:latest
-      - run: docker compose --file compose.production.yaml up --wait
+      - run: curl -o .env https://raw.githubusercontent.com/squiglink/server/main/.env.example
+      - run: curl -o Dockerfile https://raw.githubusercontent.com/squiglink/server/main/Dockerfile
+      - run: curl -o compose.yaml https://raw.githubusercontent.com/squiglink/server/main/compose.production.yaml
+      - run: docker compose run --rm server task database-create
+      - run: docker compose run --rm server task kysely -- migrate:latest
+      - run: docker compose up --wait
       - run: curl --silent http://127.0.0.1:3000/health
-      - run: docker compose --file compose.production.yaml down
+      - run: docker compose down
 
   check:
     runs-on: ubuntu-latest
