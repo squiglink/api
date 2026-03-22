@@ -4,15 +4,19 @@ import { Kysely } from "kysely";
 import { PostgresJSDialect } from "kysely-postgres-js";
 import { SQL } from "bun";
 
+export function connect(db = configuration.postgresDatabase) {
+  return new SQL({
+    bigint: true,
+    database: db,
+    host: configuration.postgresHost,
+    password: configuration.postgresPassword,
+    user: configuration.postgresUser,
+  });
+}
+
 export const database = new Kysely<Database>({
   dialect: new PostgresJSDialect({
-    postgres: new SQL({
-      bigint: true,
-      database: configuration.postgresDatabase,
-      host: configuration.postgresHost,
-      password: configuration.postgresPassword,
-      user: configuration.postgresUser,
-    }),
+    postgres: connect(),
   }),
 });
 

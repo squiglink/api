@@ -2,6 +2,7 @@
   "name": "squiglink-server",
   "type": "module",
   "dependencies": {
+    "commander": "^14.0.3",
     "hono": "^4.12.8",
     "hono-openapi": "^1.3.0",
     "kysely": "^0.28.14",

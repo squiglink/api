@@ -98,6 +98,12 @@ tasks:
         server
         bun kysely {{.CLI_ARGS}}
 
+  production-execute:
+    desc: Execute the production binary.
+    cmds:
+      - docker compose run --rm server bun build --compile --outfile /tmp/server source/index.ts
+      - docker compose run --rm server /tmp/server {{.CLI_ARGS}}
+
   list:
     aliases:
       - default

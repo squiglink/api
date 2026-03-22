@@ -10,8 +10,8 @@ jobs:
       - run: curl -o .env https://raw.githubusercontent.com/squiglink/server/main/.env.example
       - run: curl -o Dockerfile https://raw.githubusercontent.com/squiglink/server/main/Dockerfile
       - run: curl -o compose.yaml https://raw.githubusercontent.com/squiglink/server/main/compose.production.yaml
-      - run: docker compose run --rm server task database-create
-      - run: docker compose run --rm server task kysely -- migrate:latest
+      - run: docker compose run --rm server ./server database-create
+      - run: docker compose run --rm server ./server database-migrate
       - run: docker compose up --wait
       - run: curl --silent http://127.0.0.1:3000/health
       - run: docker compose down

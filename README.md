@@ -58,8 +58,8 @@ Done?:
 4. Create and migrate the database:
 
    ```sh
-   docker compose run --rm server task database-create
-   docker compose run --rm server task kysely -- migrate:latest
+   docker compose run --rm server ./server database-create
+   docker compose run --rm server ./server database-migrate
    ```
 
 5. Start the application:
@@ -70,5 +70,4 @@ Done?:
 
 Done?:
 
-- Execute `docker compose run --rm server task` to list available tasks.
 - Send requests to <http://localhost:3000> or host instances of Lab and Studio.

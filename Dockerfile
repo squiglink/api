@@ -10,18 +10,23 @@ FROM base AS development
 
 CMD ["bun", "--watch", "source/index.ts"]
 
-# Production
+# Production build
 
-FROM base AS production
-
-RUN apk add --no-cache go-task-task postgresql-client
+FROM base AS production-build
 
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production
+RUN bun install --frozen-lockfile
 
-COPY kysely.config.ts ./
 COPY migrations ./migrations
 COPY source ./source
-COPY Taskfile.production.yaml ./Taskfile.yaml
+RUN bun build --compile --outfile server source/index.ts
 
-CMD ["bun", "source/index.ts"]
+# Production
+
+FROM alpine AS production
+
+COPY --from=production-build /server/server /server/server
+
+WORKDIR /server
+
+CMD ["./server", "start"]
