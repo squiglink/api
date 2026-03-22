@@ -46,13 +46,12 @@ application.post(
     if (configuration.cloudflareTurnstileEnabled) {
       if (!jsonParameters.cloudflareTurnstileToken) return context.body(null, 401);
 
-      const remoteIp = headerParameters["cf-connecting-ip"] || headerParameters["x-forwarded-for"];
-      if (!remoteIp) throw new Error("Reached unreachable.");
-
+      const remoteIp = headerParameters["cf-connecting-ip"] || headerParameters["x-forwarded-for"]!;
       const cloudflareTurnstileResponse = await validateCloudflareTurnstileToken(
         remoteIp,
         jsonParameters.cloudflareTurnstileToken,
       );
+
       if (!cloudflareTurnstileResponse.success) return context.body(null, 401);
     }
 

@@ -23,7 +23,7 @@ const jsonSchema = zod.object({
 });
 
 const paramSchema = zod.object({
-  id: zod.string(),
+  id: zod.uuid(),
 });
 
 const responseSchema = zod.object({
