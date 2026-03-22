@@ -22,7 +22,6 @@ jobs:
       - uses: actions/checkout@v6
       - uses: go-task/setup-task@v1
       - run: cp .env.example .env
-      - run: export $(sed 's/#.*//' .env)
       - run: task install-dependencies
       - run: task database-create-test
       - run: task kysely-test -- migrate:latest

@@ -1,11 +1,8 @@
 import application from "../source/application.js";
+import fs from "node:fs";
 import { generateSpecs } from "hono-openapi";
 
-async function main() {
-  const specs = await generateSpecs(application, { excludeStaticFile: false });
+const specs = await generateSpecs(application, { excludeStaticFile: false });
 
-  await Bun.$`mkdir -p output`.quiet();
-  await Bun.write("output/openapi.json", JSON.stringify(specs, null, 2));
-}
-
-main();
+fs.mkdirSync("output", { recursive: true });
+fs.writeFileSync("output/openapi.json", JSON.stringify(specs, null, 2));
