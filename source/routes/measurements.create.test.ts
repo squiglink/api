@@ -98,6 +98,6 @@ describe("POST /measurements", () => {
       method: "POST",
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
   });
 });

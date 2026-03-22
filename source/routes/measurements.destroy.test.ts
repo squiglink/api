@@ -65,7 +65,7 @@ describe("DELETE /measurements/:id", () => {
       method: "DELETE",
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
     expect(await count("measurements")).toEqual(1);
   });
 });

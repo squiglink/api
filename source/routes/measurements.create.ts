@@ -48,7 +48,7 @@ const routeDescription = describeRoute({
       description: "OK",
     },
     400: { description: "Bad Request" },
-    401: { description: "Unauthorized" },
+    403: { description: "Forbidden" },
     409: { description: "Conflict" },
   },
 });
@@ -68,7 +68,7 @@ application.post(
         "databases",
       ))
     ) {
-      return context.body(null, 401);
+      return context.body(null, 403);
     }
 
     let channels: { left_channel?: string; right_channel?: string } = {};

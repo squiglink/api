@@ -42,7 +42,7 @@ const routeDescription = describeRoute({
       },
       description: "OK",
     },
-    401: { description: "Unauthorized" },
+    403: { description: "Forbidden" },
     404: { description: "Not Found" },
   },
 });
@@ -71,7 +71,7 @@ application.patch(
         "evaluations",
       ))
     ) {
-      return context.body(null, 401);
+      return context.body(null, 403);
     }
 
     const result = await database

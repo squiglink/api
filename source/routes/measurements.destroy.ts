@@ -17,7 +17,7 @@ const paramSchema = zod.object({
 const routeDescription = describeRoute({
   responses: {
     200: { description: "OK" },
-    401: { description: "Unauthorized" },
+    403: { description: "Forbidden" },
     404: { description: "Not Found" },
   },
 });
@@ -44,7 +44,7 @@ application.delete(
         "databases",
       ))
     ) {
-      return context.body(null, 401);
+      return context.body(null, 403);
     }
 
     await database.deleteFrom("measurements").where("id", "=", paramParameters.id).execute();

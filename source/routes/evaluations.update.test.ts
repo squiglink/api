@@ -64,6 +64,6 @@ describe("PATCH /evaluations/:id", () => {
       method: "PATCH",
     });
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
   });
 });

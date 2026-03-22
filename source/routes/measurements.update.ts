@@ -49,7 +49,7 @@ const routeDescription = describeRoute({
       description: "OK",
     },
     400: { description: "Bad Request" },
-    401: { description: "Unauthorized" },
+    403: { description: "Forbidden" },
     404: { description: "Not Found" },
   },
 });
@@ -72,7 +72,7 @@ application.patch(
 
     const databaseId = jsonParameters.database_id || measurement.database_id;
     if (!(await validateOwner(context.get("currentUser").id, database, databaseId, "databases"))) {
-      return context.body(null, 401);
+      return context.body(null, 403);
     }
 
     let channels: { left_channel?: string; right_channel?: string } = {};
