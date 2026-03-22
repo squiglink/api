@@ -1,28 +1,14 @@
 # Base
 
-FROM node:25-alpine3.23 AS base
-
-RUN npm install --global pnpm@^10.27.0
+FROM oven/bun:1.3.11-alpine AS base
 
 WORKDIR /server
-
-# Build
-
-FROM base AS build
-
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-
-COPY kysely.config.ts tsconfig.json ./
-COPY migrations ./migrations
-COPY source ./source
-RUN pnpm exec tsc
 
 # Development
 
 FROM base AS development
 
-CMD ["pnpm", "tsx", "watch", "source/index.ts"]
+CMD ["bun", "--watch", "source/index.ts"]
 
 # Production
 
@@ -30,11 +16,12 @@ FROM base AS production
 
 RUN apk add --no-cache go-task-task postgresql-client
 
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
 
-COPY --from=build /server/output ./output
 COPY kysely.config.ts ./
+COPY migrations ./migrations
+COPY source ./source
 COPY Taskfile.production.yaml ./Taskfile.yaml
 
-CMD ["node", "output/source/index.js"]
+CMD ["bun", "source/index.ts"]

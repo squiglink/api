@@ -1,3 +1,4 @@
+import "./global.js";
 import authenticationLogin from "./routes/authentication.login.js";
 import authenticationRefresh from "./routes/authentication.refresh.js";
 import authenticationVerify from "./routes/authentication.verify.js";

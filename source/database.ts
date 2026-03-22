@@ -1,16 +1,13 @@
 import configuration from "./configuration.js";
-import pg from "pg";
 import type { Database } from "./types.js";
-import { Kysely, PostgresDialect } from "kysely";
-
-const { Pool } = pg;
-
-pg.types.setTypeParser(pg.types.builtins.INT8, (value) => parseInt(value, 10));
-pg.types.setTypeParser(pg.types.builtins.TIMESTAMP, (value) => new Date(value).toISOString());
+import { Kysely } from "kysely";
+import { PostgresJSDialect } from "kysely-postgres-js";
+import { SQL } from "bun";
 
 export const database = new Kysely<Database>({
-  dialect: new PostgresDialect({
-    pool: new Pool({
+  dialect: new PostgresJSDialect({
+    postgres: new SQL({
+      bigint: true,
       database: configuration.postgresDatabase,
       host: configuration.postgresHost,
       password: configuration.postgresPassword,
