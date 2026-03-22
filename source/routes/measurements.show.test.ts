@@ -1,6 +1,6 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { insertMeasurement } from "../test_helper.factories.js";
 
 describe("GET /measurements/:id", () => {
@@ -10,7 +10,7 @@ describe("GET /measurements/:id", () => {
     });
 
     const body = {
-      created_at: measurement.created_at,
+      created_at: measurement.created_at.toISOString(),
       database_id: measurement.database_id,
       id: measurement.id,
       kind: measurement.kind,
@@ -18,7 +18,7 @@ describe("GET /measurements/:id", () => {
       left_channel: measurement.left_channel,
       model_id: measurement.model_id,
       right_channel: measurement.right_channel,
-      updated_at: measurement.updated_at,
+      updated_at: measurement.updated_at.toISOString(),
     };
 
     const response = await application.request(`/measurements/${measurement.id}`);

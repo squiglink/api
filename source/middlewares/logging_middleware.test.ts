@@ -1,16 +1,16 @@
 import configuration from "../configuration.js";
 import { Hono } from "hono";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import { loggingMiddleware } from "./logging_middleware.js";
 
 describe("loggingMiddleware", () => {
-  let consoleLogSpy: ReturnType<typeof vi.spyOn>;
+  let consoleLogSpy: ReturnType<typeof spyOn>;
   let originalServerEnvironment: string;
 
   beforeEach(() => {
     originalServerEnvironment = configuration.serverEnvironment;
     configuration.serverEnvironment = "development";
-    consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
   });
 
   afterEach(() => {

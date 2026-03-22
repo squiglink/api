@@ -1,18 +1,18 @@
-import * as findUserModule from "../services/find_user_by_jwt_token.js";
 import { authenticationMiddleware } from "./authentication_middleware.js";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, mock } from "bun:test";
 
-vi.mock("../services/find_user_by_jwt_token.js");
+const findUserByJwtToken = mock();
+mock.module("../services/find_user_by_jwt_token.js", () => ({ findUserByJwtToken }));
 
 describe(".authenticationMiddleware", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    findUserByJwtToken.mockClear();
   });
 
   it("sets the current user context variable", async () => {
     const context: any = {
-      req: { header: vi.fn().mockReturnValue("valid") },
-      set: vi.fn(),
+      req: { header: mock().mockReturnValue("valid") },
+      set: mock(),
     };
     const currentUser = {
       created_at: new Date(),
@@ -23,7 +23,7 @@ describe(".authenticationMiddleware", () => {
       updated_at: new Date(),
       username: "placeholder",
     };
-    vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(currentUser);
+    findUserByJwtToken.mockResolvedValue(currentUser);
 
     await authenticationMiddleware(context, async () => {});
 
@@ -31,10 +31,10 @@ describe(".authenticationMiddleware", () => {
   });
 
   it("responds with unauthorized if the authorization token is not present", async () => {
-    const body = vi.fn();
+    const body = mock();
     const context: any = {
       body,
-      req: { header: vi.fn().mockReturnValue(undefined) },
+      req: { header: mock().mockReturnValue(undefined) },
     };
 
     await authenticationMiddleware(context, async () => {
@@ -45,12 +45,12 @@ describe(".authenticationMiddleware", () => {
   });
 
   it("responds with unauthorized if the authorization token is invalid", async () => {
-    const body = vi.fn();
+    const body = mock();
     const context: any = {
       body,
-      req: { header: vi.fn().mockReturnValue("invalid") },
+      req: { header: mock().mockReturnValue("invalid") },
     };
-    vi.mocked(findUserModule.findUserByJwtToken).mockResolvedValue(null);
+    findUserByJwtToken.mockResolvedValue(null);
 
     await authenticationMiddleware(context, async () => {
       throw new Error("Reached unreachable.");

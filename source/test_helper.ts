@@ -1,4 +1,4 @@
-import { beforeEach } from "vitest";
+import { beforeEach } from "bun:test";
 import { database } from "./database.js";
 import {
   insertJwtAccessToken,
@@ -22,8 +22,10 @@ async function truncateAllTables() {
       .execute()
   ).map((row) => row.table_name);
 
-  tableNames.map((tableName) =>
-    sql`truncate table ${sql.table(tableName)} cascade`.execute(database),
+  await Promise.all(
+    tableNames.map((tableName) =>
+      sql`truncate table ${sql.table(tableName)} cascade`.execute(database),
+    ),
   );
 }
 

@@ -1,6 +1,6 @@
 import application from "../application.js";
 import { createJwtToken } from "../services/create_jwt_token.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { signIn } from "../test_helper.js";
 
 describe("POST /authentication/refresh", () => {
