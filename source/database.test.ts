@@ -1,5 +1,5 @@
 import { database, touch } from "./database.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { insertBrand } from "./test_helper.factories.js";
 
 describe(".touch", () => {

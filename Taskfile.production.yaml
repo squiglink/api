@@ -13,6 +13,6 @@ tasks:
   kysely:
     desc: Run a Kysely command against the database.
     cmds:
-      - pnpm kysely {{.CLI_ARGS}}
+      - bun kysely {{.CLI_ARGS}}
 
 version: 3

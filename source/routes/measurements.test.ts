@@ -1,6 +1,6 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { insertDatabase, insertMeasurement, insertModel } from "../test_helper.factories.js";
 
 describe("GET /measurements", () => {
@@ -32,22 +32,22 @@ describe("GET /measurements", () => {
 
     const body = [
       {
-        created_at: measurements[0].created_at,
+        created_at: measurements[0].created_at.toISOString(),
         database_id: databaseId,
         id: measurements[0].id,
         kind: measurements[0].kind,
         label: measurements[0].label,
         model_id: modelId,
-        updated_at: measurements[0].updated_at,
+        updated_at: measurements[0].updated_at.toISOString(),
       },
       {
-        created_at: measurements[1].created_at,
+        created_at: measurements[1].created_at.toISOString(),
         database_id: databaseId,
         id: measurements[1].id,
         kind: measurements[1].kind,
         label: measurements[1].label,
         model_id: modelId,
-        updated_at: measurements[1].updated_at,
+        updated_at: measurements[1].updated_at.toISOString(),
       },
     ];
 

@@ -1,6 +1,6 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { insertEvaluation, insertModel, insertUser } from "../test_helper.factories.js";
 import { signIn } from "../test_helper.js";
 

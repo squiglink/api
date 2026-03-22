@@ -1,6 +1,6 @@
 import application from "../application.js";
 import { database } from "../database.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { insertEvaluation } from "../test_helper.factories.js";
 
 describe("GET /evaluations", () => {
@@ -12,13 +12,13 @@ describe("GET /evaluations", () => {
     });
 
     const body = {
-      created_at: evaluation.created_at,
+      created_at: evaluation.created_at.toISOString(),
       id: evaluation.id,
       model_id: evaluation.model_id,
       review_score: evaluation.review_score,
       review_url: evaluation.review_url,
       shop_url: evaluation.shop_url,
-      updated_at: evaluation.updated_at,
+      updated_at: evaluation.updated_at.toISOString(),
       user_id: evaluation.user_id,
     };
 

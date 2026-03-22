@@ -27,8 +27,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    env_file:
-      - .env
     networks:
       - squiglink
     ports:
