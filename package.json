@@ -15,6 +15,6 @@
     "kysely-codegen": "^0.20.0",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }
