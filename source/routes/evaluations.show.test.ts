@@ -1,0 +1,27 @@
+import application from "../application.js";
+import { database } from "../database.js";
+import { describe, expect, it } from "bun:test";
+import { insertEvaluation } from "../test_helper.factories.js";
+
+describe("GET /evaluations/:id", () => {
+  it("responds with success and returns the evaluation", async () => {
+    const evaluation = await database.transaction().execute(async (transaction) => {
+      return await insertEvaluation(transaction);
+    });
+
+    const body = {
+      created_at: evaluation.created_at.toISOString(),
+      id: evaluation.id,
+      model_id: evaluation.model_id,
+      review_score: evaluation.review_score,
+      review_url: evaluation.review_url,
+      shop_url: evaluation.shop_url,
+      updated_at: evaluation.updated_at.toISOString(),
+      user_id: evaluation.user_id,
+    };
+
+    const response = await application.request(`/evaluations/${evaluation.id}`);
+    expect(await response.json()).toEqual(body);
+    expect(response.ok).toBe(true);
+  });
+});
