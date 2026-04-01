@@ -48,26 +48,24 @@ application.get(
 
     const pageSize = 10;
 
-    const userIdParameter = queryParameters.user_id;
     const { count } = await database
       .selectFrom("databases")
       .select(database.fn.countAll().as("count"))
-      .$if(userIdParameter !== undefined, (selectQueryBuilder) =>
-        selectQueryBuilder.where("databases.user_id", "=", userIdParameter!),
+      .$if(queryParameters.user_id !== undefined, (selectQueryBuilder) =>
+        selectQueryBuilder.where("databases.user_id", "=", queryParameters.user_id!),
       )
       .executeTakeFirstOrThrow();
     const pageCount = Math.ceil(Number(count) / pageSize);
 
-    const searchQueryParameter = queryParameters.query;
     const page = await database
       .selectFrom("databases")
       .selectAll()
-      .$if(userIdParameter !== undefined, (selectQueryBuilder) =>
-        selectQueryBuilder.where("databases.user_id", "=", userIdParameter!),
+      .$if(queryParameters.user_id !== undefined, (selectQueryBuilder) =>
+        selectQueryBuilder.where("databases.user_id", "=", queryParameters.user_id!),
       )
-      .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
+      .$if(queryParameters.query !== undefined, (selectQueryBuilder) =>
         selectQueryBuilder.orderBy(
-          sql`concat(databases.kind, ' ', databases.path) <-> ${searchQueryParameter}`,
+          sql`concat(databases.kind, ' ', databases.path) <-> ${queryParameters.query}`,
         ),
       )
       .orderBy("databases.created_at")

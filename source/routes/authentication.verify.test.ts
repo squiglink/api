@@ -5,21 +5,7 @@ import { describe, expect, it } from "bun:test";
 import { insertJwtMagicLinkToken } from "../test_helper.factories.js";
 
 describe("GET /authentication/verify", () => {
-  it("responds with unauthorized if the magic link token is invalid", async () => {
-    const response = await application.request("/authentication/verify?token=invalid-token");
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if the magic link token is expired", async () => {
-    const expiredToken = await createJwtToken(0);
-
-    const response = await application.request(`/authentication/verify?token=${expiredToken}`);
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with success and returns tokens if the magic link token is valid", async () => {
+  it("responds with success and returns tokens", async () => {
     const magicLinkToken = (
       await database.transaction().execute(async (transaction) => {
         return await insertJwtMagicLinkToken(transaction);
@@ -34,5 +20,19 @@ describe("GET /authentication/verify", () => {
       user_id: expect.any(String),
     });
     expect(response.status).toBe(200);
+  });
+
+  it("responds with unauthorized if the magic link token is expired", async () => {
+    const expiredToken = await createJwtToken(0);
+
+    const response = await application.request(`/authentication/verify?token=${expiredToken}`);
+
+    expect(response.status).toBe(401);
+  });
+
+  it("responds with unauthorized if the magic link token is invalid", async () => {
+    const response = await application.request("/authentication/verify?token=invalid-token");
+
+    expect(response.status).toBe(401);
   });
 });

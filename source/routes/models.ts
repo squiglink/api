@@ -54,7 +54,6 @@ application.get("/models", routeDescription, validator("query", querySchema), as
     .executeTakeFirstOrThrow();
   const pageCount = Math.ceil(Number(count) / pageSize);
 
-  const searchQueryParameter = queryParameters.query;
   const page = await database
     .selectFrom("models")
     .innerJoin("brands", "brands.id", "models.brand_id")
@@ -71,9 +70,9 @@ application.get("/models", routeDescription, validator("query", querySchema), as
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
     )
-    .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
+    .$if(queryParameters.query !== undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(
-        sql`concat(brands.name, ' ', models.name) <-> ${searchQueryParameter}`,
+        sql`concat(brands.name, ' ', models.name) <-> ${queryParameters.query}`,
       ),
     )
     .orderBy("models.created_at")

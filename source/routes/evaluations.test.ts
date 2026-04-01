@@ -4,7 +4,7 @@ import { describe, expect, it } from "bun:test";
 import { insertEvaluation } from "../test_helper.factories.js";
 
 describe("GET /evaluations", () => {
-  it("responds with success and returns an evaluation", async () => {
+  it("responds with success and returns the evaluation", async () => {
     const { evaluation } = await database.transaction().execute(async (transaction) => {
       const evaluation = await insertEvaluation(transaction);
 

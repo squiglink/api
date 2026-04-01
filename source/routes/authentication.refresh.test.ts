@@ -4,16 +4,6 @@ import { describe, expect, it } from "bun:test";
 import { signIn } from "../test_helper.js";
 
 describe("POST /authentication/refresh", () => {
-  it("responds with unauthorized if the refresh token is invalid", async () => {
-    const response = await application.request("/authentication/refresh", {
-      body: JSON.stringify({ refresh_token: await createJwtToken(0) }),
-      headers: { "content-type": "application/json" },
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
   it("responds with success and returns tokens if the refresh token is valid", async () => {
     const { refreshToken } = await signIn();
 
@@ -28,5 +18,15 @@ describe("POST /authentication/refresh", () => {
       refresh_token: expect.any(String),
     });
     expect(response.status).toBe(200);
+  });
+
+  it("responds with unauthorized if the refresh token is invalid", async () => {
+    const response = await application.request("/authentication/refresh", {
+      body: JSON.stringify({ refresh_token: await createJwtToken(0) }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    expect(response.status).toBe(401);
   });
 });

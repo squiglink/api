@@ -48,14 +48,13 @@ application.get("/brands", routeDescription, validator("query", querySchema), as
     .executeTakeFirstOrThrow();
   const pageCount = Math.ceil(Number(count) / pageSize);
 
-  const searchQueryParameter = queryParameters.query;
   const page = await database
     .selectFrom("brands")
     .leftJoin("models", "brands.id", "models.brand_id")
     .selectAll("brands")
     .select(database.fn.count("models.id").as("model_count"))
-    .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
-      selectQueryBuilder.orderBy(sql`brands.name <-> ${searchQueryParameter}`),
+    .$if(queryParameters.query !== undefined, (selectQueryBuilder) =>
+      selectQueryBuilder.orderBy(sql`brands.name <-> ${queryParameters.query}`),
     )
     .orderBy("brands.created_at")
     .groupBy("brands.id")

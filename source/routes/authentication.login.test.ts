@@ -20,37 +20,6 @@ describe("POST /authentication/login", () => {
     sendEmail.mockResolvedValue({ success: true, id: "placeholder" });
   });
 
-  it("responds with unauthorized if the user does not exist", async () => {
-    const response = await application.request("/authentication/login", {
-      body: JSON.stringify({ email: "test@test.com" }),
-      headers: { "content-type": "application/json" },
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
-  it("responds with unauthorized if sending the email has failed", async () => {
-    sendEmail.mockResolvedValue({
-      message: "placeholder",
-      name: "placeholder",
-      statusCode: 500,
-      success: false,
-    });
-
-    const user = await database.transaction().execute(async (transaction) => {
-      return await insertUser(transaction);
-    });
-
-    const response = await application.request("/authentication/login", {
-      body: JSON.stringify({ email: user.email }),
-      headers: { "content-type": "application/json" },
-      method: "POST",
-    });
-
-    expect(response.status).toBe(401);
-  });
-
   it("creates a JWT magic link token and sends an email with the magic link", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
@@ -76,6 +45,37 @@ describe("POST /authentication/login", () => {
       }),
     );
     expect(response.status).toBe(200);
+  });
+
+  it("responds with unauthorized if the email has failed to be sent", async () => {
+    sendEmail.mockResolvedValue({
+      message: "placeholder",
+      name: "placeholder",
+      statusCode: 500,
+      success: false,
+    });
+
+    const user = await database.transaction().execute(async (transaction) => {
+      return await insertUser(transaction);
+    });
+
+    const response = await application.request("/authentication/login", {
+      body: JSON.stringify({ email: user.email }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    expect(response.status).toBe(401);
+  });
+
+  it("responds with unauthorized if the user does not exist", async () => {
+    const response = await application.request("/authentication/login", {
+      body: JSON.stringify({ email: "test@test.com" }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    expect(response.status).toBe(401);
   });
 
   describe("when Cloudflare Turnstile is enabled", () => {

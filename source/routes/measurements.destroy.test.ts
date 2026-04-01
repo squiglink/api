@@ -10,6 +10,20 @@ import {
 } from "../test_helper.factories.js";
 
 describe("DELETE /measurements/:id", () => {
+  it("responds with not found if the measurement does not exist", async () => {
+    const { accessToken } = await signIn();
+
+    const response = await application.request(
+      "/measurements/00000000-0000-0000-0000-000000000000",
+      {
+        headers: { authorization: `Bearer ${accessToken}` },
+        method: "DELETE",
+      },
+    );
+
+    expect(response.status).toBe(404);
+  });
+
   it("responds with success and destroys a measurement", async () => {
     const { measurementId, userId } = await database.transaction().execute(async (transaction) => {
       const userId = (await insertUser(transaction)).id;
@@ -31,20 +45,6 @@ describe("DELETE /measurements/:id", () => {
 
     expect(response.status).toBe(200);
     expect(await count("measurements")).toEqual(0);
-  });
-
-  it("responds with not found if the measurement does not exist", async () => {
-    const { accessToken } = await signIn();
-
-    const response = await application.request(
-      "/measurements/00000000-0000-0000-0000-000000000000",
-      {
-        headers: { authorization: `Bearer ${accessToken}` },
-        method: "DELETE",
-      },
-    );
-
-    expect(response.status).toBe(404);
   });
 
   it("responds with unauthorized if trying to destroy a measurement in another user's database", async () => {

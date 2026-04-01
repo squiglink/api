@@ -5,6 +5,37 @@ import { describe, expect, it } from "bun:test";
 import { insertDatabase, insertModel, insertUser } from "../test_helper.factories.js";
 
 describe("POST /measurements", () => {
+  it("responds with bad request if neither the left channel nor the right channel is provided", async () => {
+    const { databaseId, modelId, userId } = await database
+      .transaction()
+      .execute(async (transaction) => {
+        const userId = (await insertUser(transaction)).id;
+        const databaseId = (await insertDatabase(transaction, { user_id: userId })).id;
+        const modelId = (await insertModel(transaction)).id;
+
+        return { databaseId, modelId, userId };
+      });
+
+    const { accessToken } = await signIn(userId);
+    const body = {
+      database_id: databaseId,
+      kind: "frequency_response",
+      label: "placeholder",
+      model_id: modelId,
+    };
+
+    const response = await application.request("/measurements", {
+      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+    });
+
+    expect(response.status).toBe(400);
+  });
+
   it("responds with success and creates a measurement", async () => {
     const { databaseId, modelId, userId } = await database
       .transaction()
@@ -38,37 +69,6 @@ describe("POST /measurements", () => {
     expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
     expect(response.status).toBe(200);
-  });
-
-  it("responds with bad request if neither left_channel nor right_channel is provided", async () => {
-    const { databaseId, modelId, userId } = await database
-      .transaction()
-      .execute(async (transaction) => {
-        const userId = (await insertUser(transaction)).id;
-        const databaseId = (await insertDatabase(transaction, { user_id: userId })).id;
-        const modelId = (await insertModel(transaction)).id;
-
-        return { databaseId, modelId, userId };
-      });
-
-    const { accessToken } = await signIn(userId);
-    const body = {
-      database_id: databaseId,
-      kind: "frequency_response",
-      label: "placeholder",
-      model_id: modelId,
-    };
-
-    const response = await application.request("/measurements", {
-      body: JSON.stringify(body),
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      method: "POST",
-    });
-
-    expect(response.status).toBe(400);
   });
 
   it("responds with unauthorized if trying to create a measurement in another user's database", async () => {
