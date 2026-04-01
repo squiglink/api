@@ -137,6 +137,31 @@ describe("GET /databases", () => {
     expect(secondPageResponse.ok).toBe(true);
   });
 
+  it("responds with success and filters by the user ID", async () => {
+    const { user, userDatabase } = await database.transaction().execute(async (transaction) => {
+      const user = await insertUser(transaction);
+      const userDatabase = await insertDatabase(transaction, { user_id: user.id });
+      await insertDatabase(transaction);
+      return { user, userDatabase };
+    });
+
+    const response = await application.request(`/databases?user_id=${user.id}`);
+    expect(response.ok).toBe(true);
+    expect(await response.json()).toEqual({
+      page_count: 1,
+      page: [
+        {
+          created_at: userDatabase.created_at.toISOString(),
+          id: userDatabase.id,
+          kind: userDatabase.kind,
+          path: userDatabase.path,
+          updated_at: userDatabase.updated_at.toISOString(),
+          user_id: user.id,
+        },
+      ],
+    });
+  });
+
   it("responds with success and queries the kind", async () => {
     const { databases, users } = await database.transaction().execute(async (transaction) => {
       const databases: {

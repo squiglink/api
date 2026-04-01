@@ -9,6 +9,7 @@ const application = new Hono();
 const querySchema = zod.object({
   page: zod.coerce.number().optional().default(1),
   query: zod.string().optional(),
+  user_id: zod.string().optional(),
 });
 
 const responseSchema = zod.object({
@@ -47,9 +48,13 @@ application.get(
 
     const pageSize = 10;
 
+    const userIdParameter = queryParameters.user_id;
     const { count } = await database
       .selectFrom("databases")
       .select(database.fn.countAll().as("count"))
+      .$if(userIdParameter !== undefined, (selectQueryBuilder) =>
+        selectQueryBuilder.where("databases.user_id", "=", userIdParameter!),
+      )
       .executeTakeFirstOrThrow();
     const pageCount = Math.ceil(Number(count) / pageSize);
 
@@ -57,6 +62,9 @@ application.get(
     const page = await database
       .selectFrom("databases")
       .selectAll()
+      .$if(userIdParameter !== undefined, (selectQueryBuilder) =>
+        selectQueryBuilder.where("databases.user_id", "=", userIdParameter!),
+      )
       .$if(searchQueryParameter !== undefined, (selectQueryBuilder) =>
         selectQueryBuilder.orderBy(
           sql`concat(databases.kind, ' ', databases.path) <-> ${searchQueryParameter}`,
