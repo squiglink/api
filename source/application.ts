@@ -22,6 +22,7 @@ import measurementsUpdate from "./routes/measurements.update.js";
 import models from "./routes/models.js";
 import modelsCreate from "./routes/models.create.js";
 import modelsShow from "./routes/models.show.js";
+import usersShow from "./routes/users.show.js";
 import { Hono } from "hono";
 import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
 import { cors } from "hono/cors";
@@ -47,6 +48,7 @@ application.route("/", measurements);
 application.route("/", measurementsShow);
 application.route("/", models);
 application.route("/", modelsShow);
+application.route("/", usersShow);
 
 const authorizedApplication = new Hono();
 
