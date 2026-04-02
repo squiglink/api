@@ -1,12 +1,12 @@
 import { authenticationMiddleware } from "./authentication_middleware.js";
 import { beforeEach, describe, expect, it, mock } from "bun:test";
 
-const findUserByJwtToken = mock();
-mock.module("../services/find_user_by_jwt_token.js", () => ({ findUserByJwtToken }));
+const getCurrentUser = mock();
+mock.module("../services/get_current_user.js", () => ({ getCurrentUser }));
 
 describe(".authenticationMiddleware", () => {
   beforeEach(() => {
-    findUserByJwtToken.mockClear();
+    getCurrentUser.mockClear();
   });
 
   it("responds with unauthorized if the authorization token is invalid", async () => {
@@ -15,7 +15,7 @@ describe(".authenticationMiddleware", () => {
       body,
       req: { header: mock().mockReturnValue("invalid") },
     };
-    findUserByJwtToken.mockResolvedValue(null);
+    getCurrentUser.mockResolvedValue(null);
 
     await authenticationMiddleware(context, async () => {
       throw new Error("Reached unreachable.");
@@ -52,7 +52,7 @@ describe(".authenticationMiddleware", () => {
       updated_at: new Date(),
       username: "placeholder",
     };
-    findUserByJwtToken.mockResolvedValue(currentUser);
+    getCurrentUser.mockResolvedValue(currentUser);
 
     await authenticationMiddleware(context, async () => {});
 

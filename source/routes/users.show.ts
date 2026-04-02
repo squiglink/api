@@ -3,7 +3,11 @@ import { Hono } from "hono";
 import { database } from "../database.js";
 import { describeRoute, resolver, validator } from "hono-openapi";
 
-const application = new Hono();
+const application = new Hono<{
+  Variables: {
+    currentUser: { id: string } | undefined;
+  };
+}>();
 
 const paramSchema = zod.object({
   id: zod.string(),
@@ -12,7 +16,7 @@ const paramSchema = zod.object({
 const responseSchema = zod.object({
   created_at: zod.string(),
   display_name: zod.string(),
-  email: zod.string(),
+  email: zod.string().describe("Populated if authenticated as the user.").nullable(),
   id: zod.string(),
   scoring_system: zod.string(),
   updated_at: zod.string(),
@@ -38,6 +42,7 @@ application.get(
   routeDescription,
   validator("param", paramSchema),
   async (context) => {
+    const currentUser = context.get("currentUser");
     const paramParameters = context.req.valid("param");
 
     const result = await database
@@ -47,7 +52,9 @@ application.get(
       .executeTakeFirst();
     if (!result) return context.body(null, 404);
 
-    return context.json(result);
+    const email = currentUser?.id === result.id ? result.email : null;
+
+    return context.json({ ...result, email });
   },
 );
 

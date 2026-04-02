@@ -1,11 +1,8 @@
 import type { Context } from "hono";
-import { findUserByJwtToken } from "../services/find_user_by_jwt_token.js";
+import { getCurrentUser } from "../services/get_current_user.js";
 
 export async function authenticationMiddleware(context: Context, next: () => Promise<void>) {
-  const token = context.req.header("authorization")?.replace("Bearer ", "");
-  if (!token) return context.body(null, 401);
-
-  const user = await findUserByJwtToken(token);
+  const user = await getCurrentUser(context);
   if (!user) return context.body(null, 401);
 
   context.set("currentUser", user);

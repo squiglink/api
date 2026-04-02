@@ -25,6 +25,7 @@ import modelsShow from "./routes/models.show.js";
 import usersShow from "./routes/users.show.js";
 import { Hono } from "hono";
 import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
+import { authenticationOptionalMiddleware } from "./middlewares/authentication_optional_middleware.js";
 import { cors } from "hono/cors";
 import { loggingMiddleware } from "./middlewares/logging_middleware.js";
 
@@ -48,7 +49,13 @@ application.route("/", measurements);
 application.route("/", measurementsShow);
 application.route("/", models);
 application.route("/", modelsShow);
-application.route("/", usersShow);
+
+const authorizedOptionallyApplicationalApplication = new Hono();
+
+authorizedOptionallyApplicationalApplication.use("/*", authenticationOptionalMiddleware);
+authorizedOptionallyApplicationalApplication.route("/", usersShow);
+
+application.route("/", authorizedOptionallyApplicationalApplication);
 
 const authorizedApplication = new Hono();
 
