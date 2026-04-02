@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import { loggingMiddleware } from "./logging_middleware.js";
 
-describe("loggingMiddleware", () => {
+describe(".loggingMiddleware", () => {
   let consoleLogSpy: ReturnType<typeof spyOn>;
   let originalServerEnvironment: string;
 

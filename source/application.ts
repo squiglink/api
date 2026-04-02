@@ -50,12 +50,12 @@ application.route("/", measurementsShow);
 application.route("/", models);
 application.route("/", modelsShow);
 
-const authorizedOptionallyApplicationalApplication = new Hono();
+const authorizedOptionallyApplication = new Hono();
 
-authorizedOptionallyApplicationalApplication.use("/*", authenticationOptionalMiddleware);
-authorizedOptionallyApplicationalApplication.route("/", usersShow);
+authorizedOptionallyApplication.use("/*", authenticationOptionalMiddleware);
+authorizedOptionallyApplication.route("/", usersShow);
 
-application.route("/", authorizedOptionallyApplicationalApplication);
+application.route("/", authorizedOptionallyApplication);
 
 const authorizedApplication = new Hono();
 

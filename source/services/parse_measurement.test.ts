@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { parseMeasurement } from "./parse_measurement.js";
 
-describe("measurement_parser", () => {
+describe(".parse_measurement", () => {
   it("does not parse the measurement if it has unsupported delimiters", () => {
     const data = "1.2|3.4";
     const [result, error] = parseMeasurement(data);

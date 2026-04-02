@@ -20,7 +20,7 @@ describe("POST /authentication/login", () => {
     sendEmail.mockResolvedValue({ success: true, id: "placeholder" });
   });
 
-  it("creates a JWT magic link token and sends an email with the magic link", async () => {
+  it("responds with success and sends the magic link email", async () => {
     const user = await database.transaction().execute(async (transaction) => {
       return await insertUser(transaction);
     });

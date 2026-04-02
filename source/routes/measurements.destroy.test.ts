@@ -47,7 +47,7 @@ describe("DELETE /measurements/:id", () => {
     expect(await count("measurements")).toEqual(0);
   });
 
-  it("responds with unauthorized if trying to destroy a measurement in another user's database", async () => {
+  it("responds with unauthorized if the database belongs to another user", async () => {
     const { measurementId } = await database.transaction().execute(async (transaction) => {
       const databaseId = (await insertDatabase(transaction)).id;
       const modelId = (await insertModel(transaction)).id;

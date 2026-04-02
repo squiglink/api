@@ -11,7 +11,7 @@ import {
 } from "../test_helper.factories.js";
 
 describe("GET /legacy/data/phone_book.json", () => {
-  it("responds with success", async () => {
+  it("responds with success and returns the phone book", async () => {
     const { brands, databaseId, evaluations, measurements, models } = await database
       .transaction()
       .execute(async (transaction) => {
@@ -107,7 +107,7 @@ describe("GET /legacy/data/phone_book.json", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with success without evaluations", async () => {
+  it("responds with success and returns the phone book without evaluations", async () => {
     const { brands, databaseId, measurements, models } = await database
       .transaction()
       .execute(async (transaction) => {

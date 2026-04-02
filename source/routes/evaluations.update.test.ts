@@ -39,7 +39,7 @@ describe("PATCH /evaluations/:id", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with unauthorized if trying to update another user's evaluation", async () => {
+  it("responds with unauthorized if the evaluation belongs to another user", async () => {
     const { evaluationId, modelId } = await database.transaction().execute(async (transaction) => {
       const modelId = (await insertModel(transaction)).id;
       const evaluationId = (await insertEvaluation(transaction, { model_id: modelId })).id;

@@ -47,7 +47,7 @@ describe("PATCH /measurements/:id", () => {
     expect(response.ok).toBe(true);
   });
 
-  it("responds with unauthorized if trying to update a measurement in another user's database", async () => {
+  it("responds with unauthorized if the database belongs to another user", async () => {
     const { databaseId, measurementId, modelId } = await database
       .transaction()
       .execute(async (transaction) => {
