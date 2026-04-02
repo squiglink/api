@@ -1,9 +1,49 @@
 import application from "../application.js";
 import { database } from "../database.js";
 import { describe, expect, it } from "bun:test";
-import { insertBrand, insertModel } from "../test_helper.factories.js";
+import {
+  insertBrand,
+  insertDatabase,
+  insertMeasurement,
+  insertModel,
+  insertUser,
+} from "../test_helper.factories.js";
 
 describe("GET /models", () => {
+  it("responds with success and filters by the database ID", async () => {
+    const { brand, model, userDatabase } = await database
+      .transaction()
+      .execute(async (transaction) => {
+        const user = await insertUser(transaction);
+        const userDatabase = await insertDatabase(transaction, { user_id: user.id });
+        const brand = await insertBrand(transaction);
+        const model = await insertModel(transaction, { brand_id: brand.id });
+        await insertMeasurement(transaction, { database_id: userDatabase.id, model_id: model.id });
+        await insertModel(transaction);
+        return { brand, model, userDatabase };
+      });
+
+    const response = await application.request(`/models?database_id=${userDatabase.id}`);
+    expect(response.ok).toBe(true);
+    expect(await response.json()).toEqual({
+      page_count: 1,
+      page: [
+        {
+          brand: {
+            created_at: brand.created_at.toISOString(),
+            id: brand.id,
+            name: brand.name,
+            updated_at: brand.updated_at.toISOString(),
+          },
+          created_at: model.created_at.toISOString(),
+          id: model.id,
+          name: model.name,
+          updated_at: model.updated_at.toISOString(),
+        },
+      ],
+    });
+  });
+
   it("responds with success and queries the brand name", async () => {
     const { brands, models } = await database.transaction().execute(async (transaction) => {
       const brands: { created_at: Date; id: string; name: string; updated_at: Date }[] = [];

@@ -8,6 +8,7 @@ import { sql } from "kysely";
 const application = new Hono();
 
 const querySchema = zod.object({
+  database_id: zod.string().optional(),
   page: zod.coerce.number().optional().default(1),
   query: zod.string().optional(),
 });
@@ -51,6 +52,14 @@ application.get("/models", routeDescription, validator("query", querySchema), as
   const { count } = await database
     .selectFrom("models")
     .select(database.fn.countAll().as("count"))
+    .$if(queryParameters.database_id !== undefined, (selectQueryBuilder) =>
+      selectQueryBuilder.where("models.id", "in", (expressionBuilder) =>
+        expressionBuilder
+          .selectFrom("measurements")
+          .select("measurements.model_id")
+          .where("measurements.database_id", "=", queryParameters.database_id!),
+      ),
+    )
     .executeTakeFirstOrThrow();
   const pageCount = Math.ceil(Number(count) / pageSize);
 
@@ -69,6 +78,14 @@ application.get("/models", routeDescription, validator("query", querySchema), as
           ])
           .whereRef("brands.id", "=", "models.brand_id"),
       ).as("brand"),
+    )
+    .$if(queryParameters.database_id !== undefined, (selectQueryBuilder) =>
+      selectQueryBuilder.where("models.id", "in", (expressionBuilder) =>
+        expressionBuilder
+          .selectFrom("measurements")
+          .select("measurements.model_id")
+          .where("measurements.database_id", "=", queryParameters.database_id!),
+      ),
     )
     .$if(queryParameters.query !== undefined, (selectQueryBuilder) =>
       selectQueryBuilder.orderBy(
