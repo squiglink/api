@@ -11,9 +11,9 @@ const application = new Hono<{
 
 const jsonSchema = zod.object({
   model_id: zod.string(),
-  review_score: zod.number().optional(),
-  review_url: zod.string().optional(),
-  shop_url: zod.string().optional(),
+  review_score: zod.number().nullable().optional(),
+  review_url: zod.string().nullable().optional(),
+  shop_url: zod.string().nullable().optional(),
 });
 
 const responseSchema = zod.object({

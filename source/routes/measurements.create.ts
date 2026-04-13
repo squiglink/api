@@ -16,9 +16,9 @@ const jsonSchema = zod
     database_id: zod.string(),
     kind: zod.enum(["frequency_response", "harmonic_distortion", "impedance", "sound_isolation"]),
     label: zod.string(),
-    left_channel: zod.string().optional(),
+    left_channel: zod.string().nullable().optional(),
     model_id: zod.string(),
-    right_channel: zod.string().optional(),
+    right_channel: zod.string().nullable().optional(),
   })
   .refine((data) => data.left_channel || data.right_channel, {
     message: "Either `left_channel` or `right_channel` must be provided",

@@ -10,6 +10,31 @@ import {
 import { signIn } from "../test_helper.js";
 
 describe("PATCH /measurements/:id", () => {
+  it("responds with bad request if neither the left channel nor the right channel would be present after the update", async () => {
+    const { measurementId, userId } = await database.transaction().execute(async (transaction) => {
+      const userId = (await insertUser(transaction)).id;
+      const databaseId = (await insertDatabase(transaction, { user_id: userId })).id;
+      const measurementId = (
+        await insertMeasurement(transaction, { database_id: databaseId, right_channel: null })
+      ).id;
+
+      return { measurementId, userId };
+    });
+
+    const { accessToken } = await signIn(userId);
+
+    const response = await application.request(`/measurements/${measurementId}`, {
+      body: JSON.stringify({ left_channel: null }),
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      method: "PATCH",
+    });
+
+    expect(response.status).toBe(400);
+  });
+
   it("responds with success and updates a measurement", async () => {
     const { databaseId, measurementId, modelId, userId } = await database
       .transaction()

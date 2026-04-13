@@ -23,7 +23,7 @@ const headerSchema = zod
   });
 
 const jsonSchema = zod.object({
-  cloudflareTurnstileToken: zod.string().optional(),
+  cloudflareTurnstileToken: zod.string().nullable().optional(),
   email: zod.email(),
 });
 
