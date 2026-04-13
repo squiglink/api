@@ -10,6 +10,28 @@ import {
 } from "../test_helper.factories.js";
 
 describe("DELETE /measurements/:id", () => {
+  it("responds with forbidden if the database belongs to another user", async () => {
+    const { measurementId } = await database.transaction().execute(async (transaction) => {
+      const databaseId = (await insertDatabase(transaction)).id;
+      const modelId = (await insertModel(transaction)).id;
+      const measurementId = (
+        await insertMeasurement(transaction, { database_id: databaseId, model_id: modelId })
+      ).id;
+
+      return { measurementId };
+    });
+
+    const { accessToken } = await signIn();
+
+    const response = await application.request(`/measurements/${measurementId}`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+      method: "DELETE",
+    });
+
+    expect(response.status).toBe(403);
+    expect(await count("measurements")).toEqual(1);
+  });
+
   it("responds with not found if the measurement does not exist", async () => {
     const { accessToken } = await signIn();
 
@@ -45,27 +67,5 @@ describe("DELETE /measurements/:id", () => {
 
     expect(response.status).toBe(200);
     expect(await count("measurements")).toEqual(0);
-  });
-
-  it("responds with unauthorized if the database belongs to another user", async () => {
-    const { measurementId } = await database.transaction().execute(async (transaction) => {
-      const databaseId = (await insertDatabase(transaction)).id;
-      const modelId = (await insertModel(transaction)).id;
-      const measurementId = (
-        await insertMeasurement(transaction, { database_id: databaseId, model_id: modelId })
-      ).id;
-
-      return { measurementId };
-    });
-
-    const { accessToken } = await signIn();
-
-    const response = await application.request(`/measurements/${measurementId}`, {
-      headers: { authorization: `Bearer ${accessToken}` },
-      method: "DELETE",
-    });
-
-    expect(response.status).toBe(403);
-    expect(await count("measurements")).toEqual(1);
   });
 });

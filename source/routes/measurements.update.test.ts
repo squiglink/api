@@ -35,6 +35,39 @@ describe("PATCH /measurements/:id", () => {
     expect(response.status).toBe(400);
   });
 
+  it("responds with forbidden if the database belongs to another user", async () => {
+    const { databaseId, measurementId, modelId } = await database
+      .transaction()
+      .execute(async (transaction) => {
+        const databaseId = (await insertDatabase(transaction)).id;
+        const measurementId = (await insertMeasurement(transaction)).id;
+        const modelId = (await insertModel(transaction)).id;
+
+        return { databaseId, measurementId, modelId };
+      });
+
+    const { accessToken } = await signIn();
+    const body = {
+      database_id: databaseId,
+      kind: "frequency_response",
+      label: "placeholder",
+      left_channel: "1.2, 3.4\n5.6, 7.8\n",
+      model_id: modelId,
+      right_channel: "2.3, 4.5\n6.7, 8.9\n",
+    };
+
+    const response = await application.request(`/measurements/${measurementId}`, {
+      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      method: "PATCH",
+    });
+
+    expect(response.status).toBe(403);
+  });
+
   it("responds with success and updates a measurement", async () => {
     const { databaseId, measurementId, modelId, userId } = await database
       .transaction()
@@ -70,38 +103,5 @@ describe("PATCH /measurements/:id", () => {
 
     expect(await response.json()).toMatchObject(body);
     expect(response.ok).toBe(true);
-  });
-
-  it("responds with unauthorized if the database belongs to another user", async () => {
-    const { databaseId, measurementId, modelId } = await database
-      .transaction()
-      .execute(async (transaction) => {
-        const databaseId = (await insertDatabase(transaction)).id;
-        const measurementId = (await insertMeasurement(transaction)).id;
-        const modelId = (await insertModel(transaction)).id;
-
-        return { databaseId, measurementId, modelId };
-      });
-
-    const { accessToken } = await signIn();
-    const body = {
-      database_id: databaseId,
-      kind: "frequency_response",
-      label: "placeholder",
-      left_channel: "1.2, 3.4\n5.6, 7.8\n",
-      model_id: modelId,
-      right_channel: "2.3, 4.5\n6.7, 8.9\n",
-    };
-
-    const response = await application.request(`/measurements/${measurementId}`, {
-      body: JSON.stringify(body),
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      method: "PATCH",
-    });
-
-    expect(response.status).toBe(403);
   });
 });

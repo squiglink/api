@@ -36,6 +36,36 @@ describe("POST /measurements", () => {
     expect(response.status).toBe(400);
   });
 
+  it("responds with forbidden if the database belongs to another user", async () => {
+    const { databaseId, modelId } = await database.transaction().execute(async (transaction) => {
+      const databaseId = (await insertDatabase(transaction)).id;
+      const modelId = (await insertModel(transaction)).id;
+
+      return { databaseId, modelId };
+    });
+
+    const { accessToken } = await signIn();
+    const body = {
+      database_id: databaseId,
+      kind: "frequency_response",
+      label: "placeholder",
+      left_channel: "1.2, 3.4\n5.6, 7.8\n",
+      model_id: modelId,
+      right_channel: "2.3, 4.5\n6.7, 8.9\n",
+    };
+
+    const response = await application.request("/measurements", {
+      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+    });
+
+    expect(response.status).toBe(403);
+  });
+
   it("responds with success and creates a measurement", async () => {
     const { databaseId, modelId, userId } = await database
       .transaction()
@@ -69,35 +99,5 @@ describe("POST /measurements", () => {
     expect(await response.json()).toMatchObject(body);
     expect(await count("models")).toEqual(1);
     expect(response.status).toBe(200);
-  });
-
-  it("responds with unauthorized if the database belongs to another user", async () => {
-    const { databaseId, modelId } = await database.transaction().execute(async (transaction) => {
-      const databaseId = (await insertDatabase(transaction)).id;
-      const modelId = (await insertModel(transaction)).id;
-
-      return { databaseId, modelId };
-    });
-
-    const { accessToken } = await signIn();
-    const body = {
-      database_id: databaseId,
-      kind: "frequency_response",
-      label: "placeholder",
-      left_channel: "1.2, 3.4\n5.6, 7.8\n",
-      model_id: modelId,
-      right_channel: "2.3, 4.5\n6.7, 8.9\n",
-    };
-
-    const response = await application.request("/measurements", {
-      body: JSON.stringify(body),
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${accessToken}`,
-      },
-      method: "POST",
-    });
-
-    expect(response.status).toBe(403);
   });
 });
