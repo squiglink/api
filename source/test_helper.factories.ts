@@ -1,5 +1,11 @@
 import configuration from "./configuration.js";
-import type { Database, DatabaseKind, MeasurementKind, UserScoringSystem } from "./types.js";
+import type {
+  Database,
+  DatabaseKind,
+  MeasurementKind,
+  UserRole,
+  UserScoringSystem,
+} from "./types.js";
 import type { Kysely, Transaction } from "kysely";
 import { createJwtToken } from "./services/create_jwt_token.js";
 import { faker } from "@faker-js/faker";
@@ -213,6 +219,7 @@ export async function insertUser(
     display_name?: string;
     email?: string;
     id?: string;
+    role?: UserRole;
     scoring_system?: UserScoringSystem;
     updated_at?: Date;
     username?: string;
@@ -222,6 +229,7 @@ export async function insertUser(
   display_name: string;
   email: string;
   id: string;
+  role: UserRole;
   scoring_system: UserScoringSystem;
   updated_at: Date;
   username: string;

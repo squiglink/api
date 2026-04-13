@@ -5,6 +5,7 @@ import authenticationVerify from "./routes/authentication.verify.js";
 import brands from "./routes/brands.js";
 import brandsCreate from "./routes/brands.create.js";
 import brandsShow from "./routes/brands.show.js";
+import brandsUpdate from "./routes/brands.update.js";
 import databases from "./routes/databases.js";
 import databasesShow from "./routes/databases.show.js";
 import evaluations from "./routes/evaluations.js";
@@ -22,6 +23,7 @@ import measurementsUpdate from "./routes/measurements.update.js";
 import models from "./routes/models.js";
 import modelsCreate from "./routes/models.create.js";
 import modelsShow from "./routes/models.show.js";
+import modelsUpdate from "./routes/models.update.js";
 import usersShow from "./routes/users.show.js";
 import { Hono } from "hono";
 import { authenticationMiddleware } from "./middlewares/authentication_middleware.js";
@@ -61,12 +63,14 @@ const authorizedApplication = new Hono();
 
 authorizedApplication.use("/*", authenticationMiddleware);
 authorizedApplication.route("/", brandsCreate);
+authorizedApplication.route("/", brandsUpdate);
 authorizedApplication.route("/", evaluationsCreate);
 authorizedApplication.route("/", evaluationsUpdate);
 authorizedApplication.route("/", measurementsCreate);
 authorizedApplication.route("/", measurementsDestroy);
 authorizedApplication.route("/", measurementsUpdate);
 authorizedApplication.route("/", modelsCreate);
+authorizedApplication.route("/", modelsUpdate);
 
 application.route("/", authorizedApplication);
 

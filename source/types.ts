@@ -20,6 +20,8 @@ export type MeasurementKind =
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export type UserRole = "creator" | "root";
+
 export type UserScoringSystem = "five_star" | "hundred_point" | "ten_point" | "ten_point_decimal";
 
 export interface Brands {
@@ -98,6 +100,7 @@ export interface Users {
   display_name: string;
   email: string;
   id: Generated<string>;
+  role: Generated<UserRole>;
   scoring_system: UserScoringSystem;
   updated_at: Generated<Timestamp>;
   username: string;

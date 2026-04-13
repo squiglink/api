@@ -18,6 +18,7 @@ const responseSchema = zod.object({
   display_name: zod.string(),
   email: zod.string().describe("Populated if authenticated as the user.").nullable(),
   id: zod.string(),
+  role: zod.string(),
   scoring_system: zod.string(),
   updated_at: zod.string(),
   username: zod.string(),
